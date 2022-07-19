@@ -38,25 +38,37 @@ public class MemberDAO extends DAO<Member>{
 	@Override
 	public Member find(int id) {
 		Member member;
+		ResultSet result = null;
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Member WHERE IdMember = " +id);
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Member WHERE IdMember = " +id);
 			if(result.first()){
 				// Compléter avec info de base
+				String firstname = result.getString("Firstname");
+				
 				member = new Member(result.getString("Firstname"),result.getString("Lastname"),result.getString("Password"),result.getString("Tel"),result.getString("Pseudo"));
 				member.setBalance(result.getDouble("Balance"));
 				member.setId(result.getInt("IdMember"));
 				// Compléter avec les catégories
-				result = this.connect.createStatement().executeQuery("SELECT * FROM cat_memb where IdMember =  " + id);
+				
+				result = this.connect.createStatement().executeQuery("SELECT * FROM Cat_Memb where IdMember =  " + id);
 				CategoryDAO categoryDAO = new CategoryDAO(this.connect);
 				while(result.next()) {
 					// L'id du calendrier = l'id de la catégorie ( type )
-					member.getMemberCategories().add(categoryDAO.find(result.getInt("IdCalendar")));
+					System.out.println("This member "+firstname+" have : " +result.getInt("IdCalendar") );
+					//member.getMemberCategories().add(categoryDAO.find(result.getInt("IdCalendar")));
+					System.out.println("BUg0");
 				}
+				
 				return member;
 			}
-			
 		}catch(SQLException e){
 			e.printStackTrace();
+		}finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

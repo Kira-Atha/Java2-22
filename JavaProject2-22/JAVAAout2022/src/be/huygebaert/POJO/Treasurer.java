@@ -2,6 +2,8 @@ package be.huygebaert.POJO;
 
 import java.util.List;
 
+import be.huygebaert.DAO.DAO;
+
 public class Treasurer extends Person {
 	private static final long serialVersionUID = 7206955388975555505L;
 
@@ -23,6 +25,9 @@ public class Treasurer extends Person {
 
 	@Override
 	public boolean signUp() {
+		if(personDAO.create(this)) {
+			return true;
+		}
 		return false;
 	}
 	private void sendPaymentReminderLetter() {

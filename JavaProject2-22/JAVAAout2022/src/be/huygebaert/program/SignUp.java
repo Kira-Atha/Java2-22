@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
@@ -143,14 +144,14 @@ public class SignUp {
 		typeCategoryGroup = new ButtonGroup();
 
 		List <Category> categories = new ArrayList <Category>();
-		DAO<Category> categoryDAO = adf.getCategoryDAO();
-
-		categories = categoryDAO.findAll();
+		categories = Category.getAllCategories();
+		
 		int count = 0;
 		for(Category category : categories) {
 			++count;
 			rbtn_category = new JRadioButton(category.getClass().getSimpleName());
 			rbtn_category.setActionCommand(String.valueOf(count));
+			System.out.println("BOUTON ++COUNT"+count);
 			typeCategoryGroup.add(rbtn_category);
 			panel_rbtn_TypeCategory.add(rbtn_category);
 		}
@@ -160,6 +161,7 @@ public class SignUp {
 		for(Category category:categories) {
 			System.out.println(category.getCategoryMembers());
 		}
+		
 		signUp.getContentPane().add(panel_rbtn_TypeCategory);
 		
 		
@@ -196,23 +198,23 @@ public class SignUp {
 				if(account.equals("Treasurer")) {
 					Treasurer treasurer = new Treasurer(firstname,lastname,password,tel,pseudo);
 					if(!treasurer.equals(null)) {
-						//TODO : NO
-						personDAO.create(treasurer);
-						MonitorPayments next = new MonitorPayments();
-						JFrame monitorPayments = next.monitorPayments;
-						changeFrame(monitorPayments);
-					}else {
-						lb_error.setText("This treasurer already exist in member !");
-					}
+						if(treasurer.signUp());
+							MonitorPayments next = new MonitorPayments();
+							JFrame monitorPayments = next.monitorPayments;
+							changeFrame(monitorPayments);
+						}else {
+							JOptionPane.showMessageDialog(null, "This treasurer already exist in member !");
+						}
 				}
 				if(account.equals("Member")) {
+					System.out.println("Send => "+category);
 					Member member = new Member(firstname,lastname,password,tel,pseudo,Integer.parseInt(category));
 					// Velo mis à null, il sera modifié à la page suivante
 						if(!member.equals(null)) {
 							if(member.signUp()){
 								AddVelo next = new AddVelo();
 								JFrame addVelo = next.addVelo;
-								changeFrame(addVelo);
+								//changeFrame(addVelo);
 							}
 						}else {
 							lb_error.setText("This member already exist !");
@@ -223,13 +225,14 @@ public class SignUp {
 					// TEST
 					System.out.println(manager.getFirstname());
 					System.out.println(manager.getPseudo());
-					
-					
+
 					if(!manager.equals(null)) {
-						personDAO.create(manager);
-						ConsultCalendar next = new ConsultCalendar(manager);
-						JFrame consultCalendar = next.consultCalendar;
-						changeFrame(consultCalendar);
+						if(manager.signUp());
+							ConsultCalendar next = new ConsultCalendar(manager);
+							JFrame consultCalendar = next.consultCalendar;
+							changeFrame(consultCalendar);
+					}else {
+						JOptionPane.showMessageDialog(null, "This category already have a manager.");
 					}
 				}
 			}
@@ -317,7 +320,7 @@ public class SignUp {
 			result+="Invalid account type";
 			result+="<br/>";
 		}
-		if(typeCategory.equals("") || typeCategory.equals(null)) {
+		if(typeAccount.equals("Treasurer") == false && typeCategory.equals("") || typeCategory.equals(null)) {
 			result+="Invalid category type";
 			result+="<br/>";
 		}

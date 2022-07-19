@@ -33,7 +33,8 @@ public class Member extends Person{
 			memberCategories = new ArrayList<Category>();
 			Category category = Category.getCategory(num_category);
 			this.memberCategories.add(category);
-			
+			System.out.println("Passe a member "+num_category);
+			System.out.println("Le numéro de la catégorie : "+this.getMemberCategories().get(0).getNum());
 			// 
 			memberVelos = new ArrayList<Velo>();
 			Velo velo = new Velo();

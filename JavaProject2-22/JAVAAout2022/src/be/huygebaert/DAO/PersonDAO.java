@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +25,11 @@ public class PersonDAO extends DAO<Person> {
 
 	@Override
 	public boolean create(Person obj) {
+		
 		if(obj instanceof Member) {
 			Member member = (Member) obj;
-			try {
-			    PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Member VALUES (?,?,?,?,?,?,?)");
-			    ps0.setInt(1, member.getId());
+			try(PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Member VALUES (?,?,?,?,?,?,?)")) {
+			    ps0.setInt(1, 0);
 		        ps0.setString(2, member.getFirstname());
 		        ps0.setString(3, member.getLastname());
 		        ps0.setString(4, member.getPassword());
@@ -36,26 +37,25 @@ public class PersonDAO extends DAO<Person> {
 		        ps0.setDouble(6, member.getBalance());
 		        ps0.setString(7, member.getPseudo());
 		        int isOk0 = ps0.executeUpdate();
-
-		        // Comme la catégorie est choisie à l'inscription, ajout dans la table.
-		        PreparedStatement ps1 = this.connect.prepareStatement("INSERT INTO Cat_Memb VALUES (?,?)");
-		        List<Person> allPerson = findAll();
-		        
-		        ps1.setInt(1, allPerson.size());
-		        ps1.setInt(2, member.getMemberCategories().get(0).getNum());
-		        int isOk1 = ps1.executeUpdate();
-		        
-		        // Ajouter la catégorie à la liste des catégories du membre
-		        member.getMemberCategories().get(0).addPerson(member);
-		        
-		        if(isOk0 == 1 && isOk1 == 1) {
-		        	this.connect.close();
-		        	return true;
-		        }
 			}catch(SQLException e) {
 				e.printStackTrace();
 				return false;
 			}
+			
+			try(PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Cat_Memb VALUES (?,?)")) {
+				List<Person> allPerson = findAll();
+				System.out.println("allPersonSize =>"+allPerson.size());
+		        ps0.setInt(1, allPerson.size());
+		        ps0.setInt(2, member.getMemberCategories().get(0).getNum());
+		        System.out.println("DAO, dans l'insert => "+member.getMemberCategories().get(0).getNum());
+		        int isOk1 = ps0.executeUpdate();
+			}catch(SQLException e) {
+				e.printStackTrace();
+				return false;
+			}
+			
+        	member.getMemberCategories().get(0).addPerson(member);
+        	return true;
 		}
 		
 		if(obj instanceof Manager) {

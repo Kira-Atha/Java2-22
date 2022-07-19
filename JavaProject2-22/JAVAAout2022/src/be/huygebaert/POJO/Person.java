@@ -62,8 +62,5 @@ abstract public class Person implements Serializable {
 	public boolean signUp() {
 		return false;
 	}
-	public boolean signUp(String firstname, String lastname, String pseudo, int num_category) {
-		return false;
-	}
 	
 }

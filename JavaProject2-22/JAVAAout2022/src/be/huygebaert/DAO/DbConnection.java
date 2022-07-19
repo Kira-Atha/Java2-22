@@ -14,11 +14,11 @@ public class DbConnection {
 			instance = DriverManager.getConnection(url);
 		}
 		catch(ClassNotFoundException ex){
-	JOptionPane.showMessageDialog(null, "Classe de driver introuvable" + ex.getMessage());
+			JOptionPane.showMessageDialog(null, "Classe de driver introuvable" + ex.getMessage());
 			System.exit(0);
 		}
 		catch (SQLException ex) {
-	JOptionPane.showMessageDialog(null, "Erreur JDBC : " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, "Erreur JDBC : " + ex.getMessage());
 		}
 		if (instance == null) {
             JOptionPane.showMessageDialog(null, "La base de données est inaccessible, fermeture du programme.");

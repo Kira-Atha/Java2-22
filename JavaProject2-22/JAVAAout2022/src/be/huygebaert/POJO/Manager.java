@@ -9,10 +9,11 @@ import be.huygebaert.DAO.DAOFactory;
 public class Manager extends Person {
 	private static final long serialVersionUID = -1584705078113981090L;
 	private Category category = null;
+	DAO<Category> categoryDAO = adf.getCategoryDAO();
+	DAO<Manager> managerDAO = adf.getManagerDAO();
 	
 	public Manager(String firstname, String lastname, String password, String tel, String pseudo, int num_category) {
 		try {
-			 
 			Person.idCount++;
 			this.id = Person.idCount;
 			this.firstname = firstname;
@@ -20,12 +21,10 @@ public class Manager extends Person {
 			this.password=password;
 			this.tel=tel;
 			this.pseudo=pseudo;
-			DAO<Category> categoryDAO = adf.getCategoryDAO();
 			Category category = categoryDAO.find(num_category);
 			this.category = category;
-		
 		}catch(Exception e) {
-		System.out.println("Manager doesn't create");
+			System.out.println("Manager doesn't create");
 		}
 	}
 	public Manager(String firstname, String lastname, String password, String tel, String pseudo) {
@@ -45,12 +44,26 @@ public class Manager extends Person {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
-	/*
-	@Override
 	
+	@Override
 	public boolean signUp() {
-		personDAO.create(this);
-	}*/
+		List <Manager> managers = getAllManagers();
+		for(Manager manager : managers ) {
+			/*
+			if(this.getCategory().getNum() == manager.getCategory().getNum()) {
+				return false;
+			}*/
+			System.out.println(manager.getFirstname());
+		}
+		if(personDAO.create(this)) {
+			return true;
+		}
+		return false;
+	}
+	public List <Manager>getAllManagers(){
+		return managerDAO.findAll();
+	}
+	
 	public void manageCalendar() {
 		
 	}

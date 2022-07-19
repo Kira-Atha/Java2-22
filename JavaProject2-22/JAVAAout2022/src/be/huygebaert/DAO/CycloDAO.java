@@ -45,14 +45,15 @@ public class CycloDAO extends DAO<Cyclo> {
 				
 				cyclo.setSingleCalendar(calendarDAO.find(cyclo.getNum()));
 				cyclo.setNum(id);
+				
 				result = this.connect.createStatement().executeQuery(
 						"SELECT * FROM Calendar INNER JOIN Cat_Memb "
 						+ "ON Calendar.IdCalendar = Cat_Memb.IdCalendar "
 						+ "INNER JOIN Member "
 						+ "ON Cat_Memb.IdMember = Member.IdMember "
 						+ "WHERE IdCalendar ="+id);
-				
 				while(result.next()) {
+					System.out.println("Membre dans la catégorie => ["+id+"] "+result.getInt("IdMember"));
 					cyclo.addPerson(memberDAO.find(result.getInt("IdMember")));
 				}
 				result = this.connect.createStatement().executeQuery(

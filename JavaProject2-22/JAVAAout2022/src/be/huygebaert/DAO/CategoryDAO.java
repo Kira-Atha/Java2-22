@@ -37,10 +37,45 @@ public class CategoryDAO extends DAO<Category> {
 	}
 	@Override
 	public Category find(int id) {
-		List<Category> categories = findAll();
-		for(Category category : categories) {
-			if(id == category.getNum()) {
-				return category;
+		CycloDAO cycloDAO = new CycloDAO(this.connect);
+		TrailRiderDAO trailriderDAO = new TrailRiderDAO(this.connect);
+		DescenderDAO descenderDAO = new DescenderDAO(this.connect);
+		TrialistDAO trialistDAO = new TrialistDAO(this.connect);
+		Category category;
+		ResultSet result = null;
+		try {
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Calendar WHERE IdCalendar ="+id);
+			while(result.next()){
+				if (result.getString("NameCategory").equals("Cyclo")){
+					category = new Cyclo();
+					category = cycloDAO.find(result.getInt("IdCalendar"));
+					return category;
+				}
+				
+				if (result.getString("NameCategory").equals("Descender")){
+					category = new Descender();
+					category = descenderDAO.find(result.getInt("IdCalendar"));
+					return category;
+				}
+				if (result.getString("NameCategory").equals("Trailrider")){
+					category = new TrailRider();
+					category = trailriderDAO.find(result.getInt("IdCalendar"));
+					return category;
+				}
+				if (result.getString("NameCategory").equals("Trialist")){
+					category = new Trialist();
+					category = trialistDAO.find(result.getInt("IdCalendar"));
+					return category;
+				}
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 		}
 		return null;

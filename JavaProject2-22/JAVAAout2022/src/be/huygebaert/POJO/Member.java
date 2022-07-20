@@ -18,7 +18,10 @@ public class Member extends Person{
 
 	
 	public Member() {}
-	
+	public Member(String pseudo,String password) {
+		this.pseudo = pseudo;
+		this.password = password;
+	}
 	public Member(String firstname, String lastname, String password, String tel, String pseudo, int num_category) {
 		try {
 			Person.idCount++;
@@ -28,7 +31,7 @@ public class Member extends Person{
 			this.password=password;
 			this.tel=tel;
 			this.pseudo=pseudo;
-			this.balance=0;
+			this.balance=20;
 			
 			memberCategories = new ArrayList<Category>();
 			Category category = Category.getCategory(num_category);
@@ -107,14 +110,6 @@ public class Member extends Person{
 		this.memberRegisters = memberRegisters;
 	}
 
-	@Override
-	public boolean signUp() {
-		if(personDAO.create(this)) {
-			return true;
-		}
-		return false;
-				
-	}
 	public void calculateBalance() {
 		
 	}
@@ -125,5 +120,12 @@ public class Member extends Person{
 	@Override
 	public String toString() {
 		return this.getFirstname()+" "+this.getLastname();
+	}
+
+	public boolean updateBalance(Member member) {
+		if(memberDAO.update(member)) {
+			return true;
+		}
+		return false;
 	}
 }

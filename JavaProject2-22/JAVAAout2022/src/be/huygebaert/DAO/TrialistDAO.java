@@ -39,12 +39,13 @@ public class TrialistDAO extends DAO<Trialist>{
 			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Calendar WHERE IdCalendar ="+id);
 			if(result.first()) {
 				Trialist trialist = new Trialist();
-				MemberDAO memberDAO = new MemberDAO(this.connect);
-				ManagerDAO managerDAO = new ManagerDAO(this.connect);
+				//MemberDAO memberDAO = new MemberDAO(this.connect);
+				//ManagerDAO managerDAO = new ManagerDAO(this.connect);
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
 				
 				trialist.setSingleCalendar(calendarDAO.find(trialist.getNum()));
 				trialist.setNum(id);
+				/*
 				result = this.connect.createStatement().executeQuery(
 						"SELECT * FROM Calendar INNER JOIN Cat_Memb "
 						+ "ON Calendar.IdCalendar = Cat_Memb.IdCalendar "
@@ -65,7 +66,7 @@ public class TrialistDAO extends DAO<Trialist>{
 					// .next() va tout de même s'arrêter au bout du premier et unique manager rencontré pour cette catégorie.
 					trialist.addPerson(managerDAO.find(result.getInt("IdManager")));
 				}
-				
+				*/
 				return trialist;
 			}
 		}catch(SQLException e) {

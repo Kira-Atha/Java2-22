@@ -9,11 +9,14 @@ import javax.swing.JFrame;
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 import be.huygebaert.POJO.Category;
+import javax.swing.JLabel;
+import java.awt.Font;
 
 public class Init {
 
 	public JFrame init;
 	private JButton btn_SignUp, btn_SignIn;
+	private JLabel lb_welcome;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -30,16 +33,6 @@ public class Init {
 
 	public Init() {
 		initialize();
-		
-		/*TESTS
-		DAOFactory adf = new DAOFactory();
-		DAO<Category> categoryDAO = adf.getCategoryDAO();
-		List <Category> categories = new ArrayList <Category>();
-		categories = categoryDAO.findAll();
-		for(Category category : categories) {
-			System.out.println(category);
-		}
-		*/
 	}
 
 	private void initialize() {
@@ -49,13 +42,18 @@ public class Init {
 		init.getContentPane().setLayout(null);
 		init.setLocationRelativeTo(null);
 		
-		btn_SignUp = new JButton("Sign Up");
-		btn_SignUp.setBounds(200,200,100,30);
+		btn_SignUp = new JButton("Sign up");
+		btn_SignUp.setBounds(330,207,100,30);
 		init.getContentPane().add(btn_SignUp);
 		
-		btn_SignIn = new JButton("Sign In");
-		btn_SignIn.setBounds(200,230,100,30);
+		btn_SignIn = new JButton("Sign in");
+		btn_SignIn.setBounds(330,237,100,30);
 		init.getContentPane().add(btn_SignIn);
+		
+		lb_welcome = new JLabel("Welcome to the Vansset cyclis'ts club");
+		lb_welcome.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lb_welcome.setBounds(213, 68, 341, 54);
+		init.getContentPane().add(lb_welcome);
 		
 	
 
@@ -71,7 +69,6 @@ public class Init {
 			changeFrame(nextFrame);
 		});
 	}
-	
 	
 	public void changeFrame(JFrame window) {
 		window.setVisible(true);

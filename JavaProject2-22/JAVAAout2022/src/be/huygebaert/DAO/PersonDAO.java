@@ -41,7 +41,7 @@ public class PersonDAO extends DAO<Person> {
 				e.printStackTrace();
 				return false;
 			}
-			
+			/*
 			try(PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Cat_Memb VALUES (?,?)")) {
 				List<Person> allPerson = findAll();
 				System.out.println("allPersonSize =>"+allPerson.size());
@@ -53,8 +53,8 @@ public class PersonDAO extends DAO<Person> {
 				e.printStackTrace();
 				return false;
 			}
-			
-        	member.getMemberCategories().get(0).addPerson(member);
+			*/
+        	//member.getMemberCategories().get(0).addPerson(member);
         	return true;
 		}
 		
@@ -69,7 +69,7 @@ public class PersonDAO extends DAO<Person> {
 		        ps.setInt(5, manager.getCategory().getNum());
 		        ps.setString(6, manager.getPseudo());
 		        
-		        manager.getCategory().addPerson(manager);
+		        //manager.getCategory().addPerson(manager);
 		        int isOk = ps.executeUpdate();
 
 		        if(isOk == 1) {
@@ -161,7 +161,7 @@ public class PersonDAO extends DAO<Person> {
 			while(result.next()){
 				// Compléter avec info de base
 				treasurer = new Treasurer(result.getString("Firstname"),result.getString("Lastname"),result.getString("Password"),result.getString("Tel"),result.getString("Pseudo"));
-				treasurer.setId(result.getInt("IdManager"));
+				treasurer.setId(result.getInt("IdTreasurer"));
 				allPersons.add(treasurer);
 			}
 		}catch(SQLException e) {

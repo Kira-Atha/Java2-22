@@ -23,13 +23,6 @@ public class Treasurer extends Person {
 		}
 	}
 
-	@Override
-	public boolean signUp() {
-		if(personDAO.create(this)) {
-			return true;
-		}
-		return false;
-	}
 	private void sendPaymentReminderLetter() {
 		
 	}

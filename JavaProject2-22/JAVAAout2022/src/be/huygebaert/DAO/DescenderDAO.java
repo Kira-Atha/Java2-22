@@ -40,12 +40,13 @@ public class DescenderDAO extends DAO<Descender>{
 			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Calendar WHERE IdCalendar ="+id);
 			if(result.first()) {
 				Descender descender = new Descender();
-				MemberDAO memberDAO = new MemberDAO(this.connect);
-				ManagerDAO managerDAO = new ManagerDAO(this.connect);
+				//MemberDAO memberDAO = new MemberDAO(this.connect);
+				//ManagerDAO managerDAO = new ManagerDAO(this.connect);
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
 				
 				descender.setSingleCalendar(calendarDAO.find(descender.getNum()));
 				descender.setNum(id);
+				/*
 				result = this.connect.createStatement().executeQuery(
 						"SELECT * FROM Calendar INNER JOIN Cat_Memb "
 						+ "ON Calendar.IdCalendar = Cat_Memb.IdCalendar "
@@ -66,7 +67,7 @@ public class DescenderDAO extends DAO<Descender>{
 					// .next() va tout de même s'arrêter au bout du premier et unique manager rencontré pour cette catégorie.
 					descender.addPerson(managerDAO.find(result.getInt("IdManager")));
 				}
-				
+				*/
 				return descender;
 			}
 		}catch(SQLException e) {

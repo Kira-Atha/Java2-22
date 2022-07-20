@@ -24,19 +24,21 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Objects;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class SignUp {
 
 	public JFrame signUp;
 	private JTextField tf_firstname, tf_lastname, tf_tel, tf_pseudo;
 	private JPasswordField pf_password;
-	private JLabel lb_error,lb_firstname, lb_lastname, lb_password, lb_tel, lb_pseudo;
+	private JLabel lb_error,lb_firstname, lb_lastname, lb_password, lb_tel, lb_pseudo,lb_typeAccount,lb_typeCategory,lb_personalInfo;
 	private JButton btn_send, btn_back;
 	private ButtonGroup typeAccountGroup, typeCategoryGroup;
 	private JRadioButton rbtn_category;
-	DAOFactory adf = new DAOFactory();
 	private JRadioButton rbtn_manager, rbtn_member, rbtn_treasurer;
+
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -60,11 +62,11 @@ public class SignUp {
 		signUp.setBounds(0, 0, 800, 600);
 		signUp.setLocationRelativeTo(null);
 		signUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		signUp.setLayout(null);
+		signUp.getContentPane().setLayout(null);
 		JPanel inSignUp = new JPanel();
-		inSignUp.setBounds(20,20,500,300);
+		inSignUp.setBounds(134,147,500,162);
 		inSignUp.setLayout(null);
-		signUp.add(inSignUp);
+		signUp.getContentPane().add(inSignUp);
 		
 		tf_firstname = new JTextField();
 		tf_firstname.setBounds(100,30,150,20);
@@ -112,6 +114,10 @@ public class SignUp {
 		inSignUp.add(tf_pseudo);
 		inSignUp.add(lb_pseudo);
 		
+		lb_personalInfo = new JLabel("Enter your personal information");
+		lb_personalInfo.setBounds(100, 5, 220, 14);
+		inSignUp.add(lb_personalInfo);
+		
 		btn_send.setBounds(500,500,70,50);
 		btn_back.setBounds(400,500,70,50);
 		signUp.getContentPane().add(btn_send);
@@ -119,7 +125,7 @@ public class SignUp {
 		
 		JPanel panel_rbtn_TypeAccount = new JPanel();
 		panel_rbtn_TypeAccount.setLayout(new GridLayout(3,1));
-		panel_rbtn_TypeAccount.setBounds(0,200,100,100);
+		panel_rbtn_TypeAccount.setBounds(210,363,100,100);
 	
 		rbtn_manager = new JRadioButton("Manager");
 		rbtn_manager.setActionCommand("Manager");
@@ -140,7 +146,7 @@ public class SignUp {
 		
 		JPanel panel_rbtn_TypeCategory = new JPanel();
 		panel_rbtn_TypeCategory.setLayout(new GridLayout(4,1));
-		panel_rbtn_TypeCategory.setBounds(100,200,100,100);
+		panel_rbtn_TypeCategory.setBounds(331,363,100,100);
 		typeCategoryGroup = new ButtonGroup();
 
 		List <Category> categories = new ArrayList <Category>();
@@ -151,20 +157,30 @@ public class SignUp {
 			++count;
 			rbtn_category = new JRadioButton(category.getClass().getSimpleName());
 			rbtn_category.setActionCommand(String.valueOf(count));
-			System.out.println("BOUTON ++COUNT"+count);
+			//System.out.println("BOUTON ++COUNT"+count);
 			typeCategoryGroup.add(rbtn_category);
 			panel_rbtn_TypeCategory.add(rbtn_category);
 		}
-		/*TESTS
-		 */
 
-		for(Category category:categories) {
-			System.out.println(category.getCategoryMembers());
-		}
-		
 		signUp.getContentPane().add(panel_rbtn_TypeCategory);
+		JLabel lblNewLabel = new JLabel("Registration");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblNewLabel.setBounds(298, 51, 133, 26);
+		signUp.getContentPane().add(lblNewLabel);
+		
+		lb_typeAccount = new JLabel("Account type");
+		lb_typeAccount.setBounds(235, 338, 75, 14);
+		signUp.getContentPane().add(lb_typeAccount);
+		
+		lb_typeCategory = new JLabel("Category");
+		lb_typeCategory.setBounds(348, 338, 72, 14);
+		signUp.getContentPane().add(lb_typeCategory);
 		
 		
+		/*
+		 * 
+		 * ACTIONS
+		 */
 		btn_send.addActionListener(e->{
 			String firstname = tf_firstname.getText();
 			String lastname = tf_lastname.getText();
@@ -197,42 +213,45 @@ public class SignUp {
 				
 				if(account.equals("Treasurer")) {
 					Treasurer treasurer = new Treasurer(firstname,lastname,password,tel,pseudo);
-					if(!treasurer.equals(null)) {
-						if(treasurer.signUp());
-							MonitorPayments next = new MonitorPayments();
+					if(!Objects.isNull(treasurer)) {
+						if(treasurer.signUp()) {
+							MonitorPayments next = new MonitorPayments(treasurer);
 							JFrame monitorPayments = next.monitorPayments;
 							changeFrame(monitorPayments);
 						}else {
-							JOptionPane.showMessageDialog(null, "This treasurer already exist in member !");
+							JOptionPane.showMessageDialog(null, "This pseudo is already used");
 						}
+					}
 				}
 				if(account.equals("Member")) {
 					System.out.println("Send => "+category);
 					Member member = new Member(firstname,lastname,password,tel,pseudo,Integer.parseInt(category));
 					// Velo mis à null, il sera modifié à la page suivante
-						if(!member.equals(null)) {
-							if(member.signUp()){
-								AddVelo next = new AddVelo();
-								JFrame addVelo = next.addVelo;
-								//changeFrame(addVelo);
-							}
+					if(!Objects.isNull(member)) {
+						if(member.signUp()){
+							AddVelo next = new AddVelo();
+							JFrame addVelo = next.addVelo;
+							changeFrame(addVelo);
 						}else {
-							lb_error.setText("This member already exist !");
+							JOptionPane.showMessageDialog(null,"This pseudo is already used");
 						}
+					}
 				}
 				if(account.equals("Manager")) {
 					Manager manager = new Manager(firstname,lastname,password,tel,pseudo,Integer.parseInt(category));
 					// TEST
+					/*
 					System.out.println(manager.getFirstname());
 					System.out.println(manager.getPseudo());
-
-					if(!manager.equals(null)) {
-						if(manager.signUp());
+					*/
+					if(!Objects.isNull(manager)) {
+						if(manager.signUp()){
 							ConsultCalendar next = new ConsultCalendar(manager);
 							JFrame consultCalendar = next.consultCalendar;
 							changeFrame(consultCalendar);
-					}else {
-						JOptionPane.showMessageDialog(null, "This category already have a manager.");
+						}else {
+							JOptionPane.showMessageDialog(null, "This category already have a manager or this pseudo is already used.");
+						}
 					}
 				}
 			}
@@ -291,7 +310,6 @@ public class SignUp {
 		window.setVisible(true);
 		signUp.dispose();
 	}
-	
 	
 	public String formValidation(String firstname, String lastname, String password, String pseudo, String tel, String typeAccount, String typeCategory) {
 		String result="";

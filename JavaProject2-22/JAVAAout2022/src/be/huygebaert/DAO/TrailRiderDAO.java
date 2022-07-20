@@ -39,12 +39,13 @@ public class TrailRiderDAO extends DAO<TrailRider> {
 			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Calendar WHERE IdCalendar ="+id);
 			if(result.first()) {
 				TrailRider trailrider = new TrailRider();
-				MemberDAO memberDAO = new MemberDAO(this.connect);
-				ManagerDAO managerDAO = new ManagerDAO(this.connect);
+				//MemberDAO memberDAO = new MemberDAO(this.connect);
+				//ManagerDAO managerDAO = new ManagerDAO(this.connect);
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
 				
 				trailrider.setSingleCalendar(calendarDAO.find(trailrider.getNum()));
 				trailrider.setNum(id);
+				/*
 				result = this.connect.createStatement().executeQuery(
 						"SELECT * FROM Calendar INNER JOIN Cat_Memb "
 						+ "ON Calendar.IdCalendar = Cat_Memb.IdCalendar "
@@ -65,6 +66,7 @@ public class TrailRiderDAO extends DAO<TrailRider> {
 					// .next() va tout de même s'arrêter au bout du premier et unique manager rencontré pour cette catégorie.
 					trailrider.addPerson(managerDAO.find(result.getInt("IdManager")));
 				}
+				*/
 				return trailrider;
 				
 			}

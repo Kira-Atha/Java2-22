@@ -3,6 +3,8 @@ package be.huygebaert.program;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import be.huygebaert.POJO.Manager;
 import be.huygebaert.POJO.Member;
@@ -12,6 +14,7 @@ public class ConsultCalendar {
 
 	public JFrame consultCalendar;
 	private static Person person;
+	private JLabel lb_message;
 	/**
 	 * Launch the application.
 	 */
@@ -31,8 +34,12 @@ public class ConsultCalendar {
 	/**
 	 * Create the application.
 	 */
-	public ConsultCalendar(Person person) {
+	public ConsultCalendar() {
 		initialize();
+		
+	}
+	public ConsultCalendar(Person person) {
+		this();
 		ConsultCalendar.person=person;
 	}
 
@@ -40,21 +47,32 @@ public class ConsultCalendar {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		if(ConsultCalendar.person instanceof Manager) {
-			// Afficher direct le contenu de sa catégorie, du coup nouvelle page
-			
-		}
-		
-		if(ConsultCalendar.person instanceof Member) {
-			
-		}
-		consultCalendar = new JFrame();
+		consultCalendar = new JFrame("ConsultCalendar");
 		consultCalendar.setBounds(100, 100, 800, 600);
 		consultCalendar.setLocationRelativeTo(null);
 		consultCalendar.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		consultCalendar.setLayout(null);
+		JPanel inConsultCalendar = new JPanel();
+		inConsultCalendar.setBounds(20,20,500,300);
+		inConsultCalendar.setLayout(null);
+		consultCalendar.add(inConsultCalendar);
 		
+		lb_message = new JLabel("");
+		lb_message.setBounds(20, 20, 400, 400);
 		
-		consultCalendar.setVisible(true);
+		if(ConsultCalendar.person instanceof Manager) {
+			lb_message.setText("Manager");
+			inConsultCalendar.add(lb_message);
+		}
+		
+		if(ConsultCalendar.person instanceof Member) {
+			lb_message.setText("Member");
+			inConsultCalendar.add(lb_message);
+		}
+	}
+	
+	public void changeFrame(JFrame window) {
+		window.setVisible(true);
+		consultCalendar.dispose();
 	}
 }

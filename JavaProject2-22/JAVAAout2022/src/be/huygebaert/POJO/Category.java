@@ -14,8 +14,8 @@ abstract public class Category implements Serializable, AutoCloseable {
 	public static DAOFactory adf = new DAOFactory();
 	// Num category = num calendar 
 	protected int num;
-	private Manager singleManager = null;
-	private List<Member> categoryMembers = new ArrayList<Member>();
+	//private Manager singleManager = null;
+	//private List<Member> categoryMembers = new ArrayList<Member>();
 	protected Calendar singleCalendar;
 	public static List <Category> categories = null; 
 	public static DAO<Category> categoryDAO = adf.getCategoryDAO();
@@ -35,22 +35,27 @@ abstract public class Category implements Serializable, AutoCloseable {
 	public static Category getCategory(int num) {
 		return categoryDAO.find(num);
 	}
+	/*
 	public List<Member> getCategoryMembers() {
 		return categoryMembers;
 	}
 	public Manager getSingleManager() {
 		return singleManager;
 	}
+	*/
 	public Calendar getSingleCalendar() {
 		return this.singleCalendar;
 	}
+	/*
 	public void setSingleManager(Manager singleManager) {
 		this.singleManager = singleManager;
 	}
+	*/
 	public void setSingleCalendar(Calendar singleCalendar) {
 		this.singleCalendar = singleCalendar;
 	}
-
+	
+	/*
 	public boolean addPerson(Person person) {
 		if(person instanceof Member) {
 			if(!categoryMembers.contains(person)) {
@@ -72,7 +77,7 @@ abstract public class Category implements Serializable, AutoCloseable {
 		}
 		return false;
 	}
-	
+	*/
 	
 	// Garbage collector passera 
 	public void deleteCategory() {

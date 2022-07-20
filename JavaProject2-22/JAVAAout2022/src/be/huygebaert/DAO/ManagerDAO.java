@@ -77,6 +77,7 @@ public class ManagerDAO extends DAO<Manager>{
 	@Override
 	public List<Manager> findAll() {
 		List <Manager> allManagers = new ArrayList<Manager>();
+		CategoryDAO categoryDAO = new CategoryDAO(this.connect);
 		Manager manager;
 		
 		try {
@@ -86,12 +87,7 @@ public class ManagerDAO extends DAO<Manager>{
 				manager = new Manager(result.getString("Firstname"),result.getString("Lastname"),result.getString("Password"),result.getString("Tel"),result.getString("Pseudo"));
 				manager.setId(result.getInt("IdManager"));
 				// Compléter avec les catégories
-				
-				if(result.first()) {
-					CategoryDAO categoryDAO = new CategoryDAO(this.connect);
-					//manager.setCategory(categoryDAO.find(result.getInt("IdCalendar")));
-				}
-				
+				manager.setCategory(categoryDAO.find(result.getInt("IdCalendar")));
 				allManagers.add(manager);
 			}
 			return allManagers;

@@ -31,7 +31,7 @@ public class MemberDAO extends DAO<Member>{
 
 	@Override
 	public boolean update(Member obj) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 

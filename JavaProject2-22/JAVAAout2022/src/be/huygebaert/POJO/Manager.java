@@ -45,21 +45,6 @@ public class Manager extends Person {
 		this.category = category;
 	}
 	
-	@Override
-	public boolean signUp() {
-		List <Manager> managers = getAllManagers();
-		for(Manager manager : managers ) {
-			/*
-			if(this.getCategory().getNum() == manager.getCategory().getNum()) {
-				return false;
-			}*/
-			System.out.println(manager.getFirstname());
-		}
-		if(personDAO.create(this)) {
-			return true;
-		}
-		return false;
-	}
 	public List <Manager>getAllManagers(){
 		return managerDAO.findAll();
 	}

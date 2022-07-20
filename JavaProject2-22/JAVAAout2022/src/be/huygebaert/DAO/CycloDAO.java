@@ -39,19 +39,21 @@ public class CycloDAO extends DAO<Cyclo> {
 			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Calendar WHERE IdCalendar ="+id);
 			if(result.first()) {
 				Cyclo cyclo = new Cyclo();
-				MemberDAO memberDAO = new MemberDAO(this.connect);
-				ManagerDAO managerDAO = new ManagerDAO(this.connect);
+				//MemberDAO memberDAO = new MemberDAO(this.connect);
+				//ManagerDAO managerDAO = new ManagerDAO(this.connect);
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
 				
 				cyclo.setSingleCalendar(calendarDAO.find(cyclo.getNum()));
 				cyclo.setNum(id);
 				
+				/*
 				result = this.connect.createStatement().executeQuery(
 						"SELECT * FROM Calendar INNER JOIN Cat_Memb "
 						+ "ON Calendar.IdCalendar = Cat_Memb.IdCalendar "
 						+ "INNER JOIN Member "
 						+ "ON Cat_Memb.IdMember = Member.IdMember "
 						+ "WHERE IdCalendar ="+id);
+				
 				while(result.next()) {
 					System.out.println("Membre dans la catégorie => ["+id+"] "+result.getInt("IdMember"));
 					cyclo.addPerson(memberDAO.find(result.getInt("IdMember")));
@@ -64,7 +66,7 @@ public class CycloDAO extends DAO<Cyclo> {
 				while(result.next()) {
 					cyclo.addPerson(managerDAO.find(result.getInt("IdManager")));
 				}
-				
+				*/
 				return cyclo;
 			}
 		}catch(SQLException e) {

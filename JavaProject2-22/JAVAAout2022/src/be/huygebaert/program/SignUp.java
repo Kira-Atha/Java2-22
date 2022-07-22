@@ -31,14 +31,13 @@ import java.awt.Font;
 public class SignUp {
 
 	public JFrame signUp;
-	private JTextField tf_firstname, tf_lastname, tf_tel, tf_pseudo;
+	private JTextField tf_firstname, tf_lastname, tf_tel, tf_pseudo,tf_weight,tf_type,tf_lenght;
 	private JPasswordField pf_password;
-	private JLabel lb_error,lb_firstname, lb_lastname, lb_password, lb_tel, lb_pseudo,lb_typeAccount,lb_typeCategory,lb_personalInfo;
+	private JLabel lb_firstname, lb_lastname, lb_password, lb_tel, lb_pseudo,lb_typeAccount,lb_typeCategory,lb_personalInfo,lb_registration,lb_weight, lb_lenght, lb_type,lb_txtAddVelo;
 	private JButton btn_send, btn_back;
 	private ButtonGroup typeAccountGroup, typeCategoryGroup;
-	private JRadioButton rbtn_category;
-	private JRadioButton rbtn_manager, rbtn_member, rbtn_treasurer;
-
+	private JRadioButton rbtn_manager, rbtn_member, rbtn_treasurer,rbtn_category;
+	private JPanel panel_personelInformations,panel_rbtn_TypeCategory,panel_addVelo,panel_rbtn_TypeAccount;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -63,10 +62,15 @@ public class SignUp {
 		signUp.setLocationRelativeTo(null);
 		signUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		signUp.getContentPane().setLayout(null);
-		JPanel inSignUp = new JPanel();
-		inSignUp.setBounds(134,147,500,162);
-		inSignUp.setLayout(null);
-		signUp.getContentPane().add(inSignUp);
+		panel_personelInformations = new JPanel();
+		panel_personelInformations.setBounds(134,147,500,162);
+		panel_personelInformations.setLayout(null);
+		signUp.getContentPane().add(panel_personelInformations);
+		
+		panel_addVelo = new JPanel();
+		panel_addVelo.setBounds(464, 337, 187, 142);
+		panel_addVelo.setLayout(null);
+		signUp.getContentPane().add(panel_addVelo);
 		
 		tf_firstname = new JTextField();
 		tf_firstname.setBounds(100,30,150,20);
@@ -90,10 +94,27 @@ public class SignUp {
 		lb_password.setBounds(0,120,90,20);
 		btn_send = new JButton("Send");
 		btn_back= new JButton("Back");
+		lb_weight = new JLabel("Weight");
+		lb_weight.setBounds(0,121,60,20);
+		lb_lenght = new JLabel("lenght");
+		lb_lenght.setBounds(0,90,60,20);
+		lb_type = new JLabel("Type");
+		lb_type.setBounds(0,59,60,20);
+		tf_weight = new JTextField();
+		tf_weight.setBounds(87,121,100,20);
+		tf_weight.setText("0");
+		tf_lenght = new JTextField();
+		tf_lenght.setText("0");
+		tf_lenght.setBackground(Color.WHITE);
+		tf_lenght.setBounds(87,90,100,20);
+		tf_type = new JTextField();
+		tf_type.setBounds(87,59,100,20);
+		lb_txtAddVelo = new JLabel("Add Velo");
+		lb_txtAddVelo.setBounds(53,0,100,20);
 		
 		JCheckBox chkb_Pass = new JCheckBox("Show password");
 		chkb_Pass.setBounds(250, 120, 150, 20);
-		inSignUp.add(chkb_Pass);
+		panel_personelInformations.add(chkb_Pass);
 
 		chkb_Pass.addActionListener(e -> {
 			if(chkb_Pass.isSelected()) {
@@ -103,27 +124,34 @@ public class SignUp {
 			}
 		});
 		
-		inSignUp.add(lb_firstname);
-		inSignUp.add(tf_firstname);
-		inSignUp.add(lb_lastname);
-		inSignUp.add(tf_lastname);
-		inSignUp.add(lb_password);
-		inSignUp.add(pf_password);
-		inSignUp.add(lb_tel);
-		inSignUp.add(tf_tel);
-		inSignUp.add(tf_pseudo);
-		inSignUp.add(lb_pseudo);
+		panel_personelInformations.add(lb_firstname);
+		panel_personelInformations.add(tf_firstname);
+		panel_personelInformations.add(lb_lastname);
+		panel_personelInformations.add(tf_lastname);
+		panel_personelInformations.add(lb_password);
+		panel_personelInformations.add(pf_password);
+		panel_personelInformations.add(lb_tel);
+		panel_personelInformations.add(tf_tel);
+		panel_personelInformations.add(tf_pseudo);
+		panel_personelInformations.add(lb_pseudo);
+		panel_addVelo.add(tf_lenght);
+		panel_addVelo.add(tf_weight);
+		panel_addVelo.add(tf_type);
+		panel_addVelo.add(lb_lenght);
+		panel_addVelo.add(lb_weight);
+		panel_addVelo.add(lb_type);
+		panel_addVelo.add(lb_txtAddVelo);
 		
 		lb_personalInfo = new JLabel("Enter your personal information");
 		lb_personalInfo.setBounds(100, 5, 220, 14);
-		inSignUp.add(lb_personalInfo);
+		panel_personelInformations.add(lb_personalInfo);
 		
 		btn_send.setBounds(500,500,70,50);
 		btn_back.setBounds(400,500,70,50);
 		signUp.getContentPane().add(btn_send);
 		signUp.getContentPane().add(btn_back);
 		
-		JPanel panel_rbtn_TypeAccount = new JPanel();
+		panel_rbtn_TypeAccount = new JPanel();
 		panel_rbtn_TypeAccount.setLayout(new GridLayout(3,1));
 		panel_rbtn_TypeAccount.setBounds(210,363,100,100);
 	
@@ -144,7 +172,7 @@ public class SignUp {
 		
 		signUp.getContentPane().add(panel_rbtn_TypeAccount);
 		
-		JPanel panel_rbtn_TypeCategory = new JPanel();
+		panel_rbtn_TypeCategory = new JPanel();
 		panel_rbtn_TypeCategory.setLayout(new GridLayout(4,1));
 		panel_rbtn_TypeCategory.setBounds(331,363,100,100);
 		typeCategoryGroup = new ButtonGroup();
@@ -163,10 +191,10 @@ public class SignUp {
 		}
 
 		signUp.getContentPane().add(panel_rbtn_TypeCategory);
-		JLabel lblNewLabel = new JLabel("Registration");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel.setBounds(298, 51, 133, 26);
-		signUp.getContentPane().add(lblNewLabel);
+		lb_registration = new JLabel("Registration");
+		lb_registration.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lb_registration.setBounds(298, 51, 133, 26);
+		signUp.getContentPane().add(lb_registration);
 		
 		lb_typeAccount = new JLabel("Account type");
 		lb_typeAccount.setBounds(235, 338, 75, 14);
@@ -175,7 +203,6 @@ public class SignUp {
 		lb_typeCategory = new JLabel("Category");
 		lb_typeCategory.setBounds(348, 338, 72, 14);
 		signUp.getContentPane().add(lb_typeCategory);
-		
 		
 		/*
 		 * 
@@ -191,26 +218,17 @@ public class SignUp {
 			String account = checkedAccount? typeAccountGroup.getSelection().getActionCommand():"";
 			boolean checkedCategory = typeCategoryGroup.getSelection() !=null;
 			String category = checkedCategory? typeCategoryGroup.getSelection().getActionCommand():"";
-			String result = formValidation(firstname,lastname,password,pseudo,tel,account,category);
+			double weightVelo = Double.parseDouble(tf_weight.getText());
+			double lenghtVelo = Double.parseDouble(tf_lenght.getText());
+			String typeVelo = tf_type.getText();
+			String result = formValidation(firstname,lastname,password,pseudo,tel,account,category,lenghtVelo,weightVelo,typeVelo);
 			
-			lb_error = new JLabel();
-			lb_error.setBounds(300,250, 400, 300);
-			lb_error.setForeground(Color.red);
-			signUp.getContentPane().add(lb_error);
+			
 			if(result!="") {
-				result="<html>"+result+"</html>";
-				lb_error.setText(result);
-				lb_error.show();
-				System.out.println(result);
+				JOptionPane.showMessageDialog(null, result);
 			}else {
 				//___
-				
-				lb_error.setText(null);
-				lb_error.hide();
-				// Alors envoyer résultat pour traitement
-				DAOFactory adf = new DAOFactory();
-				DAO<Person> personDAO = adf.getPersonDAO();
-				
+				// Alors envoyer résultat pour traitement				
 				if(account.equals("Treasurer")) {
 					Treasurer treasurer = new Treasurer(firstname,lastname,password,tel,pseudo);
 					if(!Objects.isNull(treasurer)) {
@@ -225,13 +243,12 @@ public class SignUp {
 				}
 				if(account.equals("Member")) {
 					System.out.println("Send => "+category);
-					Member member = new Member(firstname,lastname,password,tel,pseudo,Integer.parseInt(category));
-					// Velo mis à null, il sera modifié à la page suivante
+					Member member = new Member(firstname,lastname,password,tel,pseudo,Integer.parseInt(category),typeVelo,weightVelo,lenghtVelo);
 					if(!Objects.isNull(member)) {
 						if(member.signUp()){
-							AddVelo next = new AddVelo();
-							JFrame addVelo = next.addVelo;
-							changeFrame(addVelo);
+							ConsultCalendar next = new ConsultCalendar(member);
+							JFrame consultCalendar = next.consultCalendar;
+							changeFrame(consultCalendar);
 						}else {
 							JOptionPane.showMessageDialog(null,"This pseudo is already used");
 						}
@@ -260,6 +277,32 @@ public class SignUp {
 			Init previous = new Init();
 			JFrame home = previous.init;
 			changeFrame(home);
+		});
+		
+		// Afficher le formulaire d'ajout de vélo lorsque membre est choisi
+		
+		rbtn_member.addActionListener(e-> {
+			if(rbtn_member.isSelected()) {
+					panel_addVelo.setVisible(true);
+				}else {
+				panel_addVelo.setVisible(false);
+			}
+		});
+		
+		rbtn_treasurer.addActionListener(e-> {
+			if(rbtn_member.isSelected()) {
+					panel_addVelo.setVisible(true);
+				}else {
+				panel_addVelo.setVisible(false);
+			}
+		});
+		
+		rbtn_manager.addActionListener(e-> {
+			if(rbtn_member.isSelected()) {
+					panel_addVelo.setVisible(true);
+				}else {
+				panel_addVelo.setVisible(false);
+			}
 		});
 		
 		// Rendre les catégories invisibles pour le trésorier
@@ -311,36 +354,50 @@ public class SignUp {
 		signUp.dispose();
 	}
 	
-	public String formValidation(String firstname, String lastname, String password, String pseudo, String tel, String typeAccount, String typeCategory) {
+	public String formValidation(String firstname, String lastname, String password, String pseudo, String tel, String typeAccount, String typeCategory,double lenghtVelo,double weightVelo,String typeVelo) {
 		String result="";
 		
 		if(firstname.equals("") || firstname.length() < 3) {
 			result+="Invalid firstname";
-			result+="<br/>";
+			result+="\n";
 		}
 		if(lastname.equals("") || lastname.length() < 3) {
 			result+="Invalid lastname";
-			result+="<br/>";
+			result+="\n";
 		}
 		if(password.equals("") || password.length() < 4 || password.length()>16) {
 			result+="Invalid password. Password must be in 4 to 16 characters";
-			result+="<br/>";
+			result+="\n";
 		}
 		if(pseudo.equals("") || pseudo.length() < 3) {
 			result+="Invalid pseudo";
-			result+="<br/>";
+			result+="\n";
 		}
 		if(tel.equals("") || tel.length() < 3) {
 			result+="Invalid tel";
-			result+="<br/>";
+			result+="\n";
 		}
 		if(typeAccount.equals("") || typeAccount.equals(null)) {
 			result+="Invalid account type";
-			result+="<br/>";
+			result+="\n";
 		}
 		if(typeAccount.equals("Treasurer") == false && typeCategory.equals("") || typeCategory.equals(null)) {
 			result+="Invalid category type";
-			result+="<br/>";
+			result+="\n";
+		}
+		if(typeAccount.equals("Member")) {
+			if(weightVelo == 0) {
+				result+="Enter weight velo";
+				result+="\n";
+			}
+			if(lenghtVelo == 0) {
+				result+="Enter lenght velo";
+				result+="\n";
+			}
+			if(typeVelo.equals("") || Objects.isNull(typeVelo)) {
+				result+="Enter type velo";
+				result+="\n";
+			}
 		}
 		return result;
 	}

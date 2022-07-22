@@ -1,6 +1,8 @@
 package be.huygebaert.DAO;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import be.huygebaert.POJO.Velo;
@@ -11,8 +13,7 @@ public class VeloDAO extends DAO<Velo> {
 	}
 
 	@Override
-	public boolean create(Velo obj) {
-		// TODO Auto-generated method stub
+	public boolean create(Velo velo) {
 		return false;
 	}
 

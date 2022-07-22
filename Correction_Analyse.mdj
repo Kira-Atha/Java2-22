@@ -8580,7 +8580,6 @@
 								"reference": {
 									"$ref": "AAAAAAF8VPGpZzhbp5M="
 								},
-								"navigable": false,
 								"multiplicity": "0..1"
 							}
 						},
@@ -8610,7 +8609,6 @@
 								"reference": {
 									"$ref": "AAAAAAF8VRJ/rKIZFaY="
 								},
-								"navigable": false,
 								"multiplicity": "0..*"
 							}
 						}
@@ -8980,7 +8978,6 @@
 								"reference": {
 									"$ref": "AAAAAAF8VPHS2ziFgMM="
 								},
-								"navigable": false,
 								"multiplicity": "1"
 							},
 							"end2": {
@@ -9877,9 +9874,9 @@
 												"$ref": "AAAAAAF8wOuDaEyEDlo="
 											},
 											"font": "Arial;13;0",
-											"left": 110.97900390625,
+											"left": 62.55908203125,
 											"top": 5,
-											"width": 45.0908203125,
+											"width": 41.091796875,
 											"height": 13,
 											"text": "Sign up"
 										},
@@ -9892,9 +9889,9 @@
 											"font": "Arial;13;1",
 											"left": 45,
 											"top": 5,
-											"width": 60.97900390625,
+											"width": 12.55908203125,
 											"height": 13,
-											"text": "interaction"
+											"text": "sd"
 										}
 									],
 									"font": "Arial;13;0",
@@ -10722,7 +10719,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 123.578125,
+											"left": 122.11181640625,
 											"top": 109,
 											"width": 1,
 											"height": 13
@@ -10736,7 +10733,7 @@
 											"font": "Arial;13;1",
 											"left": 93,
 											"top": 109,
-											"width": 25.578125,
+											"width": 24.11181640625,
 											"height": 13,
 											"text": "loop"
 										},
@@ -10769,7 +10766,7 @@
 															"font": "Arial;13;0",
 															"left": 108,
 															"top": 142,
-															"width": 134.37353515625,
+															"width": 129.96826171875,
 															"height": 13,
 															"text": "[While form is not valid]"
 														}
@@ -12179,7 +12176,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 189.07177734375,
+											"left": 187.61181640625,
 											"top": 285,
 											"width": 1,
 											"height": 13
@@ -12193,7 +12190,7 @@
 											"font": "Arial;13;1",
 											"left": 165,
 											"top": 285,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -12226,7 +12223,7 @@
 															"font": "Arial;13;0",
 															"left": 180,
 															"top": 318,
-															"width": 155.33984375,
+															"width": 141.15283203125,
 															"height": 13,
 															"text": "[if the Person is a member]"
 														}
@@ -12845,7 +12842,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 189.07177734375,
+											"left": 187.61181640625,
 											"top": 501,
 											"width": 1,
 											"height": 13
@@ -12859,7 +12856,7 @@
 											"font": "Arial;13;1",
 											"left": 165,
 											"top": 501,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -12892,7 +12889,7 @@
 															"font": "Arial;13;0",
 															"left": 180,
 															"top": 534,
-															"width": 157.52978515625,
+															"width": 142.5810546875,
 															"height": 13,
 															"text": "[if the person is a manager]"
 														}
@@ -12947,7 +12944,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 189.07177734375,
+											"left": 187.61181640625,
 											"top": 717,
 											"width": 1,
 											"height": 13
@@ -12961,7 +12958,7 @@
 											"font": "Arial;13;1",
 											"left": 165,
 											"top": 717,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -12994,7 +12991,7 @@
 															"font": "Arial;13;0",
 															"left": 180,
 															"top": 750,
-															"width": 158.96435546875,
+															"width": 144.015625,
 															"height": 13,
 															"text": "[If the person is a treasurer]"
 														}
@@ -13049,7 +13046,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 144.72998046875,
+											"left": 143.99365234375,
 											"top": 221,
 											"width": 1,
 											"height": 13
@@ -13063,7 +13060,7 @@
 											"font": "Arial;13;1",
 											"left": 125,
 											"top": 221,
-											"width": 14.72998046875,
+											"width": 13.99365234375,
 											"height": 13,
 											"text": "alt"
 										},
@@ -13096,7 +13093,7 @@
 															"font": "Arial;13;0",
 															"left": 140,
 															"top": 254,
-															"width": 139.43896484375,
+															"width": 131.7646484375,
 															"height": 13,
 															"text": "[When  the form is valid]"
 														}
@@ -13129,7 +13126,7 @@
 															"font": "Arial;13;0",
 															"left": 140,
 															"top": 912,
-															"width": 157.5107421875,
+															"width": 148.37646484375,
 															"height": 13,
 															"text": "[When the form is not valid]"
 														}
@@ -14109,9 +14106,9 @@
 												"$ref": "AAAAAAF8wOw1NU5pujY="
 											},
 											"font": "Arial;13;0",
-											"left": 102.97900390625,
+											"left": 54.55908203125,
 											"top": 5,
-											"width": 40.7490234375,
+											"width": 38.20361328125,
 											"height": 13,
 											"text": "Sign in"
 										},
@@ -14124,9 +14121,9 @@
 											"font": "Arial;13;1",
 											"left": 37,
 											"top": 5,
-											"width": 60.97900390625,
+											"width": 12.55908203125,
 											"height": 13,
-											"text": "interaction"
+											"text": "sd"
 										}
 									],
 									"font": "Arial;13;0",
@@ -15745,7 +15742,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 147.578125,
+											"left": 146.11181640625,
 											"top": 109,
 											"width": 1,
 											"height": 13
@@ -15759,7 +15756,7 @@
 											"font": "Arial;13;1",
 											"left": 117,
 											"top": 109,
-											"width": 25.578125,
+											"width": 24.11181640625,
 											"height": 13,
 											"text": "loop"
 										},
@@ -15792,7 +15789,7 @@
 															"font": "Arial;13;0",
 															"left": 132,
 															"top": 142,
-															"width": 153.17529296875,
+															"width": 146.21826171875,
 															"height": 13,
 															"text": "[while the form is not valid]"
 														}
@@ -16295,7 +16292,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 237.07177734375,
+											"left": 235.61181640625,
 											"top": 277,
 											"width": 1,
 											"height": 13
@@ -16309,7 +16306,7 @@
 											"font": "Arial;13;1",
 											"left": 213,
 											"top": 277,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -16342,7 +16339,7 @@
 															"font": "Arial;13;0",
 															"left": 228,
 															"top": 310,
-															"width": 153.89892578125,
+															"width": 140.4228515625,
 															"height": 13,
 															"text": "[if the person is a member]"
 														}
@@ -16397,7 +16394,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 237.07177734375,
+											"left": 235.61181640625,
 											"top": 413,
 											"width": 1,
 											"height": 13
@@ -16411,7 +16408,7 @@
 											"font": "Arial;13;1",
 											"left": 213,
 											"top": 413,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -16444,7 +16441,7 @@
 															"font": "Arial;13;0",
 															"left": 228,
 															"top": 446,
-															"width": 158.24072265625,
+															"width": 143.29833984375,
 															"height": 13,
 															"text": "[if the person is a treasurer]"
 														}
@@ -16499,7 +16496,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 237.07177734375,
+											"left": 235.61181640625,
 											"top": 541,
 											"width": 1,
 											"height": 13
@@ -16513,7 +16510,7 @@
 											"font": "Arial;13;1",
 											"left": 213,
 											"top": 541,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -16546,7 +16543,7 @@
 															"font": "Arial;13;0",
 															"left": 228,
 															"top": 574,
-															"width": 157.52978515625,
+															"width": 142.5810546875,
 															"height": 13,
 															"text": "[if the person is a manager]"
 														}
@@ -16601,7 +16598,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 152.72998046875,
+											"left": 151.99365234375,
 											"top": 229,
 											"width": 1,
 											"height": 13
@@ -16615,7 +16612,7 @@
 											"font": "Arial;13;1",
 											"left": 133,
 											"top": 229,
-											"width": 14.72998046875,
+											"width": 13.99365234375,
 											"height": 13,
 											"text": "alt"
 										},
@@ -16648,7 +16645,7 @@
 															"font": "Arial;13;0",
 															"left": 148,
 															"top": 262,
-															"width": 220.37158203125,
+															"width": 203.24560546875,
 															"height": 13,
 															"text": "[When the form is valid and user exist]"
 														}
@@ -16681,7 +16678,7 @@
 															"font": "Arial;13;0",
 															"left": 148,
 															"top": 664,
-															"width": 308.8642578125,
+															"width": 281.7724609375,
 															"height": 13,
 															"text": "[When the form is not valid and the user doesn't exist]"
 														}
@@ -17557,9 +17554,9 @@
 												"$ref": "AAAAAAF8wOx0bU705qo="
 											},
 											"font": "Arial;13;0",
-											"left": 75.97900390625,
+											"left": 27.55908203125,
 											"top": 10,
-											"width": 101.4580078125,
+											"width": 90.14013671875,
 											"height": 13,
 											"text": "Manage calendar"
 										},
@@ -17572,9 +17569,9 @@
 											"font": "Arial;13;1",
 											"left": 10,
 											"top": 10,
-											"width": 60.97900390625,
+											"width": 12.55908203125,
 											"height": 13,
-											"text": "interaction"
+											"text": "sd"
 										}
 									],
 									"font": "Arial;13;0",
@@ -19096,9 +19093,9 @@
 												"$ref": "AAAAAAF8wOyp0U8oZy8="
 											},
 											"font": "Arial;13;0",
-											"left": 75.97900390625,
+											"left": 27.55908203125,
 											"top": 10,
-											"width": 63.16259765625,
+											"width": 59.86181640625,
 											"height": 13,
 											"text": "Add outing"
 										},
@@ -19111,9 +19108,9 @@
 											"font": "Arial;13;1",
 											"left": 10,
 											"top": 10,
-											"width": 60.97900390625,
+											"width": 12.55908203125,
 											"height": 13,
-											"text": "interaction"
+											"text": "sd"
 										}
 									],
 									"font": "Arial;13;0",
@@ -19375,9 +19372,9 @@
 												"$ref": "AAAAAAF9BHoxElE7vuw="
 											},
 											"font": "Arial;13;0",
-											"left": 55.9599609375,
+											"left": 52.3291015625,
 											"top": 125,
-											"width": 101.4580078125,
+											"width": 90.14013671875,
 											"height": 13,
 											"text": "Manage calendar"
 										},
@@ -19390,7 +19387,7 @@
 											"font": "Arial;13;1",
 											"left": 29,
 											"top": 125,
-											"width": 21.9599609375,
+											"width": 18.3291015625,
 											"height": 13,
 											"text": "seq"
 										},
@@ -19931,7 +19928,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 51.578125,
+											"left": 50.11181640625,
 											"top": 213,
 											"width": 1,
 											"height": 13
@@ -19945,7 +19942,7 @@
 											"font": "Arial;13;1",
 											"left": 21,
 											"top": 213,
-											"width": 25.578125,
+											"width": 24.11181640625,
 											"height": 13,
 											"text": "loop"
 										},
@@ -19978,7 +19975,7 @@
 															"font": "Arial;13;0",
 															"left": 36,
 															"top": 246,
-															"width": 156.05712890625,
+															"width": 149.10009765625,
 															"height": 13,
 															"text": "[While the form is not valid]"
 														}
@@ -20369,7 +20366,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 115.578125,
+											"left": 114.11181640625,
 											"top": 349,
 											"width": 1,
 											"height": 13
@@ -20383,7 +20380,7 @@
 											"font": "Arial;13;1",
 											"left": 85,
 											"top": 349,
-											"width": 25.578125,
+											"width": 24.11181640625,
 											"height": 13,
 											"text": "loop"
 										},
@@ -20416,7 +20413,7 @@
 															"font": "Arial;13;0",
 															"left": 100,
 															"top": 382,
-															"width": 186.443359375,
+															"width": 171.82470703125,
 															"height": 13,
 															"text": "[While manager add new outing]"
 														}
@@ -20471,7 +20468,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 64.72998046875,
+											"left": 63.99365234375,
 											"top": 277,
 											"width": 1,
 											"height": 13
@@ -20485,7 +20482,7 @@
 											"font": "Arial;13;1",
 											"left": 45,
 											"top": 277,
-											"width": 14.72998046875,
+											"width": 13.99365234375,
 											"height": 13,
 											"text": "alt"
 										},
@@ -20518,7 +20515,7 @@
 															"font": "Arial;13;0",
 															"left": 60,
 															"top": 310,
-															"width": 114.1435546875,
+															"width": 109.3828125,
 															"height": 13,
 															"text": "[When form is valid]"
 														}
@@ -20551,7 +20548,7 @@
 															"font": "Arial;13;0",
 															"left": 60,
 															"top": 648,
-															"width": 135.8271484375,
+															"width": 129.24462890625,
 															"height": 13,
 															"text": "[When form is not valid]"
 														}
@@ -21281,7 +21278,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 95.9599609375,
+											"left": 92.3291015625,
 											"top": 493,
 											"width": 1,
 											"height": 13
@@ -21295,7 +21292,7 @@
 											"font": "Arial;13;1",
 											"left": 69,
 											"top": 493,
-											"width": 21.9599609375,
+											"width": 18.3291015625,
 											"height": 13,
 											"text": "seq"
 										},
@@ -21328,7 +21325,7 @@
 															"font": "Arial;13;0",
 															"left": 84,
 															"top": 526,
-															"width": 97.54443359375,
+															"width": 93.4755859375,
 															"height": 13,
 															"text": "[Calculate forfeit]"
 														}
@@ -21790,9 +21787,9 @@
 												"$ref": "AAAAAAF8wO0rGVB6tA4="
 											},
 											"font": "Arial;13;0",
-											"left": 110.97900390625,
+											"left": 62.55908203125,
 											"top": 13,
-											"width": 91.32080078125,
+											"width": 85.8173828125,
 											"height": 13,
 											"text": "Calculate forfeit"
 										},
@@ -21805,9 +21802,9 @@
 											"font": "Arial;13;1",
 											"left": 45,
 											"top": 13,
-											"width": 60.97900390625,
+											"width": 12.55908203125,
 											"height": 13,
-											"text": "interaction"
+											"text": "sd"
 										}
 									],
 									"font": "Arial;13;0",
@@ -22301,7 +22298,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 125.07177734375,
+											"left": 123.61181640625,
 											"top": 461,
 											"width": 1,
 											"height": 13
@@ -22315,7 +22312,7 @@
 											"font": "Arial;13;1",
 											"left": 101,
 											"top": 461,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -22348,7 +22345,7 @@
 															"font": "Arial;13;0",
 															"left": 116,
 															"top": 494,
-															"width": 263.021484375,
+															"width": 237.173828125,
 															"height": 13,
 															"text": "[if the member is a passenger or add his velo]"
 														}
@@ -22969,7 +22966,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 101.07177734375,
+											"left": 99.61181640625,
 											"top": 109,
 											"width": 1,
 											"height": 13
@@ -22983,7 +22980,7 @@
 											"font": "Arial;13;1",
 											"left": 77,
 											"top": 109,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -23016,7 +23013,7 @@
 															"font": "Arial;13;0",
 															"left": 92,
 															"top": 142,
-															"width": 215.337890625,
+															"width": 199.646484375,
 															"height": 13,
 															"text": "[when manager wants to ADD outing]"
 														}
@@ -23766,7 +23763,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 77.07177734375,
+											"left": 75.61181640625,
 											"top": 269,
 											"width": 1,
 											"height": 13
@@ -23780,7 +23777,7 @@
 											"font": "Arial;13;1",
 											"left": 53,
 											"top": 269,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -23813,7 +23810,7 @@
 															"font": "Arial;13;0",
 															"left": 68,
 															"top": 302,
-															"width": 377.94580078125,
+															"width": 345.845703125,
 															"height": 13,
 															"text": "[When the manager wants to update existing outing and its forfeit]"
 														}
@@ -23868,7 +23865,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 125.07177734375,
+											"left": 123.61181640625,
 											"top": 661,
 											"width": 1,
 											"height": 13
@@ -23882,7 +23879,7 @@
 											"font": "Arial;13;1",
 											"left": 101,
 											"top": 661,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -23915,7 +23912,7 @@
 															"font": "Arial;13;0",
 															"left": 116,
 															"top": 694,
-															"width": 208.7998046875,
+															"width": 192.02294921875,
 															"height": 13,
 															"text": "[If the registered member is a driver]"
 														}
@@ -25584,9 +25581,9 @@
 												"$ref": "AAAAAAF8wO1WulDSH00="
 											},
 											"font": "Arial;13;0",
-											"left": 75.97900390625,
+											"left": 27.55908203125,
 											"top": 10,
-											"width": 166.4580078125,
+											"width": 154.435546875,
 											"height": 13,
 											"text": "Summary of the availabilities"
 										},
@@ -25599,9 +25596,9 @@
 											"font": "Arial;13;1",
 											"left": 10,
 											"top": 10,
-											"width": 60.97900390625,
+											"width": 12.55908203125,
 											"height": 13,
-											"text": "interaction"
+											"text": "sd"
 										}
 									],
 									"font": "Arial;13;0",
@@ -25663,9 +25660,9 @@
 												"$ref": "AAAAAAF8wO2tOFEHXOM="
 											},
 											"font": "Arial;13;0",
-											"left": 78.97900390625,
+											"left": 30.55908203125,
 											"top": 5,
-											"width": 170.0888671875,
+											"width": 155.86376953125,
 											"height": 13,
 											"text": "Make a register for the outing"
 										},
@@ -25678,9 +25675,9 @@
 											"font": "Arial;13;1",
 											"left": 13,
 											"top": 5,
-											"width": 60.97900390625,
+											"width": 12.55908203125,
 											"height": 13,
-											"text": "interaction"
+											"text": "sd"
 										}
 									],
 									"font": "Arial;13;0",
@@ -26070,7 +26067,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 87.9599609375,
+											"left": 84.3291015625,
 											"top": 85,
 											"width": 1,
 											"height": 13
@@ -26084,7 +26081,7 @@
 											"font": "Arial;13;1",
 											"left": 61,
 											"top": 85,
-											"width": 21.9599609375,
+											"width": 18.3291015625,
 											"height": 13,
 											"text": "seq"
 										},
@@ -26117,7 +26114,7 @@
 															"font": "Arial;13;0",
 															"left": 76,
 															"top": 118,
-															"width": 96.83349609375,
+															"width": 90.64453125,
 															"height": 13,
 															"text": "[Consult outings]"
 														}
@@ -26847,9 +26844,9 @@
 												"$ref": "AAAAAAF9Dq7RMNqK4bE="
 											},
 											"font": "Arial;13;0",
-											"left": 40.72998046875,
+											"left": 39.99365234375,
 											"top": 269,
-											"width": 45.80810546875,
+											"width": 39.2509765625,
 											"height": 13,
 											"text": "places?"
 										},
@@ -26862,7 +26859,7 @@
 											"font": "Arial;13;1",
 											"left": 21,
 											"top": 269,
-											"width": 14.72998046875,
+											"width": 13.99365234375,
 											"height": 13,
 											"text": "alt"
 										},
@@ -26895,7 +26892,7 @@
 															"font": "Arial;13;0",
 															"left": 36,
 															"top": 302,
-															"width": 210.28515625,
+															"width": 192.3974609375,
 															"height": 13,
 															"text": "[there is availables places for outing]"
 														}
@@ -26928,7 +26925,7 @@
 															"font": "Arial;13;0",
 															"left": 36,
 															"top": 1736,
-															"width": 213.18603515625,
+															"width": 193.85107421875,
 															"height": 13,
 															"text": "[there is not outing availables places]"
 														}
@@ -26982,9 +26979,9 @@
 												"$ref": "AAAAAAF9DrGwatrDM8I="
 											},
 											"font": "Arial;13;0",
-											"left": 56.72998046875,
+											"left": 55.99365234375,
 											"top": 453,
-											"width": 89.88623046875,
+											"width": 80.03466796875,
 											"height": 13,
 											"text": "places vehicle?"
 										},
@@ -26997,7 +26994,7 @@
 											"font": "Arial;13;1",
 											"left": 37,
 											"top": 453,
-											"width": 14.72998046875,
+											"width": 13.99365234375,
 											"height": 13,
 											"text": "alt"
 										},
@@ -27030,7 +27027,7 @@
 															"font": "Arial;13;0",
 															"left": 52,
 															"top": 486,
-															"width": 157.52978515625,
+															"width": 143.29833984375,
 															"height": 13,
 															"text": "[availables seats in vehicle]"
 														}
@@ -27063,7 +27060,7 @@
 															"font": "Arial;13;0",
 															"left": 52,
 															"top": 1216,
-															"width": 218.232421875,
+															"width": 198.1611328125,
 															"height": 13,
 															"text": "[there is not vehicle availables places]"
 														}
@@ -27233,9 +27230,9 @@
 												"$ref": "AAAAAAF9DuHGNxDbE0M="
 											},
 											"font": "Arial;13;0",
-											"left": 48.72998046875,
+											"left": 47.99365234375,
 											"top": 325,
-											"width": 48.6962890625,
+											"width": 44.3037109375,
 											"height": 13,
 											"text": "vehicle?"
 										},
@@ -27248,7 +27245,7 @@
 											"font": "Arial;13;1",
 											"left": 29,
 											"top": 325,
-											"width": 14.72998046875,
+											"width": 13.99365234375,
 											"height": 13,
 											"text": "alt"
 										},
@@ -27281,7 +27278,7 @@
 															"font": "Arial;13;0",
 															"left": 44,
 															"top": 358,
-															"width": 169.7998046875,
+															"width": 162.10009765625,
 															"height": 13,
 															"text": "[if vehicle exist for this outing]"
 														}
@@ -27314,7 +27311,7 @@
 															"font": "Arial;13;0",
 															"left": 44,
 															"top": 1376,
-															"width": 298.01611328125,
+															"width": 276.3515625,
 															"height": 13,
 															"text": "[if vehicle doesn't exist (or no places )for this outing]"
 														}
@@ -27368,9 +27365,9 @@
 												"$ref": "AAAAAAF9Du/N5Bf8W6E="
 											},
 											"font": "Arial;13;0",
-											"left": 71.9599609375,
+											"left": 68.3291015625,
 											"top": 1565,
-											"width": 66.76806640625,
+											"width": 60.5537109375,
 											"height": 13,
 											"text": "add vehicle"
 										},
@@ -27383,7 +27380,7 @@
 											"font": "Arial;13;1",
 											"left": 45,
 											"top": 1565,
-											"width": 21.9599609375,
+											"width": 18.3291015625,
 											"height": 13,
 											"text": "seq"
 										},
@@ -27416,7 +27413,7 @@
 															"font": "Arial;13;0",
 															"left": 60,
 															"top": 1598,
-															"width": 205.96240234375,
+															"width": 186.2529296875,
 															"height": 13,
 															"text": "[Add vehicle and availables spaces]"
 														}
@@ -29263,7 +29260,7 @@
 												"$ref": "AAAAAAF9D09AflLte8U="
 											},
 											"font": "Arial;13;0",
-											"left": 93.07177734375,
+											"left": 91.61181640625,
 											"top": 765,
 											"width": 7.5,
 											"height": 13,
@@ -29278,7 +29275,7 @@
 											"font": "Arial;13;1",
 											"left": 69,
 											"top": 765,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -29311,7 +29308,7 @@
 															"font": "Arial;13;0",
 															"left": 84,
 															"top": 798,
-															"width": 140.181640625,
+															"width": 128.8701171875,
 															"height": 13,
 															"text": "[want a seat for his velo]"
 														}
@@ -29365,9 +29362,9 @@
 												"$ref": "AAAAAAF9D0+C/FMHqBs="
 											},
 											"font": "Arial;13;0",
-											"left": 173.07177734375,
+											"left": 171.61181640625,
 											"top": 469,
-											"width": 8.22998046875,
+											"width": 7.5,
 											"height": 13,
 											"text": "p"
 										},
@@ -29380,7 +29377,7 @@
 											"font": "Arial;13;1",
 											"left": 149,
 											"top": 469,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -29413,7 +29410,7 @@
 															"font": "Arial;13;0",
 															"left": 164,
 															"top": 502,
-															"width": 137.28076171875,
+															"width": 127.06103515625,
 															"height": 13,
 															"text": "[want a seat for himself]"
 														}
@@ -30807,9 +30804,9 @@
 												"$ref": "AAAAAAF9GPtsm1omP+w="
 											},
 											"font": "Arial;13;0",
-											"left": 216.72998046875,
+											"left": 215.99365234375,
 											"top": 1397,
-											"width": 35.68994140625,
+											"width": 32.40185546875,
 											"height": 13,
 											"text": "velo ?"
 										},
@@ -30822,7 +30819,7 @@
 											"font": "Arial;13;1",
 											"left": 197,
 											"top": 1397,
-											"width": 14.72998046875,
+											"width": 13.99365234375,
 											"height": 13,
 											"text": "alt"
 										},
@@ -30855,7 +30852,7 @@
 															"font": "Arial;13;0",
 															"left": 212,
 															"top": 1430,
-															"width": 386.166015625,
+															"width": 349.97802734375,
 															"height": 13,
 															"text": "[if member want to register his velo and there isn't seats availables]"
 														}
@@ -30888,7 +30885,7 @@
 															"font": "Arial;13;0",
 															"left": 212,
 															"top": 1488,
-															"width": 411.86767578125,
+															"width": 371.09033203125,
 															"height": 13,
 															"text": "[if member want to register himself as passenger and there is not place]"
 														}
@@ -32135,9 +32132,9 @@
 												"$ref": "AAAAAAF8wO6B7lGlhZ8="
 											},
 											"font": "Arial;13;0",
-											"left": 75.97900390625,
+											"left": 27.55908203125,
 											"top": 10,
-											"width": 199.73876953125,
+											"width": 178.5947265625,
 											"height": 13,
 											"text": "Add vehicle and availables spaces"
 										},
@@ -32150,9 +32147,9 @@
 											"font": "Arial;13;1",
 											"left": 10,
 											"top": 10,
-											"width": 60.97900390625,
+											"width": 12.55908203125,
 											"height": 13,
-											"text": "interaction"
+											"text": "sd"
 										}
 									],
 									"font": "Arial;13;0",
@@ -32650,7 +32647,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 87.9599609375,
+											"left": 84.3291015625,
 											"top": 133,
 											"width": 1,
 											"height": 13
@@ -32664,7 +32661,7 @@
 											"font": "Arial;13;1",
 											"left": 61,
 											"top": 133,
-											"width": 21.9599609375,
+											"width": 18.3291015625,
 											"height": 13,
 											"text": "seq"
 										},
@@ -32697,7 +32694,7 @@
 															"font": "Arial;13;0",
 															"left": 76,
 															"top": 166,
-															"width": 176.3125,
+															"width": 162.07470703125,
 															"height": 13,
 															"text": "[make a register for the outing]"
 														}
@@ -32751,9 +32748,9 @@
 												"$ref": "AAAAAAF9GP6x1lpcgOE="
 											},
 											"font": "Arial;13;0",
-											"left": 69.07177734375,
+											"left": 67.61181640625,
 											"top": 285,
-											"width": 32.07177734375,
+											"width": 26.27001953125,
 											"height": 13,
 											"text": "seats"
 										},
@@ -32766,7 +32763,7 @@
 											"font": "Arial;13;1",
 											"left": 45,
 											"top": 285,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -32799,7 +32796,7 @@
 															"font": "Arial;13;0",
 															"left": 60,
 															"top": 318,
-															"width": 117.4443359375,
+															"width": 105.5107421875,
 															"height": 13,
 															"text": "[if seats needed > 0]"
 														}
@@ -34275,9 +34272,9 @@
 												"$ref": "AAAAAAF8wO9RTlNVm/8="
 											},
 											"font": "Arial;13;0",
-											"left": 94.97900390625,
+											"left": 46.55908203125,
 											"top": 29,
-											"width": 104.32080078125,
+											"width": 96.6845703125,
 											"height": 13,
 											"text": "Monitor payments"
 										},
@@ -34290,9 +34287,9 @@
 											"font": "Arial;13;1",
 											"left": 29,
 											"top": 29,
-											"width": 60.97900390625,
+											"width": 12.55908203125,
 											"height": 13,
-											"text": "interaction"
+											"text": "sd"
 										}
 									],
 									"font": "Arial;13;0",
@@ -34923,7 +34920,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 77.07177734375,
+											"left": 75.61181640625,
 											"top": 493,
 											"width": 1,
 											"height": 13
@@ -34937,7 +34934,7 @@
 											"font": "Arial;13;1",
 											"left": 53,
 											"top": 493,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -34970,7 +34967,7 @@
 															"font": "Arial;13;0",
 															"left": 68,
 															"top": 526,
-															"width": 132.6025390625,
+															"width": 123.1826171875,
 															"height": 13,
 															"text": "[if current balance > 0 ]"
 														}
@@ -35025,7 +35022,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 85.07177734375,
+											"left": 83.61181640625,
 											"top": 701,
 											"width": 1,
 											"height": 13
@@ -35039,7 +35036,7 @@
 											"font": "Arial;13;1",
 											"left": 61,
 											"top": 701,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -35072,7 +35069,7 @@
 															"font": "Arial;13;0",
 															"left": 76,
 															"top": 734,
-															"width": 128.99072265625,
+															"width": 119.9326171875,
 															"height": 13,
 															"text": "[if current balance < 0]"
 														}
@@ -35690,7 +35687,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 85.07177734375,
+											"left": 83.61181640625,
 											"top": 565,
 											"width": 1,
 											"height": 13
@@ -35704,7 +35701,7 @@
 											"font": "Arial;13;1",
 											"left": 61,
 											"top": 565,
-											"width": 19.07177734375,
+											"width": 17.61181640625,
 											"height": 13,
 											"text": "opt"
 										},
@@ -35737,7 +35734,7 @@
 															"font": "Arial;13;0",
 															"left": 76,
 															"top": 598,
-															"width": 300.57421875,
+															"width": 275.4248046875,
 															"height": 13,
 															"text": "[if treasurer send notification three times to member]"
 														}
@@ -38626,7 +38623,7 @@
 									"font": "Arial;13;0",
 									"left": 750,
 									"top": 356.5,
-									"width": 181.919921875,
+									"width": 181,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF8wPOWjFct6PE="
@@ -38925,7 +38922,7 @@
 									"font": "Arial;13;0",
 									"left": 1005,
 									"top": 540.5,
-									"width": 216.62255859375,
+									"width": 216,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF8wPOWjFdIIe0="
@@ -39499,7 +39496,7 @@
 									"font": "Arial;13;0",
 									"left": 1337.5,
 									"top": 772.5,
-									"width": 121.95361328125,
+									"width": 121,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF8wPOWjVd3COA="
@@ -42084,7 +42081,7 @@
 									"font": "Arial;13;0",
 									"left": 536.5,
 									"top": 236.5,
-									"width": 155.208984375,
+									"width": 154,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF9BGc3XktFmnI="
@@ -42940,7 +42937,7 @@
 									"font": "Arial;13;0",
 									"left": 1228.5,
 									"top": 612.5,
-									"width": 97.37548828125,
+									"width": 96,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF9BPF67W9DpkM="
@@ -43327,7 +43324,7 @@
 									"font": "Arial;13;0",
 									"left": 758,
 									"top": 444.5,
-									"width": 106.77001953125,
+									"width": 106,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF9CjZsnZ8D4VU="
@@ -43939,8 +43936,7 @@
 								},
 								"reference": {
 									"$ref": "AAAAAAF8wPOWkVhM5I4="
-								},
-								"navigable": false
+								}
 							},
 							"end2": {
 								"_type": "UMLAssociationEnd",
@@ -44426,8 +44422,7 @@
 								},
 								"reference": {
 									"$ref": "AAAAAAF8wPOWk1isybA="
-								},
-								"navigable": false
+								}
 							},
 							"end2": {
 								"_type": "UMLAssociationEnd",
@@ -44746,9 +44741,9 @@
 												"$ref": "AAAAAAF9BGn75094o9A="
 											},
 											"font": "Arial;13;0",
-											"left": 75.97900390625,
+											"left": 27.55908203125,
 											"top": 10,
-											"width": 126.74072265625,
+											"width": 112.9091796875,
 											"height": 13,
 											"text": "Choose new category"
 										},
@@ -44761,9 +44756,9 @@
 											"font": "Arial;13;1",
 											"left": 10,
 											"top": 10,
-											"width": 60.97900390625,
+											"width": 12.55908203125,
 											"height": 13,
-											"text": "interaction"
+											"text": "sd"
 										}
 									],
 									"font": "Arial;13;0",
@@ -46385,9 +46380,9 @@
 												"$ref": "AAAAAAF9BPL/HnKbINA="
 											},
 											"font": "Arial;13;0",
-											"left": 75.97900390625,
+											"left": 27.55908203125,
 											"top": 10,
-											"width": 81.95166015625,
+											"width": 75.013671875,
 											"height": 13,
 											"text": "Update outing"
 										},
@@ -46400,9 +46395,9 @@
 											"font": "Arial;13;1",
 											"left": 10,
 											"top": 10,
-											"width": 60.97900390625,
+											"width": 12.55908203125,
 											"height": 13,
-											"text": "interaction"
+											"text": "sd"
 										}
 									],
 									"font": "Arial;13;0",
@@ -46462,9 +46457,9 @@
 														"$ref": "AAAAAAF9BSNTi4qjxhI="
 													},
 													"font": "Arial;13;0",
-													"left": 110.97900390625,
+													"left": 62.55908203125,
 													"top": 45,
-													"width": 85.5634765625,
+													"width": 78.263671875,
 													"height": 13,
 													"text": "Update  outing"
 												},
@@ -46477,9 +46472,9 @@
 													"font": "Arial;13;1",
 													"left": 45,
 													"top": 45,
-													"width": 60.97900390625,
+													"width": 12.55908203125,
 													"height": 13,
-													"text": "interaction"
+													"text": "sd"
 												}
 											],
 											"font": "Arial;13;0",
@@ -46750,9 +46745,9 @@
 														"$ref": "AAAAAAF9BSNTi4q0r3A="
 													},
 													"font": "Arial;13;0",
-													"left": 183.9599609375,
+													"left": 180.3291015625,
 													"top": 165,
-													"width": 101.4580078125,
+													"width": 90.14013671875,
 													"height": 13,
 													"text": "Manage calendar"
 												},
@@ -46765,7 +46760,7 @@
 													"font": "Arial;13;1",
 													"left": 157,
 													"top": 165,
-													"width": 21.9599609375,
+													"width": 18.3291015625,
 													"height": 13,
 													"text": "seq"
 												},
@@ -47193,7 +47188,7 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 83.578125,
+													"left": 82.11181640625,
 													"top": 269,
 													"width": 1,
 													"height": 13
@@ -47207,7 +47202,7 @@
 													"font": "Arial;13;1",
 													"left": 53,
 													"top": 269,
-													"width": 25.578125,
+													"width": 24.11181640625,
 													"height": 13,
 													"text": "loop"
 												},
@@ -47240,7 +47235,7 @@
 																	"font": "Arial;13;0",
 																	"left": 68,
 																	"top": 302,
-																	"width": 156.05712890625,
+																	"width": 149.10009765625,
 																	"height": 13,
 																	"text": "[While the form is not valid]"
 																}
@@ -47295,7 +47290,7 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 187.578125,
+													"left": 186.11181640625,
 													"top": 317,
 													"width": 1,
 													"height": 13
@@ -47309,7 +47304,7 @@
 													"font": "Arial;13;1",
 													"left": 157,
 													"top": 317,
-													"width": 25.578125,
+													"width": 24.11181640625,
 													"height": 13,
 													"text": "loop"
 												},
@@ -47342,7 +47337,7 @@
 																	"font": "Arial;13;0",
 																	"left": 172,
 																	"top": 350,
-																	"width": 177.05517578125,
+																	"width": 162.79833984375,
 																	"height": 13,
 																	"text": "[While manager update outing]"
 																}
@@ -47397,7 +47392,7 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 200.72998046875,
+													"left": 199.99365234375,
 													"top": 373,
 													"width": 1,
 													"height": 13
@@ -47411,7 +47406,7 @@
 													"font": "Arial;13;1",
 													"left": 181,
 													"top": 373,
-													"width": 14.72998046875,
+													"width": 13.99365234375,
 													"height": 13,
 													"text": "alt"
 												},
@@ -47444,7 +47439,7 @@
 																	"font": "Arial;13;0",
 																	"left": 196,
 																	"top": 406,
-																	"width": 114.1435546875,
+																	"width": 109.3828125,
 																	"height": 13,
 																	"text": "[When form is valid]"
 																}
@@ -47477,7 +47472,7 @@
 																	"font": "Arial;13;0",
 																	"left": 196,
 																	"top": 736,
-																	"width": 135.8271484375,
+																	"width": 129.24462890625,
 																	"height": 13,
 																	"text": "[When form is not valid]"
 																}
@@ -48767,7 +48762,7 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 247.9599609375,
+													"left": 244.3291015625,
 													"top": 541,
 													"width": 1,
 													"height": 13
@@ -48781,7 +48776,7 @@
 													"font": "Arial;13;1",
 													"left": 221,
 													"top": 541,
-													"width": 21.9599609375,
+													"width": 18.3291015625,
 													"height": 13,
 													"text": "seq"
 												},
@@ -48814,7 +48809,7 @@
 																	"font": "Arial;13;0",
 																	"left": 236,
 																	"top": 574,
-																	"width": 94.65625,
+																	"width": 90.57470703125,
 																	"height": 13,
 																	"text": "[calculate forfeit]"
 																}
@@ -49296,9 +49291,9 @@
 												"$ref": "AAAAAAF9BPN+3HL0ZNM="
 											},
 											"font": "Arial;13;0",
-											"left": 75.97900390625,
+											"left": 27.55908203125,
 											"top": 10,
-											"width": 77.60986328125,
+											"width": 71.3955078125,
 											"height": 13,
 											"text": "Delete outing"
 										},
@@ -49311,9 +49306,9 @@
 											"font": "Arial;13;1",
 											"left": 10,
 											"top": 10,
-											"width": 60.97900390625,
+											"width": 12.55908203125,
 											"height": 13,
-											"text": "interaction"
+											"text": "sd"
 										}
 									],
 									"font": "Arial;13;0",
@@ -49373,9 +49368,9 @@
 														"$ref": "AAAAAAF9BQ1mp38F+H4="
 													},
 													"font": "Arial;13;0",
-													"left": 75.97900390625,
+													"left": 27.55908203125,
 													"top": 5,
-													"width": 77.60986328125,
+													"width": 71.3955078125,
 													"height": 13,
 													"text": "Delete outing"
 												},
@@ -49388,9 +49383,9 @@
 													"font": "Arial;13;1",
 													"left": 10,
 													"top": 5,
-													"width": 60.97900390625,
+													"width": 12.55908203125,
 													"height": 13,
-													"text": "interaction"
+													"text": "sd"
 												}
 											],
 											"font": "Arial;13;0",
@@ -49651,9 +49646,9 @@
 														"$ref": "AAAAAAF9BQ1mp38Wj5Y="
 													},
 													"font": "Arial;13;0",
-													"left": 55.9599609375,
+													"left": 52.3291015625,
 													"top": 125,
-													"width": 101.4580078125,
+													"width": 90.14013671875,
 													"height": 13,
 													"text": "Manage calendar"
 												},
@@ -49666,7 +49661,7 @@
 													"font": "Arial;13;1",
 													"left": 29,
 													"top": 125,
-													"width": 21.9599609375,
+													"width": 18.3291015625,
 													"height": 13,
 													"text": "seq"
 												},
@@ -50096,7 +50091,7 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 99.578125,
+													"left": 98.11181640625,
 													"top": 213,
 													"width": 1,
 													"height": 13
@@ -50110,7 +50105,7 @@
 													"font": "Arial;13;1",
 													"left": 69,
 													"top": 213,
-													"width": 25.578125,
+													"width": 24.11181640625,
 													"height": 13,
 													"text": "loop"
 												},
@@ -50143,7 +50138,7 @@
 																	"font": "Arial;13;0",
 																	"left": 84,
 																	"top": 246,
-																	"width": 172.71337890625,
+																	"width": 159.18017578125,
 																	"height": 13,
 																	"text": "[While manager delete outing]"
 																}
@@ -51418,9 +51413,9 @@
 														"$ref": "AAAAAAF9CjqAUKY9mB0="
 													},
 													"font": "Arial;13;0",
-													"left": 86.97900390625,
+													"left": 38.55908203125,
 													"top": 5,
-													"width": 87.7216796875,
+													"width": 80.08544921875,
 													"height": 13,
 													"text": "consult outings"
 												},
@@ -51433,9 +51428,9 @@
 													"font": "Arial;13;1",
 													"left": 21,
 													"top": 5,
-													"width": 60.97900390625,
+													"width": 12.55908203125,
 													"height": 13,
-													"text": "interaction"
+													"text": "sd"
 												}
 											],
 											"font": "Arial;13;0",

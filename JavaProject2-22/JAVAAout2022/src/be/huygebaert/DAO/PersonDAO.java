@@ -17,6 +17,7 @@ import be.huygebaert.POJO.Person;
 import be.huygebaert.POJO.TrailRider;
 import be.huygebaert.POJO.Treasurer;
 import be.huygebaert.POJO.Trialist;
+import be.huygebaert.POJO.Velo;
 
 public class PersonDAO extends DAO<Person> {
 	public PersonDAO(Connection connection) {
@@ -25,7 +26,6 @@ public class PersonDAO extends DAO<Person> {
 
 	@Override
 	public boolean create(Person obj) {
-		
 		if(obj instanceof Member) {
 			Member member = (Member) obj;
 			try(PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Member VALUES (?,?,?,?,?,?,?)")) {
@@ -36,7 +36,7 @@ public class PersonDAO extends DAO<Person> {
 		        ps0.setString(5, member.getTel());
 		        ps0.setDouble(6, member.getBalance());
 		        ps0.setString(7, member.getPseudo());
-		        int isOk0 = ps0.executeUpdate();
+		        ps0.executeUpdate();
 			}catch(SQLException e) {
 				e.printStackTrace();
 				return false;
@@ -55,6 +55,22 @@ public class PersonDAO extends DAO<Person> {
 			}
 			*/
         	//member.getMemberCategories().get(0).addPerson(member);
+			
+			// Ajout du vélo
+			
+			/*
+			try(PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Velo VALUES (?,?,?,?,?)")) {
+			    ps0.setInt(1, 0);
+		        ps0.setDouble(2, member.getMemberVelos().get(0).getWeight());
+		        ps0.setString(3, member.getMemberVelos().get(0).getType());
+		        ps0.setDouble(4, member.getMemberVelos().get(0).getLenght());
+		        ps0.setInt(5, member.getId());
+		        ps0.executeUpdate();
+			}catch(SQLException e) {
+				e.printStackTrace();
+				return false;
+			}
+			*/
         	return true;
 		}
 		

@@ -22,7 +22,7 @@ public class Member extends Person{
 		this.pseudo = pseudo;
 		this.password = password;
 	}
-	public Member(String firstname, String lastname, String password, String tel, String pseudo, int num_category) {
+	public Member(String firstname, String lastname, String password, String tel, String pseudo, int num_category,String type,double lenght,double weight) {
 		try {
 			Person.idCount++;
 			this.id = Person.idCount;
@@ -40,8 +40,7 @@ public class Member extends Person{
 			System.out.println("Le numéro de la catégorie : "+this.getMemberCategories().get(0).getNum());
 			// 
 			memberVelos = new ArrayList<Velo>();
-			Velo velo = new Velo();
-			this.memberVelos.add(velo);
+			this.addVelo(type, weight, lenght);
 			
 			memberRegisters = new ArrayList<Register>();
 		}catch(Exception e) {
@@ -110,8 +109,12 @@ public class Member extends Person{
 		this.memberRegisters = memberRegisters;
 	}
 
-	public void calculateBalance() {
-		
+	public boolean calculateBalance(double amount) {
+		if(this.getBalance() > amount) {
+			this.setBalance(this.getBalance() - amount);
+			return true;
+		}
+		return false;
 	}
 	public void verifyBalance() {
 		
@@ -127,5 +130,8 @@ public class Member extends Person{
 			return true;
 		}
 		return false;
+	}
+	public void addVelo(String type,double weight, double lenght) {
+		this.memberVelos.add(new Velo(type,weight,lenght));
 	}
 }

@@ -1,6 +1,7 @@
 package be.huygebaert.DAO;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,7 +32,16 @@ public class MemberDAO extends DAO<Member>{
 
 	@Override
 	public boolean update(Member obj) {
-		
+		String sql = "UPDATE MEMBER set Balance = ? WHERE idMember = ?";
+		try {
+			PreparedStatement statement = this.connect.prepareStatement(sql);
+			statement.setDouble(1,obj.getBalance());
+			statement.setInt(2,obj.getId());
+			statement.executeUpdate();
+			return true;
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 

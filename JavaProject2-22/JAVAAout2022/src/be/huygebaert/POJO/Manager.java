@@ -49,7 +49,14 @@ public class Manager extends Person {
 		return managerDAO.findAll();
 	}
 	
-	public void manageCalendar() {
-		
+	public void manageCalendar(int choice,Outing outing) {
+		if(choice == 0){
+			this.getCategory().getSingleCalendar().addOuting(outing);
+		}else if (choice==1) {
+			this.getCategory().getSingleCalendar().updateOuting(outing);
+		}else if(choice == 2) {
+			this.getCategory().getSingleCalendar().deleteOuting(outing);
+		}
 	}
+	
 }

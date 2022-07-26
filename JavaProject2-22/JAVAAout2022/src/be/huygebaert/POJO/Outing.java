@@ -5,6 +5,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import be.huygebaert.DAO.DAO;
+import be.huygebaert.DAO.DAOFactory;
+
 public class Outing implements Serializable {
 	private static final long serialVersionUID = -3227706264588669413L;
 	private int num;
@@ -21,10 +24,12 @@ public class Outing implements Serializable {
 	private List <Vehicle> outingVehicles;
 	private List <Register> outingRegisters;
 	
+	public Outing() {
+		outingVehicles = new ArrayList<Vehicle>();
+		outingRegisters = new ArrayList<Register>();
+	}
 	
-	public Outing() {}
-	
-	public Outing(String startPoint, Date dateStart, double forfeit, Calendar calendar,int maxMemberSeats, int maxVeloSeats) {
+	public Outing(String startPoint, Date dateStart, double forfeit,int maxMemberSeats, int maxVeloSeats,Calendar calendar) {
 		this.startPoint = startPoint;
 		this.dateStart = dateStart;
 		this.forfeit = forfeit;
@@ -39,7 +44,7 @@ public class Outing implements Serializable {
 		outingVehicles = new ArrayList<Vehicle>();
 		outingRegisters = new ArrayList<Register>();
 	}
-
+	
 	public int getNum() {
 		return num;
 	}
@@ -88,7 +93,7 @@ public class Outing implements Serializable {
 	public void setMaxVeloSeats(int maxVeloSeats) {
 		this.maxVeloSeats = maxVeloSeats;
 	}
-
+	
 	public Calendar getOutingCalendar() {
 		return outingCalendar;
 	}
@@ -96,7 +101,7 @@ public class Outing implements Serializable {
 	public void setOutingCalendar(Calendar outingCalendar) {
 		this.outingCalendar = outingCalendar;
 	}
-
+	
 	public List<Vehicle> getOutingVehicles() {
 		return outingVehicles;
 	}
@@ -139,5 +144,21 @@ public class Outing implements Serializable {
 	public double calculateForfeit() {
 		double forfeit_ = 0;
 		return forfeit_;
+	}
+	// TODO : Revoir
+	public int getNeedMemberSeats() {
+		return this.maxMemberSeats - this.remainingMemberSeats;
+	}
+
+	public int getNeedVeloSeats() {
+		return this.maxMemberSeats-this.remainingVeloSeats;
+	}
+
+	public int getRemainingMemberSeats() {
+		return remainingMemberSeats;
+	}
+
+	public int getRemainingVeloSeats() {
+		return remainingVeloSeats;
 	}
 }

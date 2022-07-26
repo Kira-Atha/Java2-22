@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="hsqldb-2.5.0.jar"/>
 	<classpathentry kind="lib" path="jackcess-3.0.1.jar"/>
 	<classpathentry kind="lib" path="ucanaccess-5.0.1.jar"/>
+	<classpathentry kind="lib" path="jcalendar-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -4,36 +4,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import be.huygebaert.DAO.DAO;
+import be.huygebaert.DAO.DAOFactory;
+
 public class Calendar implements Serializable {
 
 	private static final long serialVersionUID = -7374868150598752577L;
 	private int num;
 	private List <Outing> calendarOutings;
-	private Category calendarCategory;
+	//private Category calendarCategory;
+	static DAOFactory adf = new DAOFactory();
+	DAO<Outing> outingDAO = adf.getOutingDAO();
 	
-	public Calendar() {}
+	public Calendar() {
+		this.calendarOutings = new ArrayList<Outing>();
+	}
 	
 	public Calendar(int num,Category category) {
 		this.num = num;
 		// Composition de Category, attention ! UN CALENDRIER par catégorie ! Constructeur appelé dans l'unique instanciation des catégories
 		this.calendarOutings = new ArrayList<Outing>();
-		this.calendarCategory = category;
+		//this.calendarCategory = category;
 	}
-	
-	// Est inutile, non? Je peux récupérer via les références.
-	public Calendar getInstanceOfCalendar(Category category) {
-		Calendar calendar = null;
-		return calendar;
-	}
-
-	public Category getCalendarCategory() {
-		return calendarCategory;
-	}
-
-	public void setCalendarCategory(Category calendarCategory) {
-		this.calendarCategory = calendarCategory;
-	}
-	
 	
 	public int getNum() {
 		return num;
@@ -44,27 +36,38 @@ public class Calendar implements Serializable {
 	}
 
 	public List <Outing> getCalendarOutings() {
-		return calendarOutings;
+		return this.calendarOutings;
 	}
 
 	public void setCalendarOutings(List <Outing> calendarOutings) {
 		this.calendarOutings = calendarOutings;
 	}
 
-
-	public boolean addOuting() {
-		// TODO
-		Outing outing = new Outing();
+	public boolean addOuting(Outing outing) {
 		if(outing!=null) {
-			this.calendarOutings.add(outing);
-			return true;
+			this.getCalendarOutings().add(outing);
+			if(outingDAO.create(outing)) {
+				return true;
+			}
 		}
 		return false;
 	}	
 	public boolean updateOuting(Outing outing) {
+		if(outing!=null) {
+			this.getCalendarOutings().set(outing.getNum(),outing);
+			if(outingDAO.update(outing)) {
+				return true;
+			}
+		}
 		return false;
 	}
 	public boolean deleteOuting(Outing outing) {
+		if(outing!=null) {
+			this.getCalendarOutings().remove(outing.getNum());
+			if(outingDAO.delete(outing)) {
+				return true;
+			}
+		}
 		return false;
 	}
 }

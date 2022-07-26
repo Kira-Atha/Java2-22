@@ -36,26 +36,52 @@ public class CalendarDAO extends DAO<Calendar>{
 
 	@Override
 	public Calendar find(int id) {
-		Calendar calendar = new Calendar();
-		
+		Calendar calendar = null;
+		ResultSet result = null;
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Calendar WHERE IdCalendar =" +id);
+			calendar = new Calendar();
+			
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Calendar WHERE IdCalendar =" +id);
 			if(result.first()) {
 				calendar.setNum(result.getInt("IdCalendar"));
-		
-				CategoryDAO categoryDAO = new CategoryDAO(this.connect);
-				calendar.setCalendarCategory(categoryDAO.find(id));
-				
-				//OutingDAO outingDAO = new OutingDAO(this.connect);
-				//calendar.addOuting(outingDAO.find(result.getInt("IdOuting");
 			}
 			
-			return calendar;
 		}catch(SQLException e) {
-			e.printStackTrace();
+			 System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+		}catch (Exception e) {
+          e.printStackTrace();
+      }finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
-		return null;
+		try {
+			calendar = new Calendar();
+			
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Outing WHERE IdCalendar =" +id);
+			
+			if(result.next()) {
+				OutingDAO outingDAO = new OutingDAO(this.connect);
+				calendar.getCalendarOutings().add(outingDAO.find(result.getInt("IdOuting")));
+			}
+			
+		}catch(SQLException e) {
+			 System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+		}catch (Exception e) {
+          e.printStackTrace();
+      }finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+			
+		return calendar;
 	}
 
 	@Override

@@ -46,26 +46,28 @@ public class ManagerDAO extends DAO<Manager>{
 				// Compléter avec info de base
 				manager = new Manager(result.getString("Firstname"),result.getString("Lastname"),result.getString("Password"),result.getString("Tel"),result.getString("Pseudo"));
 				manager.setId(result.getInt("IdManager"));
-				/*
+				
 				// Compléter avec la catégorie
 				CycloDAO cycloDAO = new CycloDAO(this.connect);
 				DescenderDAO descenderDAO = new DescenderDAO(this.connect);
 				TrailRiderDAO trailRiderDAO = new TrailRiderDAO(this.connect);
 				TrialistDAO trialistDAO = new TrialistDAO(this.connect);
 				
-				if(result.getInt("IdCalendar") == 1) {
-					manager.setCategory(cycloDAO.find(result.getInt("IdCalendar")));
+				System.out.println(result.getInt("IdCalendar"));
+				switch(result.getInt("IdCalendar")) {
+					case 1:
+						manager.setCategory(cycloDAO.find(result.getInt("IdCalendar")));
+						break;
+					case 2:
+						manager.setCategory(descenderDAO.find(result.getInt("IdCalendar")));
+						break;
+					case 3:
+						manager.setCategory(trailRiderDAO.find(result.getInt("IdCalendar")));
+						break;
+					case 4:
+						manager.setCategory(trialistDAO.find(result.getInt("IdCalendar")));
+						break;
 				}
-				if(result.getInt("IdCalendar") == 2) {
-					manager.setCategory(descenderDAO.find(result.getInt("IdCalendar")));
-				}
-				if(result.getInt("IdCalendar") == 3) {
-					manager.setCategory(trailRiderDAO.find(result.getInt("IdCalendar")));
-				}
-				if(result.getInt("IdCalendar") == 4) {
-					manager.setCategory(trialistDAO.find(result.getInt("IdCalendar")));
-				}
-				*/
 				return manager;
 			}
 		}catch(SQLException e){

@@ -28,12 +28,16 @@ public class Manager extends Person {
 		}
 	}
 	public Manager(String firstname, String lastname, String password, String tel, String pseudo) {
-		this.id = Person.idCount;
-		this.firstname = firstname;
-		this.lastname=lastname;
-		this.password=password;
-		this.tel=tel;
-		this.pseudo=pseudo;
+		try {
+			this.id = Person.idCount;
+			this.firstname = firstname;
+			this.lastname=lastname;
+			this.password=password;
+			this.tel=tel;
+			this.pseudo=pseudo;
+		}catch(Exception e) {
+			System.out.println("Manager doesn't create");
+		}
 	}
 	public Manager() {
 		
@@ -50,13 +54,22 @@ public class Manager extends Person {
 	}
 	
 	public void manageCalendar(int choice,Outing outing) {
-		if(choice == 0){
-			this.getCategory().getSingleCalendar().addOuting(outing);
-		}else if (choice==1) {
-			this.getCategory().getSingleCalendar().updateOuting(outing);
-		}else if(choice == 2) {
-			this.getCategory().getSingleCalendar().deleteOuting(outing);
+		switch(choice) {
+			case 0:
+				this.getCategory().getSingleCalendar().addOuting(outing);
+				break;
+			case 1:
+				this.getCategory().getSingleCalendar().updateOuting(outing);
+				break;
+			case 2:
+				this.getCategory().getSingleCalendar().deleteOuting(outing);
+				break;
 		}
 	}
 	
+	 @Override
+	 public String toString() {
+		 return this.getFirstname()+" => " +this.getCategory();
+	 }
+	 
 }

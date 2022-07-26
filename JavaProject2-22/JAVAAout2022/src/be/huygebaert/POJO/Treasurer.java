@@ -23,6 +23,14 @@ public class Treasurer extends Person {
 		}
 	}
 
+	public boolean managePayments(Member member,double amount) {
+		if(member.calculateBalance(amount)) {
+			if(member.updateBalance(member)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	private void sendPaymentReminderLetter() {
 		
 	}

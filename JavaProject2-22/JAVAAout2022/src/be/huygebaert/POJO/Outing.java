@@ -1,8 +1,10 @@
 package be.huygebaert.POJO;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import be.huygebaert.DAO.DAO;
@@ -12,7 +14,7 @@ public class Outing implements Serializable {
 	private static final long serialVersionUID = -3227706264588669413L;
 	private int num;
 	private String startPoint;
-	private Date dateStart;
+	private Date startDate;
 	private double forfeit;
 	private int maxMemberSeats;
 	private int maxVeloSeats;
@@ -21,17 +23,19 @@ public class Outing implements Serializable {
 	private int remainingMemberSeats;
 	private int remainingVeloSeats;
 	private Calendar outingCalendar;
-	private List <Vehicle> outingVehicles;
-	private List <Register> outingRegisters;
+	private List <Vehicle> outingVehicles = new ArrayList<Vehicle>();
+	private List <Register> outingRegisters = new ArrayList<Register>();
+	static DAOFactory adf = new DAOFactory();
+	protected static DAO<Outing>outingDAO = adf.getOutingDAO();
+	protected static List<Outing> allOutings = null;
 	
 	public Outing() {
-		outingVehicles = new ArrayList<Vehicle>();
-		outingRegisters = new ArrayList<Register>();
+
 	}
 	
-	public Outing(String startPoint, Date dateStart, double forfeit,int maxMemberSeats, int maxVeloSeats,Calendar calendar) {
+	public Outing(String startPoint, Date date, double forfeit,int maxMemberSeats, int maxVeloSeats,Calendar calendar) {
 		this.startPoint = startPoint;
-		this.dateStart = dateStart;
+		this.startDate = date;
 		this.forfeit = forfeit;
 		this.outingCalendar = calendar;
 		this.maxMemberSeats = maxMemberSeats;
@@ -44,7 +48,8 @@ public class Outing implements Serializable {
 		outingVehicles = new ArrayList<Vehicle>();
 		outingRegisters = new ArrayList<Register>();
 	}
-	
+
+
 	public int getNum() {
 		return num;
 	}
@@ -61,12 +66,12 @@ public class Outing implements Serializable {
 		this.startPoint = startPoint;
 	}
 
-	public Date getDateStart() {
-		return dateStart;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setDateStart(Date dateStart) {
-		this.dateStart = dateStart;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 
 	public double getForfeit() {
@@ -160,5 +165,9 @@ public class Outing implements Serializable {
 
 	public int getRemainingVeloSeats() {
 		return remainingVeloSeats;
+	}
+	public static List<Outing> getAllOutings() {
+		allOutings = outingDAO.findAll();
+		return allOutings;
 	}
 }

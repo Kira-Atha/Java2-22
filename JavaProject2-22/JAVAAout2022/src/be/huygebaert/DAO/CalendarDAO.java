@@ -58,29 +58,31 @@ public class CalendarDAO extends DAO<Calendar>{
 			}
 		}
 		
-		try {
-			calendar = new Calendar();
-			
-			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Outing WHERE IdCalendar =" +id);
-			
-			if(result.next()) {
-				OutingDAO outingDAO = new OutingDAO(this.connect);
-				calendar.getCalendarOutings().add(outingDAO.find(result.getInt("IdOuting")));
-			}
-			
-		}catch(SQLException e) {
-			 System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-		}catch (Exception e) {
-          e.printStackTrace();
-      }finally{
+		/*
+		if(calendar.getCalendarOutings().size() == 0) { 
 			try {
-				result.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-			
+				calendar = new Calendar();
+				
+				result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Outing WHERE IdCalendar =" +id);
+				
+				if(result.next()) {
+					OutingDAO outingDAO = new OutingDAO(this.connect);
+					calendar.getCalendarOutings().add(outingDAO.find(result.getInt("IdOuting")));
+				}
+				
+			}catch(SQLException e) {
+				 System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+			}catch (Exception e) {
+	          e.printStackTrace();
+	      }finally{
+				try {
+					result.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+	      }
+		}	
+		*/
 		return calendar;
 	}
 

@@ -29,6 +29,8 @@ import javax.swing.table.TableCellRenderer;
 
 import be.huygebaert.POJO.Member;
 import be.huygebaert.POJO.Person;
+import be.huygebaert.POJO.Treasurer;
+
 import java.awt.event.FocusAdapter;
 
 public class MonitorPayments {
@@ -59,19 +61,17 @@ public class MonitorPayments {
 		});
 	}
 
-	public MonitorPayments() {
+	public MonitorPayments(Person person) {
+		MonitorPayments.person = person;
 		initialize();
 	}
-	
-	public MonitorPayments(Person person) {
-		this();
-		MonitorPayments.person = person;
-	}
+
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		//MonitorPayments.person = person;
 		monitorPayments = new JFrame("MonitorPayments");
 		monitorPayments.setBounds(100, 100, 800, 600);
 		monitorPayments.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -118,13 +118,13 @@ public class MonitorPayments {
 		tablePayments.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("- test");
+				//System.out.println("- test");
 				int row = tablePayments.getSelectedRow();
 				int column = 3;
 				double currentValue = Double.valueOf(tablePayments.getValueAt(row,column).toString());
 				//tf_newBalance.setText(Double.toString(currentValue));
 				lb_balanceSelected.setText(Double.toString(currentValue));
-				System.out.println(currentValue);
+				//System.out.println(currentValue);
 			}
 		});
 		
@@ -137,7 +137,7 @@ public class MonitorPayments {
 				row[2] = member.getPseudo();
 				row[3] = ((Member) member).getBalance();
 				model.addRow(row);
-				System.out.println(member.getFirstname()+((Member) member).getBalance());
+				//System.out.println(member.getFirstname()+((Member) member).getBalance());
 			}
 		}
 		btn_send = new JButton("-");
@@ -149,15 +149,12 @@ public class MonitorPayments {
 						//TODO : changer value car en DB démarre à 2
 						member = member.getMember(tablePayments.getSelectedRow()+2);
 						
-						if(member.calculateBalance(Double.parseDouble(tf_newBalance.getText()))) {
-							if(member.updateBalance(member)) {
-								JOptionPane.showMessageDialog(null,"Success");
-								
-								//TODO : trouver un meilleur refresh 
-								MonitorPayments next = new MonitorPayments(person);
-								JFrame monitorPayments = next.monitorPayments;
-								changeFrame(monitorPayments);
-							}
+						if(((Treasurer) person).managePayments(member,Double.parseDouble(tf_newBalance.getText()))) {
+							JOptionPane.showMessageDialog(null,"Success");
+							//TODO : trouver un meilleur refresh 
+							MonitorPayments next = new MonitorPayments(person);
+							JFrame monitorPayments = next.monitorPayments;
+							changeFrame(monitorPayments);
 						}else {
 							JOptionPane.showMessageDialog(null, "Balance of member si < the amount to subtract");
 						}

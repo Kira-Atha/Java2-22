@@ -22,21 +22,13 @@ public class OutingDAO extends DAO<Outing> {
 		try(PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Outing VALUES (?,?,?,?,?,?,?,?,?)")) {
 		    ps0.setInt(1, 0);
 	        ps0.setString(2, outing.getStartPoint());
-	        /*
-	        String selectedDate = null;
-	        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	        selectedDate = "#"+sdf.format(outing.getStartDate())+"#";
-
-	        System.out.println("DAO DATE : "+selectedDate);
-	        System.out.println(outing.getStartDate().getClass().getSimpleName());
-	        */
-	        
 	        ps0.setDate(3,new java.sql.Date(outing.getStartDate().getTime()));
 	        ps0.setDouble(4, outing.getForfeit());
 	        ps0.setInt(5, outing.getMaxMemberSeats());
 	        ps0.setInt(6, outing.getMaxVeloSeats());
 	        ps0.setInt(7, outing.getMaxMemberSeats());
 	        ps0.setInt(8, outing.getMaxMemberSeats());
+	        System.out.println("DAO CALENDAR NUM : "+outing.getOutingCalendar().getNum());
 	        ps0.setInt(9,outing.getOutingCalendar().getNum());
 	        ps0.executeUpdate();
 	        return true;
@@ -75,14 +67,17 @@ public class OutingDAO extends DAO<Outing> {
 
 	@Override
 	public boolean update(Outing outing) {
-		String sql = "UPDATE Outing set MaxMemberSeats,MaxVeloSeats,NeedMemberSeats,RemainingMemberSeats = ?,?,?,? WHERE idOuting = ?";
+		String sql = "UPDATE OUTING set StartPoint,DateStart,Forfeit,MaxMemberSeats,MaxVeloSeats,NeedMemberSeats,RemainingMemberSeats = ?,?,?,?,?,?,? WHERE IdOuting = ?";
 		try {
 			PreparedStatement statement = this.connect.prepareStatement(sql);
-			statement.setInt(1,outing.getMaxMemberSeats());
-			statement.setInt(2,outing.getMaxVeloSeats());
-			statement.setInt(3,outing.getNeedMemberSeats());
-			statement.setInt(4,outing.getRemainingMemberSeats());
-			statement.setInt(5,outing.getNum());
+			statement.setString(1,outing.getStartPoint());
+			statement.setDate(2,new java.sql.Date(outing.getStartDate().getTime()));
+			statement.setDouble(3,outing.getForfeit());
+			statement.setInt(4,outing.getMaxMemberSeats());
+			statement.setInt(5,outing.getMaxVeloSeats());
+			statement.setInt(6,outing.getNeedMemberSeats());
+			statement.setInt(7,outing.getRemainingMemberSeats());
+			statement.setInt(8,outing.getNum());
 			
 			statement.executeUpdate();
 			return true;

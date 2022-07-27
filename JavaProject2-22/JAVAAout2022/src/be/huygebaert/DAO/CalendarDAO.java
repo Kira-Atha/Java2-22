@@ -10,8 +10,6 @@ import be.huygebaert.POJO.Category;
 import be.huygebaert.POJO.Manager;
 
 public class CalendarDAO extends DAO<Calendar>{
-// Num de category = num calendar. Un calendrier par catégorie. Et même table. (liens 1-1) Est-ce nécessaire d'implémenter cette DAO dans notre cas ???
-	// J'avais juste besoin de récupérer un objet calendrier pour set le calendrier de la catégorie
 	public CalendarDAO(Connection conn) {
 		super(conn);
 	}

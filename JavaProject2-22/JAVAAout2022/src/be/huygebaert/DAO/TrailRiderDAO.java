@@ -43,8 +43,9 @@ public class TrailRiderDAO extends DAO<TrailRider> {
 				//ManagerDAO managerDAO = new ManagerDAO(this.connect);
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
 				
-				trailrider.setSingleCalendar(calendarDAO.find(trailrider.getNum()));
 				trailrider.setNum(id);
+				trailrider.setSingleCalendar(calendarDAO.find(trailrider.getNum()));
+				
 				/*
 				result = this.connect.createStatement().executeQuery(
 						"SELECT * FROM Calendar INNER JOIN Cat_Memb "

@@ -53,18 +53,27 @@ public class Manager extends Person {
 		return managerDAO.findAll();
 	}
 	
-	public void manageCalendar(int choice,Outing outing) {
+	public boolean manageCalendar(int choice,Outing outing) {
 		switch(choice) {
 			case 0:
-				this.getCategory().getSingleCalendar().addOuting(outing);
-				break;
+				if(this.getCategory().getSingleCalendar().addOuting(outing)) {
+					//System.out.println("passage 0");
+					return true;
+				}
 			case 1:
-				this.getCategory().getSingleCalendar().updateOuting(outing);
-				break;
+				//System.out.println("BEFORE DAO => "+outing.getNum());
+				
+				if(this.getCategory().getSingleCalendar().updateOuting(outing)) {
+					//System.out.println("passage 1");
+					return true;
+				}
 			case 2:
-				this.getCategory().getSingleCalendar().deleteOuting(outing);
-				break;
+				if(this.getCategory().getSingleCalendar().deleteOuting(outing)) {
+					//System.out.println("passage 2");
+					return true;
+				}
 		}
+		return false;
 	}
 	
 	 @Override

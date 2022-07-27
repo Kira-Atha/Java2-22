@@ -42,9 +42,9 @@ public class CycloDAO extends DAO<Cyclo> {
 				//MemberDAO memberDAO = new MemberDAO(this.connect);
 				//ManagerDAO managerDAO = new ManagerDAO(this.connect);
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
-				
-				cyclo.setSingleCalendar(calendarDAO.find(cyclo.getNum()));
 				cyclo.setNum(id);
+				cyclo.setSingleCalendar(calendarDAO.find(cyclo.getNum()));
+				
 				
 				/*
 				result = this.connect.createStatement().executeQuery(

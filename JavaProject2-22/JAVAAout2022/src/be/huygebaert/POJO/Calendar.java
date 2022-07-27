@@ -20,9 +20,8 @@ public class Calendar implements Serializable {
 		this.calendarOutings = new ArrayList<Outing>();
 	}
 	
-	public Calendar(int num,Category category) {
+	public Calendar(int num) {
 		this.num = num;
-		// Composition de Category, attention ! UN CALENDRIER par catégorie ! Constructeur appelé dans l'unique instanciation des catégories
 		this.calendarOutings = new ArrayList<Outing>();
 		//this.calendarCategory = category;
 	}
@@ -36,12 +35,20 @@ public class Calendar implements Serializable {
 	}
 
 	public List <Outing> getCalendarOutings() {
+		List <Outing> allOutings = Outing.getAllOutings();
+		for(Outing out : allOutings) {
+			if(out.getOutingCalendar().getNum() == this.getNum()) {
+				this.calendarOutings.add(out);
+			}
+		}
 		return this.calendarOutings;
 	}
 
+	/*
 	public void setCalendarOutings(List <Outing> calendarOutings) {
 		this.calendarOutings = calendarOutings;
 	}
+	*/
 
 	public boolean addOuting(Outing outing) {
 		if(outing!=null) {
@@ -54,7 +61,6 @@ public class Calendar implements Serializable {
 	}	
 	public boolean updateOuting(Outing outing) {
 		if(outing!=null) {
-			this.getCalendarOutings().set(outing.getNum(),outing);
 			if(outingDAO.update(outing)) {
 				return true;
 			}

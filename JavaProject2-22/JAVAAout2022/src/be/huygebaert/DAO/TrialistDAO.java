@@ -42,9 +42,8 @@ public class TrialistDAO extends DAO<Trialist>{
 				//MemberDAO memberDAO = new MemberDAO(this.connect);
 				//ManagerDAO managerDAO = new ManagerDAO(this.connect);
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
-				
-				trialist.setSingleCalendar(calendarDAO.find(trialist.getNum()));
 				trialist.setNum(id);
+				trialist.setSingleCalendar(calendarDAO.find(trialist.getNum()));
 				/*
 				result = this.connect.createStatement().executeQuery(
 						"SELECT * FROM Calendar INNER JOIN Cat_Memb "

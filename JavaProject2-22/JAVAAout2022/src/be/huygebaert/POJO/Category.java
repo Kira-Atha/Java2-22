@@ -7,7 +7,7 @@ import java.util.List;
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 
-abstract public class Category implements Serializable, AutoCloseable {
+abstract public class Category implements Serializable {
 	//INFOs JANVIER : PAS DE SINGLETON PAR CATEGORIE && CATEGORIES DEJA EN BDD (PAS CREATE)
 	
 	private static final long serialVersionUID = -309839438964916689L;
@@ -82,24 +82,5 @@ abstract public class Category implements Serializable, AutoCloseable {
 	// Garbage collector passera 
 	public void deleteCategory() {
 		this.singleCalendar = null;
-	}
-	
-	private boolean closed;
-	
-	public boolean isClosed() {
-		return closed;
-	}
-	@Override
-	public void close() throws Exception{
-		closed = true;
-	}
-
-	protected Cyclo getCategory() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public String toString() {
-		return this.getClass().getSimpleName();
 	}
 }

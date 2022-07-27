@@ -93,6 +93,29 @@ public class CategoryDAO extends DAO<Category> {
 		try {
 			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Calendar");
 			while(result.next()){
+				switch(result.getString("NameCategory")) {
+					case "Cyclo":
+						category = new Cyclo();
+						category = cycloDAO.find(result.getInt("IdCalendar"));
+						categories.add(category);
+						break;
+					case "Descender":
+						category = new Descender();
+						category = descenderDAO.find(result.getInt("IdCalendar"));
+						categories.add(category);
+						break;
+					case "Trailrider":
+						category = new TrailRider();
+						category = trailriderDAO.find(result.getInt("IdCalendar"));
+						categories.add(category);
+						break;
+					case "Trialist":
+						category = new Trialist();
+						category = trialistDAO.find(result.getInt("IdCalendar"));
+						categories.add(category);
+						break;
+				}
+				/*
 				if (result.getString("NameCategory").equals("Cyclo")){
 					category = new Cyclo();
 					category = cycloDAO.find(result.getInt("IdCalendar"));
@@ -112,7 +135,7 @@ public class CategoryDAO extends DAO<Category> {
 					category = new Trialist();
 					category = trialistDAO.find(result.getInt("IdCalendar"));
 					categories.add(category);
-				}
+				}*/
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();

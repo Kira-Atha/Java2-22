@@ -14,4 +14,5 @@ public class Cyclo extends Category{
 	public static Category getCategory(int num) {		
 		return cycloDAO.find(num);
 	}
+
 }

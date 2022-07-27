@@ -43,9 +43,9 @@ public class DescenderDAO extends DAO<Descender>{
 				//MemberDAO memberDAO = new MemberDAO(this.connect);
 				//ManagerDAO managerDAO = new ManagerDAO(this.connect);
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
-				
-				descender.setSingleCalendar(calendarDAO.find(descender.getNum()));
 				descender.setNum(id);
+				descender.setSingleCalendar(calendarDAO.find(descender.getNum()));
+				
 				/*
 				result = this.connect.createStatement().executeQuery(
 						"SELECT * FROM Calendar INNER JOIN Cat_Memb "

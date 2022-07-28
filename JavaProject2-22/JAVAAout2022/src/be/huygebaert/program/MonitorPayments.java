@@ -41,7 +41,7 @@ public class MonitorPayments {
 	private JLabel lb_hello;
 	static JTable tablePayments;
 	private JScrollPane scrollTable;
-	private JButton btn_send; 
+	private JButton btn_send,btn_logout; 
 	private JTextField tf_newBalance;
 	private List <Person>allMembers;
 	private JLabel lb_allMembers;
@@ -82,6 +82,16 @@ public class MonitorPayments {
 		inMonitorPayments.setBounds(10,10,159,44);
 		inMonitorPayments.setLayout(null);
 		monitorPayments.getContentPane().add(inMonitorPayments);
+		
+		btn_logout = new JButton();
+		btn_logout.setText("logout");
+		btn_logout.setBounds(685,11,89,20);
+		monitorPayments.getContentPane().add(btn_logout);
+		btn_logout.addActionListener(e-> {
+			Init previous = new Init();
+			JFrame home = previous.init;
+			changeFrame(home);
+		});
 		
 		lb_allMembers = new JLabel("All Members");
 		lb_allMembers.setFont(new Font("Tahoma", Font.PLAIN, 20));

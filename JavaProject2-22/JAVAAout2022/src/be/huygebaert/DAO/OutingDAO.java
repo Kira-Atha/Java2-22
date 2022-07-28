@@ -44,7 +44,7 @@ public class OutingDAO extends DAO<Outing> {
 	@Override
 	public boolean delete(Outing outing) {
 		try {
-			PreparedStatement ps = this.connect.prepareStatement("DELETE * FROM OUTING WHERE IdOuting =");
+			PreparedStatement ps = this.connect.prepareStatement("DELETE * FROM OUTING WHERE IdOuting = ?");
 			ps.setInt(1,outing.getNum());
 			ps.executeUpdate();
 		}catch(SQLException e) {
@@ -53,7 +53,17 @@ public class OutingDAO extends DAO<Outing> {
             e.printStackTrace();
         }
 		try {
-			PreparedStatement ps = this.connect.prepareStatement("DELETE * FROM Out_Vehicle WHERE IdOuting =");
+			PreparedStatement ps = this.connect.prepareStatement("DELETE * FROM Out_Vehicle WHERE IdOuting = ?");
+			ps.setInt(1,outing.getNum());
+			ps.executeUpdate();
+			return true;
+		}catch(SQLException e) {
+			 System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+		}catch (Exception e) {
+           e.printStackTrace();
+		}
+		try {
+			PreparedStatement ps = this.connect.prepareStatement("DELETE * FROM Register WHERE IdOuting = ?");
 			ps.setInt(1,outing.getNum());
 			ps.executeUpdate();
 			return true;
@@ -67,7 +77,7 @@ public class OutingDAO extends DAO<Outing> {
 
 	@Override
 	public boolean update(Outing outing) {
-		String sql = "UPDATE OUTING set StartPoint,DateStart,Forfeit,MaxMemberSeats,MaxVeloSeats,NeedMemberSeats,RemainingMemberSeats = ?,?,?,?,?,?,? WHERE IdOuting = ?";
+		String sql = "UPDATE OUTING set StartPoint = ?,DateStart = ?,Forfeit=?,MaxMemberSeats=?,MaxVeloSeats=?,NeedMemberSeats=?,RemainingMemberSeats = ? WHERE IdOuting = ?";
 		try {
 			PreparedStatement statement = this.connect.prepareStatement(sql);
 			statement.setString(1,outing.getStartPoint());
@@ -78,8 +88,10 @@ public class OutingDAO extends DAO<Outing> {
 			statement.setInt(6,outing.getNeedMemberSeats());
 			statement.setInt(7,outing.getRemainingMemberSeats());
 			statement.setInt(8,outing.getNum());
-			
 			statement.executeUpdate();
+			
+			System.out.println(outing.getStartPoint());
+			System.out.println(outing.getStartDate());
 			return true;
 		}catch(SQLException e) {
 			e.printStackTrace();

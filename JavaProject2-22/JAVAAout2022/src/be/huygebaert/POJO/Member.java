@@ -15,14 +15,14 @@ public class Member extends Person{
 	private List <Velo> memberVelos;
 	private Vehicle memberVehicle = null;
 	private List<Register> memberRegisters;
-
+	protected static DAO<Velo>veloDAO = adf.getVeloDAO();
 	
 	public Member() {}
 	public Member(String pseudo,String password) {
 		this.pseudo = pseudo;
 		this.password = password;
 	}
-	public Member(String firstname, String lastname, String password, String tel, String pseudo, int num_category,String type,double lenght,double weight) {
+	public Member(String firstname, String lastname, String password, String tel, String pseudo, Category category,String type,double lenght,double weight) {
 		try {
 			Person.idCount++;
 			this.id = Person.idCount;
@@ -31,16 +31,12 @@ public class Member extends Person{
 			this.password=password;
 			this.tel=tel;
 			this.pseudo=pseudo;
-			this.balance=20;
+			this.balance=0;
 			
 			memberCategories = new ArrayList<Category>();
-			Category category = Category.getCategory(num_category);
 			this.memberCategories.add(category);
-			System.out.println("Passe a member "+num_category);
-			System.out.println("Le numéro de la catégorie : "+this.getMemberCategories().get(0).getNum());
-			// 
 			memberVelos = new ArrayList<Velo>();
-			this.addVelo(type, weight, lenght);
+			this.memberVelos.add(new Velo(weight,type,lenght,this));
 			
 			memberRegisters = new ArrayList<Register>();
 		}catch(Exception e) {
@@ -75,7 +71,6 @@ public class Member extends Person{
 	}
 	public static List<Member> getAllMembers(){
 		DAO<Member> memberDAO = adf.getMemberDAO();
-		
 		return memberDAO.findAll();
 	}
 	
@@ -109,15 +104,12 @@ public class Member extends Person{
 		this.memberRegisters = memberRegisters;
 	}
 
-	public boolean calculateBalance(double amount) {
+	public boolean verifyBalance(double amount) {
 		if(this.getBalance() > amount) {
 			this.setBalance(this.getBalance() - amount);
 			return true;
 		}
 		return false;
-	}
-	public void verifyBalance() {
-		
 	}
 	
 	@Override
@@ -126,12 +118,24 @@ public class Member extends Person{
 	}
 
 	public boolean updateBalance(Member member) {
+		this.setBalance(member.getBalance());
 		if(memberDAO.update(member)) {
 			return true;
 		}
 		return false;
 	}
-	public void addVelo(String type,double weight, double lenght) {
-		this.memberVelos.add(new Velo(type,weight,lenght));
+	public boolean createVelo(Velo velo) {
+		this.memberVelos.add(velo);
+		if(veloDAO.create(velo)) {
+			return true;
+		}
+		return false;
+	}
+	public boolean joinCategory(Category category) {
+		this.getMemberCategories().add(category);
+		if(memberDAO.create(this)){
+			return true;
+		}
+		return false;
 	}
 }

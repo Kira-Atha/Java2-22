@@ -83,7 +83,7 @@ abstract public class Person implements Serializable {
 		allPersons = getAllPersons();
 		
 		if(this instanceof Manager) {
-			System.out.println("here");
+			//System.out.println("here");
 			Manager manager = (Manager) this;
 			List <Manager> managers = manager.getAllManagers();
 			for(Manager man : managers ) {
@@ -101,7 +101,6 @@ abstract public class Person implements Serializable {
 				}
 			}
 		}
-
 		if(personDAO.create(this)) {
 			return true;
 		}
@@ -118,5 +117,8 @@ abstract public class Person implements Serializable {
 	}
 	public Manager getManager(int id) {
 		return managerDAO.find(id);
+	}
+	public boolean joinCategory(Category category) {
+		return false;
 	}
 }

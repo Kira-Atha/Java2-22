@@ -62,6 +62,7 @@ public class Calendar implements Serializable {
 	public boolean updateOuting(Outing outing) {
 		if(outing!=null) {
 			if(outingDAO.update(outing)) {
+				getCalendarOutings();
 				return true;
 			}
 		}
@@ -69,8 +70,8 @@ public class Calendar implements Serializable {
 	}
 	public boolean deleteOuting(Outing outing) {
 		if(outing!=null) {
-			this.getCalendarOutings().remove(outing.getNum());
 			if(outingDAO.delete(outing)) {
+				getCalendarOutings();
 				return true;
 			}
 		}

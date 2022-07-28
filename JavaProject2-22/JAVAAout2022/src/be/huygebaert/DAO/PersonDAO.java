@@ -28,50 +28,33 @@ public class PersonDAO extends DAO<Person> {
 	public boolean create(Person obj) {
 		if(obj instanceof Member) {
 			Member member = (Member) obj;
-			try(PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Member VALUES (?,?,?,?,?,?,?)")) {
-			    ps0.setInt(1, 0);
-		        ps0.setString(2, member.getFirstname());
-		        ps0.setString(3, member.getLastname());
-		        ps0.setString(4, member.getPassword());
-		        ps0.setString(5, member.getTel());
-		        ps0.setDouble(6, member.getBalance());
-		        ps0.setString(7, member.getPseudo());
-		        ps0.executeUpdate();
+			try(PreparedStatement ps = this.connect.prepareStatement("INSERT INTO Member VALUES (?,?,?,?,?,?,?)")) {
+			    ps.setInt(1, 0);
+		        ps.setString(2, member.getFirstname());
+		        ps.setString(3, member.getLastname());
+		        ps.setString(4, member.getPassword());
+		        ps.setString(5, member.getTel());
+		        ps.setDouble(6, member.getBalance());
+		        ps.setString(7, member.getPseudo());
+
+		        if(ps.executeUpdate() > 0) {
+			        try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+			            if (generatedKeys.next()) {
+			                member.setId(generatedKeys.getInt(1));
+			            }
+			            else {
+			                return false;
+			            }
+			        }
+		        }
+		        ps.close();
+		        member.createVelo(member.getMemberVelos().get(0));
+		        //TODO JOIN ... FK Bug ???
+		        //member.joinCategory(member.getMemberCategories().get(0));
+		        this.connect.commit();
 			}catch(SQLException e) {
 				e.printStackTrace();
-				return false;
 			}
-			/*
-			try(PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Cat_Memb VALUES (?,?)")) {
-				List<Person> allPerson = findAll();
-				System.out.println("allPersonSize =>"+allPerson.size());
-		        ps0.setInt(1, allPerson.size());
-		        ps0.setInt(2, member.getMemberCategories().get(0).getNum());
-		        System.out.println("DAO, dans l'insert => "+member.getMemberCategories().get(0).getNum());
-		        int isOk1 = ps0.executeUpdate();
-			}catch(SQLException e) {
-				e.printStackTrace();
-				return false;
-			}
-			*/
-        	//member.getMemberCategories().get(0).addPerson(member);
-			
-			// Ajout du vélo
-			
-			/*
-			try(PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Velo VALUES (?,?,?,?,?)")) {
-			    ps0.setInt(1, 0);
-		        ps0.setDouble(2, member.getMemberVelos().get(0).getWeight());
-		        ps0.setString(3, member.getMemberVelos().get(0).getType());
-		        ps0.setDouble(4, member.getMemberVelos().get(0).getLenght());
-		        ps0.setInt(5, member.getId());
-		        ps0.executeUpdate();
-			}catch(SQLException e) {
-				e.printStackTrace();
-				return false;
-			}
-			*/
-        	return true;
 		}
 		
 		if(obj instanceof Manager) {
@@ -86,12 +69,9 @@ public class PersonDAO extends DAO<Person> {
 		        ps.setString(6, manager.getPseudo());
 		        
 		        //manager.getCategory().addPerson(manager);
-		        int isOk = ps.executeUpdate();
-
-		        if(isOk == 1) {
+		        if(ps.executeUpdate() >0) {
 		        	return true;
 		        }
-				
 			}catch(SQLException e) {
 				e.printStackTrace();
 				return false;
@@ -108,9 +88,8 @@ public class PersonDAO extends DAO<Person> {
 		        ps.setString(4, treasurer.getPassword());
 		        ps.setString(5, treasurer.getTel());
 		        ps.setString(6, treasurer.getPseudo());
-		        int isOk = ps.executeUpdate();
 
-		        if(isOk == 1) {
+		        if(ps.executeUpdate() > 0) {
 		        	return true;
 		        }
 				

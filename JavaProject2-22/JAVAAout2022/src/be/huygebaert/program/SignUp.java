@@ -94,10 +94,10 @@ public class SignUp {
 		lb_password.setBounds(0,120,90,20);
 		btn_send = new JButton("Send");
 		btn_back= new JButton("Back");
-		lb_weight = new JLabel("Weight");
-		lb_weight.setBounds(0,121,60,20);
-		lb_lenght = new JLabel("lenght");
-		lb_lenght.setBounds(0,90,60,20);
+		lb_weight = new JLabel("Weight (kg)");
+		lb_weight.setBounds(0,121,80,20);
+		lb_lenght = new JLabel("Lenght (m)");
+		lb_lenght.setBounds(0,90,80,20);
 		lb_type = new JLabel("Type");
 		lb_type.setBounds(0,59,60,20);
 		tf_weight = new JTextField();
@@ -204,6 +204,8 @@ public class SignUp {
 		lb_typeCategory.setBounds(348, 338, 72, 14);
 		signUp.getContentPane().add(lb_typeCategory);
 		
+		panel_addVelo.setVisible(false);
+
 		/*
 		 * 
 		 * ACTIONS
@@ -226,9 +228,7 @@ public class SignUp {
 			
 			if(result!="") {
 				JOptionPane.showMessageDialog(null, result);
-			}else {
-				//___
-				// Alors envoyer résultat pour traitement				
+			}else {			
 				if(account.equals("Treasurer")) {
 					Treasurer treasurer = new Treasurer(firstname,lastname,password,tel,pseudo);
 					if(!Objects.isNull(treasurer)) {
@@ -243,9 +243,10 @@ public class SignUp {
 				}
 				if(account.equals("Member")) {
 					System.out.println("Send => "+category);
-					Member member = new Member(firstname,lastname,password,tel,pseudo,Integer.parseInt(category),typeVelo,weightVelo,lenghtVelo);
+					Category categoryConstMember = Category.getCategory(Integer.parseInt(category));
+					Member member = new Member(firstname,lastname,password,tel,pseudo,categoryConstMember,typeVelo,weightVelo,lenghtVelo);
 					if(!Objects.isNull(member)) {
-						if(member.signUp()){
+						if(member.signUp()) {
 							ConsultCalendar next = new ConsultCalendar(member);
 							JFrame consultCalendar = next.consultCalendar;
 							changeFrame(consultCalendar);
@@ -255,12 +256,9 @@ public class SignUp {
 					}
 				}
 				if(account.equals("Manager")) {
-					Manager manager = new Manager(firstname,lastname,password,tel,pseudo,Integer.parseInt(category));
-					// TEST
-					/*
-					System.out.println(manager.getFirstname());
-					System.out.println(manager.getPseudo());
-					*/
+					Category categoryConst = Category.getCategory(Integer.parseInt(category));
+					Manager manager = new Manager(firstname,lastname,password,tel,pseudo,categoryConst);
+
 					if(!Objects.isNull(manager)) {
 						if(manager.signUp()){
 							ConsultCalendar next = new ConsultCalendar(manager);
@@ -386,15 +384,14 @@ public class SignUp {
 			result+="\n";
 		}
 		if(typeAccount.equals("Member")) {
-			if(weightVelo == 0) {
-				result+="Enter weight velo";
+			if(weightVelo <= 0 || weightVelo >= 5) {
+				result+="Enter weight velo in kg format";
 				result+="\n";
 			}
-			if(lenghtVelo == 0) {
-				result+="Enter lenght velo";
+			if(lenghtVelo <= 0 || lenghtVelo >=2.5) {
+				result+="Enter lenght velo in m format";
 				result+="\n";
-			}
-			if(typeVelo.equals("") || Objects.isNull(typeVelo)) {
+			}			if(typeVelo.equals("") || Objects.isNull(typeVelo)) {
 				result+="Enter type velo";
 				result+="\n";
 			}

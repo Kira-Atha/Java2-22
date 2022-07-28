@@ -7,16 +7,17 @@ public class Velo implements Serializable {
 	private double weight;
 	private String type;
 	private double lenght;
-	//private Member member;
+	private Member memberVelo;
 	// Pas besoin de savoir dans quell voiture se trouve le vélo, ni dans quelle inscription
 	
 	public Velo() {}
-	
-	public Velo(String type,double weight, double lenght) {
+	//create
+	public Velo(double weight,String type, double lenght,Member member) {
 		try {
 			this.weight=weight;
 			this.type=type;
 			this.lenght=lenght;
+			this.memberVelo = member;
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -39,5 +40,11 @@ public class Velo implements Serializable {
 	}
 	public void setLenght(double lenght) {
 		this.lenght = lenght;
+	}
+	public Member getMemberVelo() {
+		return this.memberVelo;
+	}
+	public String toString() {
+		return this.getType()+" "+this.getLenght()+" "+this.getWeight()+" "+this.getMemberVelo().getId();
 	}
 }

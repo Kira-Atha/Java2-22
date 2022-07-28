@@ -39,13 +39,14 @@ import com.toedter.calendar.JDateChooser;
 public class ConsultCalendar {
 
 	public JFrame consultCalendar;
-	JButton btn_create,btn_delete,btn_update,btn_logout;
+	JButton btn_create,btn_delete,btn_update,btn_logout,btn_cat,btn_joinCat;
 	private static Person person;
 	private JLabel lb_message,lb_nameCategory,lb_legend,lb_startPoint,lb_forfeit,lb_maxMember,lb_maxVelo,lb_titleForm;
 	private JPanel panel_outingInfo,panel_formOuting,panel_buttons,panel_calendar;
 	private JTextField tf_startPoint,tf_forfeit,tf_maxMember,tf_maxVelo;
 	private String date;
 	private List <Outing> allOutings;
+	private List <Category> allCategories;
 	private JDateChooser dateChooser;
 	private SimpleDateFormat sdf;
 	private JCalendar calendar;
@@ -67,6 +68,7 @@ public class ConsultCalendar {
 	public ConsultCalendar(Person person) {
 		ConsultCalendar.person=person;
 		allOutings = Outing.getAllOutings();
+		allCategories = Category.getAllCategories();
 		initialize();
 		
 	}
@@ -88,7 +90,6 @@ public class ConsultCalendar {
 		btn_logout.setBounds(685,11,89,20);
 		consultCalendar.getContentPane().add(btn_logout);
 		
-		
 		btn_logout.addActionListener(e-> {
 			Init previous = new Init();
 			JFrame home = previous.init;
@@ -103,41 +104,47 @@ public class ConsultCalendar {
 		panel_outingInfo.setLayout(null);
 		consultCalendar.getContentPane().add(panel_outingInfo);
 		
-		
 	// Manager date chooser (day/month/year ) + consult outing (manager && member ) 
 		sdf = new SimpleDateFormat("dd/MM/yyyy");
 		// Get current date when person arrive on ConsultCalendar
 		date = sdf.format(calendar.getDate());
 		
+		
+		// disp outing info if exist when sign in
+		disp_outingInfo();
+		
 		calendar.getDayChooser().addPropertyChangeListener("day", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				listenerCalendar();
+				clean_panel(panel_outingInfo);
+				disp_outingInfo();
 			}
 		});
 		// Permit to get date when month just selected
 		calendar.getMonthChooser().addPropertyChangeListener("month", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				listenerCalendar();
+				clean_panel(panel_outingInfo);
+				disp_outingInfo();
 			}
 		});
 		//  Permit to get date when year just selected
 		calendar.getYearChooser().addPropertyChangeListener("year", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
-				listenerCalendar();
+				clean_panel(panel_outingInfo);
+				disp_outingInfo();
 			}
 		});
 		
 		//System.out.println(person.getClass().getSimpleName());
 		//System.out.println(((Manager)person));
 		
-		
+	//MANAGER	
 		if(ConsultCalendar.person instanceof Manager) {
 			lb_message = new JLabel("Hello " + person.getPseudo()+ ", " + person.getClass().getSimpleName() + " of " + ((Manager) person).getCategory().getClass().getSimpleName());
 			consultCalendar.getContentPane().add(lb_message);
-			lb_message.setBounds(0,0,200,15);
+			lb_message.setBounds(0,0,400,15);
 			lb_legend = new JLabel("Select a date and press button : [+] => Add outing && [?] Update outing && [X] Delete outing.");
 			lb_legend.setBounds(0,30,700,15);
 			Font font = new Font(lb_legend.getFont().getName(),Font.ITALIC,lb_legend.getFont().getSize());
@@ -273,6 +280,11 @@ public class ConsultCalendar {
 						int idOuting = 0;
 						for(Outing ou : allOutings) {
 							try {
+								if(ou.getStartDate().compareTo(sdf.parse(newDate)) == 0 && ou.getOutingCalendar().getNum() == ((Manager)person).getCategory().getSingleCalendar().getNum()) {
+									JOptionPane.showMessageDialog(null,"An outing already exist for this calendar on this date");
+									exist = true;
+									break;
+								}
 								if(ou.getStartDate().compareTo(sdf.parse(date)) == 0 && ou.getOutingCalendar().getNum() == ((Manager)person).getCategory().getSingleCalendar().getNum()) {
 									idOuting = ou.getNum();
 									break;
@@ -285,7 +297,7 @@ public class ConsultCalendar {
 						if(!exist) {
 							Outing outing = null;
 							try {
-								outing = new Outing(newStartPoint,sdf.parse(date),newForfeit,newMaxMember,newMaxVelo,((Manager)person).getCategory().getSingleCalendar());
+								outing = new Outing(newStartPoint,sdf.parse(newDate),newForfeit,newMaxMember,newMaxVelo,((Manager)person).getCategory().getSingleCalendar());
 								outing.setNum(idOuting);
 							} catch (ParseException e1) {
 								e1.printStackTrace();
@@ -296,16 +308,15 @@ public class ConsultCalendar {
 								ConsultCalendar next = new ConsultCalendar(person);
 								JFrame consultCalendar = next.consultCalendar;
 								changeFrame(consultCalendar);
-								JOptionPane.showMessageDialog(null,"Create success");
+								JOptionPane.showMessageDialog(null,"Update success");
 							}else {
-								JOptionPane.showMessageDialog(null, "Can't create outing");
+								JOptionPane.showMessageDialog(null, "Can't update outing");
 							}
 						}
 					}
 				}else {
 					JOptionPane.showMessageDialog(null,"You can't update an outing if you didn't selected it and choose a new date.");
 				}
-				
 				
 			});
 			
@@ -315,37 +326,122 @@ public class ConsultCalendar {
 			panel_buttons.add(btn_delete);
 			
 			btn_delete.addActionListener(e-> {
+				Outing selectedOuting = null;
 				List <Outing> allOutings = Outing.getAllOutings();
-				
 				for(Outing outing : allOutings) {
 					try {
-						if(outing.getStartDate().compareTo(sdf.parse(date)) == 0) {
-							Outing selectedOuting = outing;
-							((Manager)person).manageCalendar(2,selectedOuting);
+						if(outing.getStartDate().compareTo(sdf.parse(date)) == 0 && outing.getOutingCalendar().getNum() == ((Manager)person).getCategory().getSingleCalendar().getNum()) {
+							selectedOuting = outing;
 						}
 					} catch (ParseException e1) {
 						e1.printStackTrace();
 					}
 				}
-				
+				if(!Objects.isNull(selectedOuting) && ((Manager)person).manageCalendar(2,selectedOuting)) {
+					JOptionPane.showMessageDialog(null,"Delete success");
+					ConsultCalendar next = new ConsultCalendar(person);
+					JFrame consultCalendar = next.consultCalendar;
+					changeFrame(consultCalendar);
+				}else {
+					JOptionPane.showMessageDialog(null,"Can't delete an outing which doesn't exist");
+				}
+			});
+		}
+	//MEMBER
+		if(ConsultCalendar.person instanceof Member) {
+			lb_message = new JLabel("Hello " + person.getPseudo()+ ", " + person.getClass().getSimpleName() + " of " + ((Member) person).getMemberCategories().get(0).getClass().getSimpleName());
+			consultCalendar.getContentPane().add(lb_message);
+			lb_message.setBounds(0,0,400,15);
+		
+		//ADD VELO
+			JPanel panel_addVelo = new JPanel();
+			consultCalendar.getContentPane().add(panel_addVelo);
+			JButton btn_addVelo = new JButton("Add velo");
+			btn_addVelo.addActionListener(e-> {
+				System.out.println("add velo");
+			});
+		//ADD VEHICLE
+			JPanel panel_addVehicle = new JPanel();
+			consultCalendar.getContentPane().add(panel_addVehicle);
+			JButton btn_addVehicle = new JButton("Add vehicle");
+			btn_addVehicle.addActionListener(e-> {
+				System.out.println("Add vehicle");
+			});
+		//REGISTER ON OUTING
+			JPanel panel_register = new JPanel();
+			consultCalendar.getContentPane().add(panel_register);
+			JButton btn_register = new JButton("Register");
+			btn_register.addActionListener(e-> {
+				System.out.println("register");
 			});
 			
-		}
-		
-		///////////////////
-		
-		
-		if(ConsultCalendar.person instanceof Member) {
-			lb_message.setText("Member");
-			panel_calendar.add(lb_message);
-			for(Category category : ((Member) person).getMemberCategories()) {
-				lb_nameCategory= new JLabel(category.getClass().getSimpleName());
-				panel_calendar.add(lb_nameCategory);
+			
+		// CHANGER DE CATEGORIES
+			JPanel panel_otherCategories = new JPanel();
+			panel_otherCategories.setLayout(null);
+			panel_otherCategories.setBounds(300,105,90,150);
+			consultCalendar.getContentPane().add(panel_otherCategories);
+			// MY CATEGORIES = BOUTON
+			btn_cat = null;
+			btn_joinCat = null;
+			
+			int count = 0;
+			for(Category cat : allCategories) {
+				System.out.println("count VALUE "+count);
+				// Si le membre est dans cette catégorie, afficher ces boutons pour consulter et donner les bons IDs
+				// Si pas, bouton rejoindre
+				
+				//TODO
+				if(cat.getClass().getSimpleName() == ((Member)person).getMemberCategories().get(count).getClass().getSimpleName()) {
+					((Member)person).getMemberCategories().get(count).setNum(cat.getNum());
+					btn_cat = new JButton(((Member)person).getMemberCategories().get(count).getClass().getSimpleName());
+					btn_cat.setBounds(0,0,100,20);
+					btn_cat.setActionCommand(String.valueOf(((Member)person).getMemberCategories().get(count).getNum()));
+					panel_otherCategories.add(btn_cat);
+					System.out.println(((Member)person).getMemberCategories().get(count).getClass().getSimpleName());
+				}else {
+					btn_joinCat = new JButton("Join "+allCategories.get(count).getClass().getSimpleName()+" category");
+					btn_joinCat.setBounds(0,0,100,20);
+					btn_joinCat.setActionCommand(String.valueOf(cat.getNum()));
+					panel_otherCategories.add(btn_joinCat);
+					System.out.println("NON"+cat.getClass().getSimpleName());
+				}
+				count++;
 			}
+			if(!Objects.isNull(btn_cat)) {
+				btn_cat.addActionListener(e->{
+					int numButtonCategory = Integer.parseInt(btn_cat.getText());
+					for(Category cat : ((Member)person).getMemberCategories()) {
+						if(cat.getNum() == numButtonCategory) {
+							((Member)person).getMemberCategories().set(0,cat);
+							ConsultCalendar next = new ConsultCalendar(person);
+							JFrame consultCalendar = next.consultCalendar;
+							changeFrame(consultCalendar);
+						}
+					}
+				});
+			}
+			
+			if(!Objects.isNull(btn_joinCat)) {
+				btn_joinCat.addActionListener(e->{
+					System.out.println("JOIN CAT LISTENER");
+					/*
+					int numButtonCategory = Integer.parseInt(btn_joinCat.getText());
+					for(Category cat : ((Member)person).getMemberCategories()) {
+						if(cat.getNum() == numButtonCategory) {
+							((Member)person).getMemberCategories().set(0,cat);
+							ConsultCalendar next = new ConsultCalendar(person);
+							JFrame consultCalendar = next.consultCalendar;
+							changeFrame(consultCalendar);
+						}
+					}
+					*/
+				});
+			}			
 		}
 	}
 	
-	
+// Utilities
 	public String formValidation(String startPoint, Date startDate, double forfeit, int maxMember, int maxVelo) {
 		String result="";
 		
@@ -382,18 +478,23 @@ public class ConsultCalendar {
 		window.setVisible(true);
 		consultCalendar.dispose();
 	}
-	public void listenerCalendar() {
-		panel_outingInfo.removeAll();
-		panel_outingInfo.revalidate();
-		panel_outingInfo.repaint();
+	public void disp_outingInfo() {
 		date = sdf.format(calendar.getDate());
 		Outing outingExist = null;
 		//System.out.println(date);
 		for(Outing outing : allOutings) {
 			try {
-				if(outing.getStartDate().compareTo(sdf.parse(date)) == 0 && outing.getOutingCalendar().getNum() == ((Manager)person).getCategory().getSingleCalendar().getNum()) {
-					outingExist = outing;
-					//System.out.println("Outing exist where you selected");
+				if(person instanceof Manager) {
+					if(outing.getStartDate().compareTo(sdf.parse(date)) == 0 && outing.getOutingCalendar().getNum() == ((Manager)person).getCategory().getSingleCalendar().getNum()) {
+						outingExist = outing;
+						//System.out.println("Outing exist where you selected");
+					}
+				}
+				if (person instanceof Member) {
+					if(outing.getStartDate().compareTo(sdf.parse(date)) == 0 && outing.getOutingCalendar().getNum() == ((Member)person).getMemberCategories().get(0).getSingleCalendar().getNum()) {
+						outingExist = outing;
+						//System.out.println("Outing exist where you selected");
+					}
 				}
 			} catch (ParseException e1) {
 				e1.printStackTrace();
@@ -435,5 +536,10 @@ public class ConsultCalendar {
 				panel_outingInfo.add(dateChooser);
 			}
 		}
+	}
+	public void clean_panel(JPanel panel) {
+		panel.removeAll();
+		panel.revalidate();
+		panel.repaint();
 	}
 }

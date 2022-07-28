@@ -18,9 +18,21 @@ public class MemberDAO extends DAO<Member>{
 		super(connection);
 	}
 
+	// Pour rejoindre la catégorie, je profite de cette DAO vide ( INSERT INTO => CREATE )
 	@Override
-	public boolean create(Member obj) {
-		// TODO Auto-generated method stub
+	public boolean create(Member member) {
+		try(PreparedStatement ps = this.connect.prepareStatement("INSERT INTO Cat_Memb VALUES(?,?)")){
+			ps.setInt(1, member.getId());
+			ps.setInt(2, member.getMemberCategories().get(0).getNum());
+			System.out.println("[PERSON DAO]MEMBER ID => "+member.getId()+" CATE ID => "+member.getMemberCategories().get(0).getNum());
+			if(ps.executeUpdate()>1) {
+				return true;
+			}else {
+				return false;
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 
@@ -31,12 +43,12 @@ public class MemberDAO extends DAO<Member>{
 	}
 
 	@Override
-	public boolean update(Member obj) {
+	public boolean update(Member member) {
 		String sql = "UPDATE MEMBER set Balance = ? WHERE idMember = ?";
 		try {
 			PreparedStatement statement = this.connect.prepareStatement(sql);
-			statement.setDouble(1,obj.getBalance());
-			statement.setInt(2,obj.getId());
+			statement.setDouble(1,member.getBalance());
+			statement.setInt(2,member.getId());
 			statement.executeUpdate();
 			return true;
 		}catch(SQLException e) {
@@ -64,9 +76,9 @@ public class MemberDAO extends DAO<Member>{
 				CategoryDAO categoryDAO = new CategoryDAO(this.connect);
 				while(result.next()) {
 					// L'id du calendrier = l'id de la catégorie ( type )
-					System.out.println("This member "+firstname+" have : " +result.getInt("IdCalendar") );
-					//member.getMemberCategories().add(categoryDAO.find(result.getInt("IdCalendar")));
-					System.out.println("BUg0");
+					//System.out.println("This member "+firstname+" have : " +result.getInt("IdCalendar") );
+					member.getMemberCategories().add(categoryDAO.find(result.getInt("IdCalendar")));
+					//System.out.println("BUg0");
 				}
 				
 				return member;
@@ -108,18 +120,15 @@ public class MemberDAO extends DAO<Member>{
 					DescenderDAO descenderDAO = new DescenderDAO(this.connect);
 					TrailRiderDAO trailRiderDAO = new TrailRiderDAO(this.connect);
 					TrialistDAO trialistDAO = new TrialistDAO(this.connect);
-					
-					if(result2.getInt("IdCalendar") == 1) {
-						member.getMemberCategories().add(cycloDAO.find(result.getInt("IdCalendar")));
-					}
-					if(result.getInt("IdCalendar") == 2) {
-						member.getMemberCategories().add(descenderDAO.find(result.getInt("IdCalendar")));
-					}
-					if(result.getInt("IdCalendar") == 3) {
-						member.getMemberCategories().add(trailRiderDAO.find(result.getInt("IdCalendar")));
-					}
-					if(result.getInt("IdCalendar") == 4) {
-						member.getMemberCategories().add(trialistDAO.find(result.getInt("IdCalendar")));
+					switch(result2.getInt("IdCalendar")) {
+						case 1:
+							member.getMemberCategories().add(cycloDAO.find(result2.getInt("IdCalendar")));
+						case 2:
+							member.getMemberCategories().add(descenderDAO.find(result2.getInt("IdCalendar")));
+						case 3:
+							member.getMemberCategories().add(trailRiderDAO.find(result2.getInt("IdCalendar")));
+						case 4:
+							member.getMemberCategories().add(trialistDAO.find(result2.getInt("IdCalendar")));
 					}
 				}
 				allMembers.add(member);

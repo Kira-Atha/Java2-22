@@ -12,7 +12,7 @@ public class Manager extends Person {
 	DAO<Category> categoryDAO = adf.getCategoryDAO();
 	DAO<Manager> managerDAO = adf.getManagerDAO();
 	
-	public Manager(String firstname, String lastname, String password, String tel, String pseudo, int num_category) {
+	public Manager(String firstname, String lastname, String password, String tel, String pseudo, Category category) {
 		try {
 			Person.idCount++;
 			this.id = Person.idCount;
@@ -21,8 +21,7 @@ public class Manager extends Person {
 			this.password=password;
 			this.tel=tel;
 			this.pseudo=pseudo;
-			Category category = categoryDAO.find(num_category);
-			this.category = category;
+			this.category=category;
 		}catch(Exception e) {
 			System.out.println("Manager doesn't create");
 		}
@@ -79,6 +78,5 @@ public class Manager extends Person {
 	 @Override
 	 public String toString() {
 		 return this.getFirstname()+" => " +this.getCategory();
-	 }
-	 
+	 }	 
 }

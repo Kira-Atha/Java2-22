@@ -71,7 +71,7 @@ public class SignIn {
 		btn_Back = new JButton("Back");
 		
 		JCheckBox chkb_Pass = new JCheckBox("Show Password");
-		chkb_Pass.setBounds(250,120,150,20);
+		chkb_Pass.setBounds(250,120,160,20);
 		inSignIn.add(chkb_Pass);
 		
 		chkb_Pass.addActionListener(e -> {

@@ -41,8 +41,7 @@ public class PersonDAO extends DAO<Person> {
 			        try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
 			            if (generatedKeys.next()) {
 			                member.setId(generatedKeys.getInt(1));
-			            }
-			            else {
+			            }else {
 			                return false;
 			            }
 			        }
@@ -52,6 +51,7 @@ public class PersonDAO extends DAO<Person> {
 		        //TODO JOIN ... FK Bug ???
 		        //member.joinCategory(member.getMemberCategories().get(0));
 		        this.connect.commit();
+		        return true;
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}

@@ -64,13 +64,13 @@ public class MemberDAO extends DAO<Member>{
 		try {
 			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Member WHERE IdMember = " +id);
 			if(result.first()){
-				// Compléter avec info de base
+		// Member info
 				String firstname = result.getString("Firstname");
 				
 				member = new Member(result.getString("Firstname"),result.getString("Lastname"),result.getString("Password"),result.getString("Tel"),result.getString("Pseudo"));
 				member.setBalance(result.getDouble("Balance"));
 				member.setId(result.getInt("IdMember"));
-				// Compléter avec les catégories
+		// Category of member
 				
 				result = this.connect.createStatement().executeQuery("SELECT * FROM Cat_Memb where IdMember =  " + id);
 				CategoryDAO categoryDAO = new CategoryDAO(this.connect);
@@ -81,6 +81,22 @@ public class MemberDAO extends DAO<Member>{
 					//System.out.println("BUg0");
 				}
 				
+				/*
+		// Vehicle of member
+				result = this.connect.createStatement().executeQuery("SELECT * FROM VEHICLE where IdDriver ="+id );
+				VehicleDAO vehicleDAO = new VehicleDAO(this.connect);
+				while(result.next()) {
+					member.setMemberVehicle(vehicleDAO.find(result.getInt("IdVehicle")));
+				}
+				
+		// Velo(s) of member
+				
+				result = this.connect.createStatement().executeQuery("SELECT * FROM VELO where IdMember = "+id);
+				VeloDAO veloDAO = new VeloDAO(this.connect);
+				while(result.next()) {
+					member.getMemberVelos().add(veloDAO.find(result.getInt("IdVelo")));
+				}
+				*/
 				return member;
 			}
 		}catch(SQLException e){

@@ -157,7 +157,7 @@ public class MonitorPayments {
 					if(JOptionPane.showInternalConfirmDialog(null, "Are you sure ?") == 0) {
 						Member member = new Member();
 						//TODO : changer value car en DB démarre à 2
-						member = member.getMember(tablePayments.getSelectedRow()+2);
+						member = member.getMember(tablePayments.getSelectedRow()+1);
 						
 						if(((Treasurer) person).managePayments(member,Double.parseDouble(tf_newBalance.getText()))) {
 							JOptionPane.showMessageDialog(null,"Success");
@@ -181,7 +181,7 @@ public class MonitorPayments {
 		monitorPayments.getContentPane().add(tf_newBalance);
 		
 		lb_hello = new JLabel("Hello "+person.getPseudo()+" a "+person.getClass().getSimpleName());
-		lb_hello.setBounds(0,0,283,50);
+		lb_hello.setBounds(0,0,400,20);
 		inMonitorPayments.add(lb_hello);
 		
 	}

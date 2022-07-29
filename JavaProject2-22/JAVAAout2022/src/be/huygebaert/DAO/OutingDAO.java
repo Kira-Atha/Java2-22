@@ -19,17 +19,19 @@ public class OutingDAO extends DAO<Outing> {
 
 	@Override
 	public boolean create(Outing outing) {
-		try(PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Outing VALUES (?,?,?,?,?,?,?,?,?)")) {
+		try(PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Outing VALUES (?,?,?,?,?,?,?,?,?,?,?)")) {
 		    ps0.setInt(1, 0);
 	        ps0.setString(2, outing.getStartPoint());
 	        ps0.setDate(3,new java.sql.Date(outing.getStartDate().getTime()));
 	        ps0.setDouble(4, outing.getForfeit());
 	        ps0.setInt(5, outing.getMaxMemberSeats());
 	        ps0.setInt(6, outing.getMaxVeloSeats());
-	        ps0.setInt(7, outing.getMaxMemberSeats());
-	        ps0.setInt(8, outing.getMaxMemberSeats());
+	        ps0.setInt(7, outing.getNeedMemberSeats());
+	        ps0.setInt(8, outing.getNeedVeloSeats());
 	        System.out.println("DAO CALENDAR NUM : "+outing.getOutingCalendar().getNum());
-	        ps0.setInt(9,outing.getOutingCalendar().getNum());
+	        ps0.setInt(9, outing.getRemainingMemberSeats());
+	        ps0.setInt(10, outing.getRemainingVeloSeats());
+	        ps0.setInt(11,outing.getOutingCalendar().getNum());
 	        ps0.executeUpdate();
 	        return true;
 		}catch(SQLException e) {
@@ -92,7 +94,21 @@ public class OutingDAO extends DAO<Outing> {
 			
 			System.out.println(outing.getStartPoint());
 			System.out.println(outing.getStartDate());
-			return true;
+			statement.closeOnCompletion();
+			
+			if(outing.getOutingVehicles().size()== 0) {
+				return true;
+			}else {
+				statement = this.connect.prepareStatement("INSERT INTO Out_Vehicle VALUES (?,?)");
+				statement.setInt(0, outing.getNum());
+				statement.setInt(1, outing.getOutingVehicles().get(outing.getOutingVehicles().size()).getNum());
+				
+				if(statement.executeUpdate() >0) {
+					return true;
+				}
+				statement.closeOnCompletion();
+				
+			}
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -116,7 +132,9 @@ public class OutingDAO extends DAO<Outing> {
 				outing.setMaxMemberSeats(result.getInt("MaxMemberSeats"));
 				outing.setMaxVeloSeats(result.getInt("MaxVeloSeats"));
 				outing.setNeedMemberSeats(result.getInt("NeedMemberSeats"));
+				outing.setNeedVeloSeats(result.getInt("NeedVeloSeats"));
 				outing.setRemainingMemberSeats(result.getInt("RemainingMemberSeats"));
+				outing.setRemainingVeloSeats(result.getInt("RemainingVeloSeats"));
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
 				outing.setOutingCalendar(calendarDAO.find(result.getInt("IdCalendar")));
 			}
@@ -153,7 +171,10 @@ public class OutingDAO extends DAO<Outing> {
 				outing.setMaxMemberSeats(result.getInt("MaxMemberSeats"));
 				outing.setMaxVeloSeats(result.getInt("MaxVeloSeats"));
 				outing.setNeedMemberSeats(result.getInt("NeedMemberSeats"));
+				outing.setNeedVeloSeats(result.getInt("NeedVeloSeats"));
 				outing.setRemainingMemberSeats(result.getInt("RemainingMemberSeats"));
+				outing.setRemainingVeloSeats(result.getInt("RemainingVeloSeats"));
+				
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
 				outing.setOutingCalendar(calendarDAO.find(result.getInt("IdCalendar")));
 				allOutings.add(outing);

@@ -49,8 +49,19 @@ public class VeloDAO extends DAO<Velo> {
 
 	@Override
 	public Velo find(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Velo velo = null;
+		/*
+		MemberDAO memberDAO = new MemberDAO(this.connect);
+		try {
+			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Velo where IdVelo ="+id);
+			while(result.next()) {
+				velo = new Velo(result.getDouble("Weight"),result.getString("Type"),result.getDouble("Lenght"),memberDAO.find(result.getInt("IdMember")));
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}*/
+		return velo;
 	}
 
 	@Override

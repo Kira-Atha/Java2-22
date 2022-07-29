@@ -143,7 +143,17 @@ public class Outing implements Serializable {
 		return false;
 	}
 	
-	public boolean addVehicle() {
+	public boolean addVehicle(Vehicle vehicle) {
+		// Si inférieur à 0, pas grave, quelques place en rab. En revanche pas utile d'avoir un véhicule complet vide
+		if(this.needMemberSeats > 0 && this.getNeedMemberSeats() - vehicle.getTotalMemberSeats() <= 0 && this.needVeloSeats > 0  && this.needVeloSeats - vehicle.getTotalVeloSeats() <= 0) {
+			this.outingVehicles.add(vehicle);
+			this.needMemberSeats = this.needMemberSeats - vehicle.getTotalMemberSeats();
+			this.needVeloSeats = this.needVeloSeats - vehicle.getTotalVeloSeats();
+			
+			if(outingDAO.update(this)) {
+				return true;
+			}
+		}
 		return false;
 	}
 	public double calculateForfeit() {
@@ -152,11 +162,11 @@ public class Outing implements Serializable {
 	}
 	// TODO : Revoir
 	public int getNeedMemberSeats() {
-		return this.maxMemberSeats - this.remainingMemberSeats;
+		return this.needMemberSeats;
 	}
 
 	public int getNeedVeloSeats() {
-		return this.maxMemberSeats-this.remainingVeloSeats;
+		return this.needVeloSeats;
 	}
 
 	public int getRemainingMemberSeats() {

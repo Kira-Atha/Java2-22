@@ -7,6 +7,7 @@ import java.util.List;
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 
+
 abstract public class Category implements Serializable {
 	//INFOs JANVIER : PAS DE SINGLETON PAR CATEGORIE && CATEGORIES DEJA EN BDD (PAS CREATE)
 	
@@ -79,8 +80,24 @@ abstract public class Category implements Serializable {
 	}
 	*/
 	
-	// Garbage collector passera 
+
 	public void deleteCategory() {
 		this.singleCalendar = null;
 	}
+// Override equals / hashCode to use List.contains(object) how i want ( compare class name between 2 categories )
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+	      return true; // Same object in memory
+	    }
+	    if (!(obj instanceof Category)) {
+	      return false; // Not even the same class
+	    }
+	    final Category other = (Category) obj;
+	    return this.getClass().getSimpleName().equals(other.getClass().getSimpleName());
+	  } 
+	  @Override
+	  public int hashCode() {
+	    return this.getClass().getSimpleName().hashCode();
+	  }
 }

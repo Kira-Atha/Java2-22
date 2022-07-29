@@ -1,6 +1,10 @@
 package be.huygebaert.POJO;
 
 import java.io.Serializable;
+import java.util.List;
+
+import be.huygebaert.DAO.DAO;
+import be.huygebaert.DAO.DAOFactory;
 
 public class Velo implements Serializable {
 	private static final long serialVersionUID = 7274111556630336582L;
@@ -9,6 +13,8 @@ public class Velo implements Serializable {
 	private double lenght;
 	private Member memberVelo;
 	// Pas besoin de savoir dans quell voiture se trouve le vélo, ni dans quelle inscription
+	private static DAOFactory adf = new DAOFactory();
+	private static DAO<Velo> veloDAO = adf.getVeloDAO();
 	
 	public Velo() {}
 	//create
@@ -46,5 +52,9 @@ public class Velo implements Serializable {
 	}
 	public String toString() {
 		return this.getType()+" "+this.getLenght()+" "+this.getWeight()+" "+this.getMemberVelo().getId();
+	}
+	
+	public static List<Velo> getAllVelos(){
+		return veloDAO.findAll();
 	}
 }

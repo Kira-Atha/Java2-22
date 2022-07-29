@@ -13,9 +13,10 @@ public class Member extends Person{
 	private double balance;
 	private List<Category> memberCategories;
 	private List <Velo> memberVelos;
-	private Vehicle memberVehicle = null;
+	private Vehicle memberVehicle;
 	private List<Register> memberRegisters;
 	protected static DAO<Velo>veloDAO = adf.getVeloDAO();
+	protected static DAO<Vehicle>vehicleDAO = adf.getVehicleDAO();
 	
 	public Member() {}
 	public Member(String pseudo,String password) {
@@ -31,8 +32,8 @@ public class Member extends Person{
 			this.password=password;
 			this.tel=tel;
 			this.pseudo=pseudo;
-			this.balance=0;
-			
+			this.balance=20;
+			this.memberVehicle = null;
 			memberCategories = new ArrayList<Category>();
 			this.memberCategories.add(category);
 			memberVelos = new ArrayList<Velo>();
@@ -127,6 +128,13 @@ public class Member extends Person{
 	public boolean createVelo(Velo velo) {
 		this.memberVelos.add(velo);
 		if(veloDAO.create(velo)) {
+			return true;
+		}
+		return false;
+	}
+	public boolean createVehicle(Vehicle vehicle) {
+		this.memberVehicle=vehicle;
+		if(vehicleDAO.create(vehicle)) {
 			return true;
 		}
 		return false;

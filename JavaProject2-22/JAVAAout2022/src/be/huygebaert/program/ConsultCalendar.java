@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -33,6 +34,9 @@ import be.huygebaert.POJO.Manager;
 import be.huygebaert.POJO.Member;
 import be.huygebaert.POJO.Outing;
 import be.huygebaert.POJO.Person;
+import be.huygebaert.POJO.Vehicle;
+import be.huygebaert.POJO.Velo;
+
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
@@ -41,15 +45,18 @@ public class ConsultCalendar {
 	public JFrame consultCalendar;
 	JButton btn_create,btn_delete,btn_update,btn_logout,btn_cat,btn_joinCat;
 	private static Person person;
-	private JLabel lb_message,lb_nameCategory,lb_legend,lb_startPoint,lb_forfeit,lb_maxMember,lb_maxVelo,lb_titleForm;
+	private JLabel lb_message,lb_legend,lb_startPoint,lb_forfeit,lb_maxMember,lb_maxVelo,lb_titleForm,lb_weight, lb_lenght, lb_type,lb_vehicleTotalMemberSeats,lb_vehicleTotalVeloSeats;
 	private JPanel panel_outingInfo,panel_formOuting,panel_buttons,panel_calendar;
-	private JTextField tf_startPoint,tf_forfeit,tf_maxMember,tf_maxVelo;
+	private JTextField tf_startPoint,tf_forfeit,tf_maxMember,tf_maxVelo,tf_weight,tf_type,tf_lenght,tf_vehicleTotalMemberSeats,tf_vehicleTotalVeloSeats;
 	private String date;
 	private List <Outing> allOutings;
 	private List <Category> allCategories;
+	private List <Velo> allVelos;
+	private List<Vehicle> allVehicles;
 	private JDateChooser dateChooser;
 	private SimpleDateFormat sdf;
 	private JCalendar calendar;
+	private Outing outingExist;
 	
 	
 	public static void main(String[] args) {
@@ -69,6 +76,8 @@ public class ConsultCalendar {
 		ConsultCalendar.person=person;
 		allOutings = Outing.getAllOutings();
 		allCategories = Category.getAllCategories();
+		allVelos = Velo.getAllVelos();
+		allVehicles = Vehicle.getAllVehicles();
 		initialize();
 		
 	}
@@ -100,7 +109,7 @@ public class ConsultCalendar {
 		panel_calendar.add(calendar);
 		
 		panel_outingInfo = new JPanel();
-		panel_outingInfo.setBounds(379,87,361,255);
+		panel_outingInfo.setBounds(370,90,350,200);
 		panel_outingInfo.setLayout(null);
 		consultCalendar.getContentPane().add(panel_outingInfo);
 		
@@ -353,91 +362,228 @@ public class ConsultCalendar {
 			consultCalendar.getContentPane().add(lb_message);
 			lb_message.setBounds(0,0,400,15);
 		
-		//ADD VELO
-			JPanel panel_addVelo = new JPanel();
-			consultCalendar.getContentPane().add(panel_addVelo);
-			JButton btn_addVelo = new JButton("Add velo");
-			btn_addVelo.addActionListener(e-> {
-				System.out.println("add velo");
-			});
-		//ADD VEHICLE
-			JPanel panel_addVehicle = new JPanel();
-			consultCalendar.getContentPane().add(panel_addVehicle);
-			JButton btn_addVehicle = new JButton("Add vehicle");
-			btn_addVehicle.addActionListener(e-> {
-				System.out.println("Add vehicle");
-			});
+			for(Velo velo : allVelos) {
+				if(velo.getMemberVelo().getId() == ((Member)person).getId())
+					((Member)person).getMemberVelos().add(velo);
+			}
+			
+			for(Vehicle vehicle : allVehicles) {
+				if(vehicle.getDriver().getId() == ((Member)person).getId()) {
+					((Member)person).setMemberVehicle(vehicle);
+				}
+			}
+		
 		//REGISTER ON OUTING
 			JPanel panel_register = new JPanel();
+			panel_register.setBounds(0,300,150,100);
+			panel_register.setLayout(null);
 			consultCalendar.getContentPane().add(panel_register);
 			JButton btn_register = new JButton("Register");
+			btn_register.setBounds(0,0,100,20);
+			panel_register.add(btn_register);
 			btn_register.addActionListener(e-> {
 				System.out.println("register");
 			});
+		//ADD VELO to member
+			JPanel panel_addVelo = new JPanel();
+			panel_addVelo.setLayout(null);
+			panel_addVelo.setBounds(250,300,200,300);
+			consultCalendar.getContentPane().add(panel_addVelo);
 			
+			JButton btn_addVelo = new JButton("Add velo");
+			btn_addVelo.setBounds(0,0,150,20);
+			panel_addVelo.add(btn_addVelo);
 			
+			lb_weight = new JLabel("Weight (kg)");
+			lb_weight.setBounds(0,121,80,20);
+			lb_lenght = new JLabel("Lenght (m)");
+			lb_lenght.setBounds(0,90,80,20);
+			lb_type = new JLabel("Type");
+			lb_type.setBounds(0,59,60,20);
+			tf_weight = new JTextField();
+			tf_weight.setBounds(87,121,40,20);
+			tf_weight.setText("0");
+			tf_lenght = new JTextField();
+			tf_lenght.setText("0");
+			tf_lenght.setBounds(87,90,40,20);
+			tf_type = new JTextField();
+			tf_type.setBounds(87,59,100,20);
+			panel_addVelo.add(tf_lenght);
+			panel_addVelo.add(tf_weight);
+			panel_addVelo.add(tf_type);
+			panel_addVelo.add(lb_lenght);
+			panel_addVelo.add(lb_weight);
+			panel_addVelo.add(lb_type);
+			
+			btn_addVelo.addActionListener(e-> {
+				System.out.println("add velo");
+				double weightVelo = Double.parseDouble(tf_weight.getText());
+				double lenghtVelo = Double.parseDouble(tf_lenght.getText());
+				String typeVelo = tf_type.getText();
+				String result = formValidationVelo(lenghtVelo,weightVelo,typeVelo);
+				
+				if(result!="") {
+					JOptionPane.showMessageDialog(null, result);
+				}else {
+					Velo velo = new Velo(weightVelo,typeVelo,weightVelo,((Member)person));
+					if(!Objects.isNull(velo)) {
+						if(velo.getMemberVelo().createVelo(velo)) {
+							JOptionPane.showMessageDialog(null, "Velo created");
+							ConsultCalendar next = new ConsultCalendar(person);
+							JFrame consultCalendar = next.consultCalendar;
+							changeFrame(consultCalendar);
+						}else {
+							JOptionPane.showMessageDialog(null, "Can't create velo");
+						}
+					}
+				}
+			});
+		//ADD VEHICLE if member hasn't
+			if(Objects.isNull(((Member)person).getMemberVehicle())){
+				JPanel panel_addVehicle = new JPanel();
+				panel_addVehicle.setLayout(null);
+				panel_addVehicle.setBounds(500,300,200,300);
+				consultCalendar.getContentPane().add(panel_addVehicle);
+				JButton btn_addVehicle = new JButton("Add vehicle");
+				btn_addVehicle.setBounds(0,0,150,20);
+				panel_addVehicle.add(btn_addVehicle);
+				
+				lb_vehicleTotalMemberSeats = new JLabel("Total member seat");
+				lb_vehicleTotalMemberSeats.setBounds(0,121,200,20);
+				lb_vehicleTotalVeloSeats = new JLabel("Total velo seat");
+				lb_vehicleTotalVeloSeats.setBounds(0,90,200,20);
+				tf_vehicleTotalMemberSeats = new JTextField();
+				tf_vehicleTotalMemberSeats.setBounds(150,121,40,20);
+				tf_vehicleTotalMemberSeats.setText("0");
+				tf_vehicleTotalVeloSeats = new JTextField();
+				tf_vehicleTotalVeloSeats.setText("0");
+				tf_vehicleTotalVeloSeats.setBounds(150,90,40,20);
+
+				panel_addVehicle.add(lb_vehicleTotalMemberSeats);
+				panel_addVehicle.add(lb_vehicleTotalVeloSeats);
+				panel_addVehicle.add(tf_vehicleTotalMemberSeats);
+				panel_addVehicle.add(tf_vehicleTotalVeloSeats);
+				
+				btn_addVehicle.addActionListener(e-> {
+					System.out.println("Add vehicle");
+					
+					int vehicleTotalMemberSeats = Integer.parseInt(tf_vehicleTotalMemberSeats.getText());
+					int vehicleTotalVeloSeats = Integer.parseInt(tf_vehicleTotalVeloSeats.getText());
+
+					String result = formValidationVehicle(vehicleTotalMemberSeats,vehicleTotalVeloSeats);
+					
+					if(result!="") {
+						JOptionPane.showMessageDialog(null, result);
+					}else {
+						
+						Vehicle vehicle = new Vehicle(vehicleTotalMemberSeats,vehicleTotalVeloSeats,((Member)person));
+						System.out.println(vehicle.getDriver().getPseudo());
+						
+						if(!Objects.isNull(vehicle)) {
+							if(((Member)person).createVehicle(vehicle)) {
+								JOptionPane.showMessageDialog(null, "Vehicle created");
+								ConsultCalendar next = new ConsultCalendar(person);
+								JFrame consultCalendar = next.consultCalendar;
+								changeFrame(consultCalendar);
+							}else {
+								JOptionPane.showMessageDialog(null, "Can't create Vehicle");
+							}
+						}
+					}
+				});
+			}else {
+				JPanel panel_addVehicle = new JPanel();
+				panel_addVehicle.setLayout(null);
+				panel_addVehicle.setBounds(500,300,200,300);
+				consultCalendar.getContentPane().add(panel_addVehicle);
+				JButton btn_addVehicle = new JButton("Add my vehicle to outing");
+				btn_addVehicle.setBounds(0,0,200,20);
+				panel_addVehicle.add(btn_addVehicle);
+				
+				btn_addVehicle.addActionListener(e->{
+					if(outingExist.addVehicle(((Member)person).getMemberVehicle())) {
+						JOptionPane.showMessageDialog(null,"Success : vehicle add to outing");
+					}else {
+						JOptionPane.showMessageDialog(null,"You can't add your vehicle to this outing");
+					}
+				});
+			}
+
 		// CHANGER DE CATEGORIES
 			JPanel panel_otherCategories = new JPanel();
 			panel_otherCategories.setLayout(null);
-			panel_otherCategories.setBounds(300,105,90,150);
+			panel_otherCategories.setBounds(0,30,800,20);
 			consultCalendar.getContentPane().add(panel_otherCategories);
 			// MY CATEGORIES = BOUTON
 			btn_cat = null;
 			btn_joinCat = null;
 			
-			int count = 0;
-			for(Category cat : allCategories) {
-				System.out.println("count VALUE "+count);
-				// Si le membre est dans cette catégorie, afficher ces boutons pour consulter et donner les bons IDs
-				// Si pas, bouton rejoindre
-				
-				//TODO
-				if(cat.getClass().getSimpleName() == ((Member)person).getMemberCategories().get(count).getClass().getSimpleName()) {
-					((Member)person).getMemberCategories().get(count).setNum(cat.getNum());
-					btn_cat = new JButton(((Member)person).getMemberCategories().get(count).getClass().getSimpleName());
-					btn_cat.setBounds(0,0,100,20);
-					btn_cat.setActionCommand(String.valueOf(((Member)person).getMemberCategories().get(count).getNum()));
-					panel_otherCategories.add(btn_cat);
-					System.out.println(((Member)person).getMemberCategories().get(count).getClass().getSimpleName());
-				}else {
-					btn_joinCat = new JButton("Join "+allCategories.get(count).getClass().getSimpleName()+" category");
-					btn_joinCat.setBounds(0,0,100,20);
-					btn_joinCat.setActionCommand(String.valueOf(cat.getNum()));
-					panel_otherCategories.add(btn_joinCat);
-					System.out.println("NON"+cat.getClass().getSimpleName());
+			List<Category> allMembCategories = ((Member)person).getMemberCategories();
+			List<Category> allMembCategoriesNoJoin = new ArrayList<Category>();
+			String nameMembCat;
+			String nameCat;
+		
+			for(Category cat : allCategories ) {
+				if(!allMembCategories.contains(cat)) {
+					allMembCategoriesNoJoin.add(cat);
 				}
-				count++;
 			}
-			if(!Objects.isNull(btn_cat)) {
-				btn_cat.addActionListener(e->{
-					int numButtonCategory = Integer.parseInt(btn_cat.getText());
-					for(Category cat : ((Member)person).getMemberCategories()) {
-						if(cat.getNum() == numButtonCategory) {
-							((Member)person).getMemberCategories().set(0,cat);
-							ConsultCalendar next = new ConsultCalendar(person);
-							JFrame consultCalendar = next.consultCalendar;
-							changeFrame(consultCalendar);
-						}
-					}
-				});
+		// MEMBER IN
+			// element 0 = calendar consulted, ignore it
+			int posButtonX = 100;
+			for(Category memCat : allMembCategories) {
+				if(allMembCategories.indexOf(memCat) != 0 ) {
+					nameMembCat = memCat.getClass().getSimpleName();
+					btn_cat = new JButton(nameMembCat);
+					btn_cat.setBounds(posButtonX,0,100,20);
+					btn_cat.setActionCommand(String.valueOf(memCat.getNum()));
+					panel_otherCategories.add(btn_cat);
+					posButtonX+=100;
+					btn_cat.addActionListener(e->{
+						int numButtonCategory = Integer.parseInt(btn_cat.getActionCommand());
+						System.out.println("Change category => "+numButtonCategory);
+						/*
+						for(Category cat : ((Member)person).getMemberCategories()) {
+							if(cat.getNum() == numButtonCategory) {
+								((Member)person).getMemberCategories().set(0,cat);
+								ConsultCalendar next = new ConsultCalendar(person);
+								JFrame consultCalendar = next.consultCalendar;
+								changeFrame(consultCalendar);
+							}
+						}*/
+					});
+				}
 			}
+		// MEMBER NOT IN
+			//TODO FIX ( change cat )
+			if(allMembCategoriesNoJoin.size()>0) {
+				for(Category memNotCat : allMembCategoriesNoJoin) {
+					nameCat = memNotCat.getClass().getSimpleName();
+					btn_joinCat = new JButton("Join "+nameCat);
+					btn_joinCat.setBounds(posButtonX,0,150,20);
+					btn_joinCat.setActionCommand(String.valueOf(memNotCat.getNum()));
+					panel_otherCategories.add(btn_joinCat);
+					posButtonX+=150;
 			
-			if(!Objects.isNull(btn_joinCat)) {
-				btn_joinCat.addActionListener(e->{
-					System.out.println("JOIN CAT LISTENER");
-					/*
-					int numButtonCategory = Integer.parseInt(btn_joinCat.getText());
-					for(Category cat : ((Member)person).getMemberCategories()) {
-						if(cat.getNum() == numButtonCategory) {
-							((Member)person).getMemberCategories().set(0,cat);
-							ConsultCalendar next = new ConsultCalendar(person);
-							JFrame consultCalendar = next.consultCalendar;
-							changeFrame(consultCalendar);
+					btn_joinCat.addActionListener(e->{
+						int numButtonCategory = Integer.parseInt(btn_joinCat.getActionCommand());
+						System.out.println("JOIN CAT => "+numButtonCategory);
+						System.out.println(btn_joinCat.getText());
+						/*
+						int numButtonCategory = Integer.parseInt(btn_joinCat.getText());
+						for(Category cat : ((Member)person).getMemberCategories()) {
+							if(cat.getNum() == numButtonCategory) {
+								((Member)person).getMemberCategories().set(0,cat);
+								ConsultCalendar next = new ConsultCalendar(person);
+								JFrame consultCalendar = next.consultCalendar;
+								changeFrame(consultCalendar);
+							}
 						}
-					}
-					*/
-				});
-			}			
+						*/
+						
+					});
+				}
+			}
 		}
 	}
 	
@@ -480,7 +626,7 @@ public class ConsultCalendar {
 	}
 	public void disp_outingInfo() {
 		date = sdf.format(calendar.getDate());
-		Outing outingExist = null;
+		outingExist = null;
 		//System.out.println(date);
 		for(Outing outing : allOutings) {
 			try {
@@ -515,11 +661,13 @@ public class ConsultCalendar {
 			lb_maxVeloSeats0.setBounds(0,100,300,20);
 			JLabel lb_needMemberSeats0 = new JLabel("Need member seats = "+Integer.toString(outingExist.getNeedMemberSeats()));
 			lb_needMemberSeats0.setBounds(0,120,300,20);
+			JLabel lb_needVeloSeats0 = new JLabel("Need velo seats = "+Integer.toString(outingExist.getNeedVeloSeats()));
+			lb_needVeloSeats0.setBounds(0,140,300,20);
 			JLabel lb_remainingMemberSeats0  = new JLabel("Remaining member seats = "+Integer.toString(outingExist.getRemainingMemberSeats()));
-			lb_remainingMemberSeats0.setBounds(0,140,300,20);
-			// TODO : gérer en bdd la colonne ici
-			//JLabel lb_remainingVeloSeats0 = new JLabel("Remaining velo seats = "+Integer.toString(outingExist.getRemainingVeloSeats()));
-			//lb_remainingVeloSeats0.setBounds(0,0,100,20);
+			lb_remainingMemberSeats0.setBounds(0,160,300,20);
+			JLabel lb_remainingVeloSeats0 = new JLabel("Remaining velo seats = "+Integer.toString(outingExist.getRemainingVeloSeats()));
+			lb_remainingVeloSeats0.setBounds(0,180,300,20);
+
 			
 			panel_outingInfo.add(lb_text);
 			panel_outingInfo.add(lb_startPoint0);
@@ -528,8 +676,10 @@ public class ConsultCalendar {
 			panel_outingInfo.add(lb_maxMemberSeat0);
 			panel_outingInfo.add(lb_maxVeloSeats0);
 			panel_outingInfo.add(lb_needMemberSeats0);
+			panel_outingInfo.add(lb_needVeloSeats0);
 			panel_outingInfo.add(lb_remainingMemberSeats0);
-			//panel_outingInfo.add(lb_remainingVeloSeats0);
+			panel_outingInfo.add(lb_remainingVeloSeats0);
+
 			if(ConsultCalendar.person instanceof Manager) {
 				dateChooser = new JDateChooser();
 				dateChooser.setBounds(150,40,150,20);
@@ -541,5 +691,34 @@ public class ConsultCalendar {
 		panel.removeAll();
 		panel.revalidate();
 		panel.repaint();
+	}
+	public String formValidationVelo(double lenghtVelo,double weightVelo,String typeVelo) {
+		String result="";
+	
+		if(weightVelo <= 0 || weightVelo >= 5) {
+			result+="Enter weight velo in kg format";
+			result+="\n";
+		}
+		if(lenghtVelo <= 0 || lenghtVelo >=2.5) {
+			result+="Enter lenght velo in m format";
+			result+="\n";
+		}			if(typeVelo.equals("") || Objects.isNull(typeVelo)) {
+			result+="Enter type velo";
+			result+="\n";
+		}
+		return result;
+	}
+
+	public String formValidationVehicle(int totalMemberSeat,int totalVeloSeat) {
+		String result="";
+		if(totalMemberSeat <=0 || totalMemberSeat >8) {
+			result+="Enter real total member seat (1-8)";
+			result+="\n";
+		}
+		if(totalVeloSeat <=0 || totalVeloSeat >8) {
+			result+="Enter real total velo seat (1-8)";
+			result+="\n";
+		}
+		return result;
 	}
 }

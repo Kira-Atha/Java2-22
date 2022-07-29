@@ -105,7 +105,6 @@ public class SignUp {
 		tf_weight.setText("0");
 		tf_lenght = new JTextField();
 		tf_lenght.setText("0");
-		tf_lenght.setBackground(Color.WHITE);
 		tf_lenght.setBounds(87,90,100,20);
 		tf_type = new JTextField();
 		tf_type.setBounds(87,59,100,20);

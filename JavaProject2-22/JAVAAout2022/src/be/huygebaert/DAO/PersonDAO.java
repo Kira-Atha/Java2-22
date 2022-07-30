@@ -47,9 +47,9 @@ public class PersonDAO extends DAO<Person> {
 			        }
 		        }
 		        ps.close();
+		        
 		        member.createVelo(member.getMemberVelos().get(0));
-		        //TODO JOIN ... FK Bug ???
-		        //member.joinCategory(member.getMemberCategories().get(0));
+		        member.joinCategory(member.getMemberCategories().get(0));
 		        this.connect.commit();
 		        return true;
 			}catch(SQLException e) {

@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
@@ -75,11 +76,12 @@ public class ConsultCalendar {
 	public ConsultCalendar(Person person) {
 		ConsultCalendar.person=person;
 		allOutings = Outing.getAllOutings();
-		allCategories = Category.getAllCategories();
-		allVelos = Velo.getAllVelos();
-		allVehicles = Vehicle.getAllVehicles();
+		if(person instanceof Member) {
+			allCategories = Category.getAllCategories();
+			allVelos = Velo.getAllVelos();
+			allVehicles = Vehicle.getAllVehicles();
+		}
 		initialize();
-		
 	}
 
 	private void initialize() {
@@ -206,6 +208,7 @@ public class ConsultCalendar {
 			
 			// ADD
 			btn_create = new JButton("+");
+			btn_create.setActionCommand("0");
 			btn_create.setBounds(0,0,50,50);
 			panel_buttons.add(btn_create);
 			
@@ -239,7 +242,6 @@ public class ConsultCalendar {
 						}
 					}
 					//System.out.println("TEST ADD => " + date);
-					if(!exist) {
 						Outing outing = null;
 						try {
 							outing = new Outing(startPoint,sdf.parse(date),forfeit,maxMember,maxVelo,((Manager)person).getCategory().getSingleCalendar());
@@ -248,7 +250,7 @@ public class ConsultCalendar {
 						}
 						System.out.println("CURRENT CALENDAR OBJECT CURRENT => "+((Manager)person).getCategory().getSingleCalendar().getNum());
 						//System.out.println("Outing start date de l'objet => " +outing.getStartDate());
-						if(((Manager)person).manageCalendar(0,outing)) {
+						if(((Manager)person).manageCalendar(Integer.parseInt(btn_create.getActionCommand()),outing)) {
 							ConsultCalendar next = new ConsultCalendar(person);
 							JFrame consultCalendar = next.consultCalendar;
 							changeFrame(consultCalendar);
@@ -257,12 +259,11 @@ public class ConsultCalendar {
 							JOptionPane.showMessageDialog(null, "Can't create outing");
 						}
 					}
-				}
-			});
-			
+				});
 			
 			// update
 			btn_update = new JButton("?");
+			btn_update.setActionCommand("1");
 			btn_update.setBounds(0,50,50,50);
 			panel_buttons.add(btn_update);
 			
@@ -290,9 +291,16 @@ public class ConsultCalendar {
 						for(Outing ou : allOutings) {
 							try {
 								if(ou.getStartDate().compareTo(sdf.parse(newDate)) == 0 && ou.getOutingCalendar().getNum() == ((Manager)person).getCategory().getSingleCalendar().getNum()) {
-									JOptionPane.showMessageDialog(null,"An outing already exist for this calendar on this date");
+									if(newDate.compareTo(date) == 0) {
+										idOuting = ou.getNum();
+										break;
+									}
+									JOptionPane.showMessageDialog(null,"An other outing already exist for this calendar on this date");
 									exist = true;
 									break;
+								}
+								if(ou.getStartDate().compareTo(sdf.parse(date)) == 0 && ou.getStartDate().compareTo(sdf.parse(newDate)) == 0) {
+									
 								}
 								if(ou.getStartDate().compareTo(sdf.parse(date)) == 0 && ou.getOutingCalendar().getNum() == ((Manager)person).getCategory().getSingleCalendar().getNum()) {
 									idOuting = ou.getNum();
@@ -313,7 +321,7 @@ public class ConsultCalendar {
 							}
 							System.out.println("CURRENT CALENDAR OBJECT CURRENT => "+((Manager)person).getCategory().getSingleCalendar().getNum());
 							//System.out.println("Outing start date de l'objet => " +outing.getStartDate());
-							if(((Manager)person).manageCalendar(1,outing)) {
+							if(((Manager)person).manageCalendar(Integer.parseInt(btn_update.getActionCommand()),outing)) {
 								ConsultCalendar next = new ConsultCalendar(person);
 								JFrame consultCalendar = next.consultCalendar;
 								changeFrame(consultCalendar);
@@ -331,6 +339,7 @@ public class ConsultCalendar {
 			
 			// delete
 			btn_delete = new JButton("X");
+			btn_delete.setActionCommand("2");
 			btn_delete.setBounds(0,100,50,50);
 			panel_buttons.add(btn_delete);
 			
@@ -346,7 +355,7 @@ public class ConsultCalendar {
 						e1.printStackTrace();
 					}
 				}
-				if(!Objects.isNull(selectedOuting) && ((Manager)person).manageCalendar(2,selectedOuting)) {
+				if(!Objects.isNull(selectedOuting) && ((Manager)person).manageCalendar(Integer.parseInt(btn_delete.getActionCommand()),selectedOuting)) {
 					JOptionPane.showMessageDialog(null,"Delete success");
 					ConsultCalendar next = new ConsultCalendar(person);
 					JFrame consultCalendar = next.consultCalendar;
@@ -438,7 +447,7 @@ public class ConsultCalendar {
 					}
 				}
 			});
-		//ADD VEHICLE if member hasn't
+		//ADD VEHICLE if member hasn't and add vehicle to selected outing
 			if(Objects.isNull(((Member)person).getMemberVehicle())){
 				JPanel panel_addVehicle = new JPanel();
 				panel_addVehicle.setLayout(null);
@@ -475,7 +484,6 @@ public class ConsultCalendar {
 					if(result!="") {
 						JOptionPane.showMessageDialog(null, result);
 					}else {
-						
 						Vehicle vehicle = new Vehicle(vehicleTotalMemberSeats,vehicleTotalVeloSeats,((Member)person));
 						System.out.println(vehicle.getDriver().getPseudo());
 						
@@ -501,10 +509,26 @@ public class ConsultCalendar {
 				panel_addVehicle.add(btn_addVehicle);
 				
 				btn_addVehicle.addActionListener(e->{
-					if(outingExist.addVehicle(((Member)person).getMemberVehicle())) {
-						JOptionPane.showMessageDialog(null,"Success : vehicle add to outing");
+					if(!Objects.isNull(outingExist)) {
+						boolean alreadyAdd = false;
+						for(Vehicle vehicle : outingExist.getOutingVehicles()) {
+							if(vehicle.getNum() == ((Member)person).getMemberVehicle().getNum()) {
+								alreadyAdd = true;
+								break;
+							}
+						}
+						if(alreadyAdd) {
+							JOptionPane.showMessageDialog(null, "You already drive for this outing");
+						}else {
+							if(outingExist.addVehicle(((Member)person).getMemberVehicle())) {
+								JOptionPane.showMessageDialog(null,"Success : vehicle add to outing");
+								ConsultCalendar next = new ConsultCalendar(person);
+								JFrame consultCalendar = next.consultCalendar;
+								changeFrame(consultCalendar);
+							}
+						}
 					}else {
-						JOptionPane.showMessageDialog(null,"You can't add your vehicle to this outing");
+						JOptionPane.showMessageDialog(null,"Select an outing");
 					}
 				});
 			}
@@ -515,8 +539,11 @@ public class ConsultCalendar {
 			panel_otherCategories.setBounds(0,30,800,20);
 			consultCalendar.getContentPane().add(panel_otherCategories);
 			// MY CATEGORIES = BOUTON
-			btn_cat = null;
-			btn_joinCat = null;
+			
+			JButton[] btn_cat = new JButton[allCategories.size()];
+			System.out.println(btn_cat.length);
+			//btn_cat = null;
+			//btn_joinCat = null;
 			
 			List<Category> allMembCategories = ((Member)person).getMemberCategories();
 			List<Category> allMembCategoriesNoJoin = new ArrayList<Category>();
@@ -531,17 +558,25 @@ public class ConsultCalendar {
 		// MEMBER IN
 			// element 0 = calendar consulted, ignore it
 			int posButtonX = 100;
-			for(Category memCat : allMembCategories) {
-				if(allMembCategories.indexOf(memCat) != 0 ) {
-					nameMembCat = memCat.getClass().getSimpleName();
-					btn_cat = new JButton(nameMembCat);
-					btn_cat.setBounds(posButtonX,0,100,20);
-					btn_cat.setActionCommand(String.valueOf(memCat.getNum()));
-					panel_otherCategories.add(btn_cat);
+			
+			for(int i = 0; i <= allMembCategories.size()-1;i++) {
+				if(allMembCategories.indexOf(allMembCategories.get(i)) !=0) {
+					//System.out.println(i);
+					btn_cat[i] = new JButton(allMembCategories.get(i).getClass().getSimpleName());
+					btn_cat[i].setBounds(posButtonX,0,100,20);
+					btn_cat[i].setActionCommand(String.valueOf(allMembCategories.get(i).getNum()));
+					panel_otherCategories.add(btn_cat[i]);
 					posButtonX+=100;
-					btn_cat.addActionListener(e->{
-						int numButtonCategory = Integer.parseInt(btn_cat.getActionCommand());
-						System.out.println("Change category => "+numButtonCategory);
+					btn_cat[i].addActionListener(e->{
+						int numButtonCategory = Integer.parseInt(e.getActionCommand());
+						//System.out.println("Change category => "+numButtonCategory);
+						//System.out.println("Change category => "+e.getSource());
+						Category categoryToChange = Category.getCategory(numButtonCategory);
+						((Member)person).getMemberCategories().set(0,categoryToChange);
+						ConsultCalendar next = new ConsultCalendar(person);
+						JFrame consultCalendar = next.consultCalendar;
+						changeFrame(consultCalendar);
+						
 						/*
 						for(Category cat : ((Member)person).getMemberCategories()) {
 							if(cat.getNum() == numButtonCategory) {
@@ -554,8 +589,33 @@ public class ConsultCalendar {
 					});
 				}
 			}
+
+	/*
+			for(Category memCat : allMembCategories) {
+				if(allMembCategories.indexOf(memCat) != 0 ) {
+					nameMembCat = memCat.getClass().getSimpleName();
+					btn_cat = new JButton(nameMembCat);
+					btn_cat.setBounds(posButtonX,0,100,20);
+					btn_cat.setActionCommand(String.valueOf(memCat.getNum()));
+					panel_otherCategories.add(btn_cat);
+					posButtonX+=100;
+					btn_cat.addActionListener(e->{
+						int numButtonCategory = Integer.parseInt(btn_cat.getActionCommand());
+						System.out.println("Change category => "+numButtonCategory);
+						
+						for(Category cat : ((Member)person).getMemberCategories()) {
+							if(cat.getNum() == numButtonCategory) {
+								((Member)person).getMemberCategories().set(0,cat);
+								ConsultCalendar next = new ConsultCalendar(person);
+								JFrame consultCalendar = next.consultCalendar;
+								changeFrame(consultCalendar);
+							}
+						}
+					});
+				}
+			}
+	*/
 		// MEMBER NOT IN
-			//TODO FIX ( change cat )
 			if(allMembCategoriesNoJoin.size()>0) {
 				for(Category memNotCat : allMembCategoriesNoJoin) {
 					nameCat = memNotCat.getClass().getSimpleName();
@@ -569,8 +629,8 @@ public class ConsultCalendar {
 						int numButtonCategory = Integer.parseInt(btn_joinCat.getActionCommand());
 						System.out.println("JOIN CAT => "+numButtonCategory);
 						System.out.println(btn_joinCat.getText());
+						
 						/*
-						int numButtonCategory = Integer.parseInt(btn_joinCat.getText());
 						for(Category cat : ((Member)person).getMemberCategories()) {
 							if(cat.getNum() == numButtonCategory) {
 								((Member)person).getMemberCategories().set(0,cat);
@@ -578,9 +638,7 @@ public class ConsultCalendar {
 								JFrame consultCalendar = next.consultCalendar;
 								changeFrame(consultCalendar);
 							}
-						}
-						*/
-						
+						}*/
 					});
 				}
 			}
@@ -721,4 +779,10 @@ public class ConsultCalendar {
 		}
 		return result;
 	}
+	public void actionPerformed(ActionEvent e) {
+	    // press the button
+	      System.out.println(e.getActionCommand()); 
+	      JButton btn=(JButton)e.getSource();
+	      System.out.println(btn.getName());  // use name or action command in if statment
+	} 
 }

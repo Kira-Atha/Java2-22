@@ -41,11 +41,33 @@ public class CategoryDAO extends DAO<Category> {
 		TrailRiderDAO trailriderDAO = new TrailRiderDAO(this.connect);
 		DescenderDAO descenderDAO = new DescenderDAO(this.connect);
 		TrialistDAO trialistDAO = new TrialistDAO(this.connect);
-		Category category;
+		Category category = null;
 		ResultSet result = null;
 		try {
 			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Calendar WHERE IdCalendar ="+id);
 			while(result.next()){
+				switch(result.getString("NameCategory")) {
+				case "Cyclo":
+					category = new Cyclo();
+					category = cycloDAO.find(result.getInt("IdCalendar"));
+					break;
+				case "Descender":
+					category = new Descender();
+					category = descenderDAO.find(result.getInt("IdCalendar"));
+					break;
+				case "Trailrider":
+					category = new TrailRider();
+					category = trailriderDAO.find(result.getInt("IdCalendar"));
+					break;
+				case "Trialist":
+					category = new Trialist();
+					category = trialistDAO.find(result.getInt("IdCalendar"));
+					break;
+			}
+				
+				
+			/*
+				
 				if (result.getString("NameCategory").equals("Cyclo")){
 					category = new Cyclo();
 					category = cycloDAO.find(result.getInt("IdCalendar"));
@@ -67,8 +89,8 @@ public class CategoryDAO extends DAO<Category> {
 					category = trialistDAO.find(result.getInt("IdCalendar"));
 					return category;
 				}
+				*/
 			}
-			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -78,7 +100,7 @@ public class CategoryDAO extends DAO<Category> {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return category;
 	}
 	
 	@Override

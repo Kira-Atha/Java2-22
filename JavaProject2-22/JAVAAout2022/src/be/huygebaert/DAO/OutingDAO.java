@@ -11,6 +11,7 @@ import java.util.List;
 import be.huygebaert.POJO.Calendar;
 import be.huygebaert.POJO.Member;
 import be.huygebaert.POJO.Outing;
+import be.huygebaert.POJO.Vehicle;
 
 public class OutingDAO extends DAO<Outing> {
 	public OutingDAO(Connection connection) {
@@ -79,48 +80,76 @@ public class OutingDAO extends DAO<Outing> {
 
 	@Override
 	public boolean update(Outing outing) {
-		String sql = "UPDATE OUTING set StartPoint = ?,DateStart = ?,Forfeit=?,MaxMemberSeats=?,MaxVeloSeats=?,NeedMemberSeats=?,RemainingMemberSeats = ? WHERE IdOuting = ?";
+	// Manager update outing
+		String sql_update = "UPDATE OUTING set StartPoint = ?,DateStart = ?,Forfeit=?,MaxMemberSeats=?,MaxVeloSeats=?,NeedMemberSeats=?,NeedVeloSeats=?,RemainingMemberSeats = ?,RemainingVeloSeats = ? WHERE IdOuting = ?";
+		PreparedStatement statement;
 		try {
-			PreparedStatement statement = this.connect.prepareStatement(sql);
-			statement.setString(1,outing.getStartPoint());
-			statement.setDate(2,new java.sql.Date(outing.getStartDate().getTime()));
-			statement.setDouble(3,outing.getForfeit());
-			statement.setInt(4,outing.getMaxMemberSeats());
-			statement.setInt(5,outing.getMaxVeloSeats());
-			statement.setInt(6,outing.getNeedMemberSeats());
-			statement.setInt(7,outing.getRemainingMemberSeats());
-			statement.setInt(8,outing.getNum());
-			statement.executeUpdate();
-			
-			System.out.println(outing.getStartPoint());
-			System.out.println(outing.getStartDate());
-			statement.closeOnCompletion();
-			
-			if(outing.getOutingVehicles().size()== 0) {
-				return true;
-			}else {
-				statement = this.connect.prepareStatement("INSERT INTO Out_Vehicle VALUES (?,?)");
-				statement.setInt(0, outing.getNum());
-				statement.setInt(1, outing.getOutingVehicles().get(outing.getOutingVehicles().size()).getNum());
+			Outing outingToCompare = find(outing.getNum());
+
+			if(outingToCompare.getOutingVehicles().size()!=outing.getOutingVehicles().size()) {
+				//this.connect.setAutoCommit(false);
 				
-				if(statement.executeUpdate() >0) {
+				System.out.println("AJOUT DE VEHICULE");
+				statement = this.connect.prepareStatement("INSERT INTO Out_Vehicle VALUES(?,?)");
+			// Get the id of the last vehicle add on outing
+				int numOfLastVehicle = outing.getOutingVehicles().get(outing.getOutingVehicles().size()-1).getNum();
+				//System.out.println(numOfLastVehicle);
+				statement.setInt(1, numOfLastVehicle);
+				statement.setInt(2, outing.getNum());
+				int num = statement.executeUpdate();
+				if(num>0) {
+					System.out.println(num);
+					statement.close();
+					statement = this.connect.prepareStatement(sql_update);
+					statement.setString(1,outing.getStartPoint());
+					statement.setDate(2,new java.sql.Date(outing.getStartDate().getTime()));
+					statement.setDouble(3,outing.getForfeit());
+					statement.setInt(4,outing.getMaxMemberSeats());
+					statement.setInt(5,outing.getMaxVeloSeats());
+					statement.setInt(6,outing.getNeedMemberSeats());
+					statement.setInt(7,outing.getNeedVeloSeats());
+					statement.setInt(8, outing.getRemainingMemberSeats());
+					statement.setInt(9, outing.getRemainingVeloSeats());
+					statement.setInt(10,outing.getNum());
+					System.out.println(outing.getNum());
+					statement.executeUpdate();
 					return true;
 				}
+			}else {
+				System.out.println("UPDATE MANAGER");
+				statement = this.connect.prepareStatement(sql_update);
+				statement.setString(1,outing.getStartPoint());
+				statement.setDate(2,new java.sql.Date(outing.getStartDate().getTime()));
+				statement.setDouble(3,outing.getForfeit());
+				statement.setInt(4,outing.getMaxMemberSeats());
+				statement.setInt(5,outing.getMaxVeloSeats());
+				statement.setInt(6,outing.getNeedMemberSeats());
+				statement.setInt(7,outing.getNeedVeloSeats());
+				statement.setInt(8, outing.getRemainingMemberSeats());
+				statement.setInt(9, outing.getRemainingVeloSeats());
+				statement.setInt(10,outing.getNum());
+				statement.executeUpdate();
+				
+				System.out.println(outing.getStartPoint());
+				System.out.println(outing.getStartDate());
 				statement.closeOnCompletion();
 				
+				return true;
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
+		
 		return false;
 	}
-
+	
 	@Override
 	public Outing find(int id) {
 		Outing outing = null;
 		ResultSet result = null;
+		ResultSet result2 = null;
 		try {
-			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Outing WHERE IdOuting = " +id);
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Outing WHERE IdOuting = "+id);
 			if(result.first()){
 				// Compléter avec info de base
 				
@@ -137,6 +166,12 @@ public class OutingDAO extends DAO<Outing> {
 				outing.setRemainingVeloSeats(result.getInt("RemainingVeloSeats"));
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
 				outing.setOutingCalendar(calendarDAO.find(result.getInt("IdCalendar")));
+	
+				result2 = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Out_Vehicle WHERE IdOuting="+id);
+				VehicleDAO vehicleDAO = new VehicleDAO(this.connect);
+				while(result2.next()) {
+					outing.getOutingVehicles().add(vehicleDAO.find(result2.getInt("IdVehicle")));
+				}
 			}
 		}catch(SQLException e) {
 			 System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
@@ -156,6 +191,7 @@ public class OutingDAO extends DAO<Outing> {
 	public List<Outing> findAll() {
 		Outing outing = null;
 		ResultSet result = null;
+		ResultSet result2 = null;
 		List<Outing> allOutings = new ArrayList<Outing>();
 		
 		try {
@@ -165,6 +201,7 @@ public class OutingDAO extends DAO<Outing> {
 				
 				outing = new Outing();
 				outing.setNum(result.getInt("IdOuting"));
+				int idOuting = outing.getNum();
 				outing.setStartPoint(result.getString("StartPoint"));
 				outing.setStartDate(result.getDate("DateStart"));
 				outing.setForfeit(result.getDouble("Forfeit"));
@@ -177,13 +214,22 @@ public class OutingDAO extends DAO<Outing> {
 				
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
 				outing.setOutingCalendar(calendarDAO.find(result.getInt("IdCalendar")));
+				
+				result2 = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Out_Vehicle WHERE IdOuting="+idOuting);
+				
+				VehicleDAO vehicleDAO = new VehicleDAO(this.connect);
+				while(result2.next()) {
+					outing.getOutingVehicles().add(vehicleDAO.find(result2.getInt("IdVehicle")));
+				}
+				//System.out.println("OUTINGS GET ON DAO => "+outing.getStartPoint());
 				allOutings.add(outing);
 			}
 		}catch(SQLException e) {
 			 System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
 		}catch (Exception e) {
            e.printStackTrace();
-       }finally{
+       }
+		finally{
 			try {
 				result.close();
 			} catch (SQLException e) {

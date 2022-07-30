@@ -46,8 +46,19 @@ public class VehicleDAO extends DAO<Vehicle>{
 
 	@Override
 	public Vehicle find(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Vehicle vehicle = null;
+		MemberDAO memberDAO = new MemberDAO(this.connect);
+		
+		try {
+			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Vehicle WHERE IdVehicle ="+id);
+			while(result.next()){
+				vehicle = new Vehicle(result.getInt("TotalMemberSeats"),result.getInt("TotalVeloSeats"),memberDAO.find(result.getInt("IdDriver")));
+				vehicle.setNum(result.getInt("IdVehicle"));
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return vehicle;
 	}
 
 	@Override
@@ -60,6 +71,7 @@ public class VehicleDAO extends DAO<Vehicle>{
 			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Vehicle");
 			while(result.next()){
 				vehicle = new Vehicle(result.getInt("TotalMemberSeats"),result.getInt("TotalVeloSeats"),memberDAO.find(result.getInt("IdDriver")));
+				vehicle.setNum(result.getInt("IdVehicle"));
 				allVehicles.add(vehicle);
 			}
 		}catch(SQLException e) {

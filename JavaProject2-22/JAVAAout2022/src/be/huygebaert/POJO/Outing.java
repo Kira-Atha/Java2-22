@@ -144,8 +144,7 @@ public class Outing implements Serializable {
 	}
 	
 	public boolean addVehicle(Vehicle vehicle) {
-		// Si inférieur à 0, pas grave, quelques place en rab. En revanche pas utile d'avoir un véhicule complet vide
-		if(this.needMemberSeats > 0 && this.getNeedMemberSeats() - vehicle.getTotalMemberSeats() <= 0 && this.needVeloSeats > 0  && this.needVeloSeats - vehicle.getTotalVeloSeats() <= 0) {
+		if(this.needMemberSeats > 0  && this.needVeloSeats > 0 ) {
 			this.outingVehicles.add(vehicle);
 			this.needMemberSeats = this.needMemberSeats - vehicle.getTotalMemberSeats();
 			this.needVeloSeats = this.needVeloSeats - vehicle.getTotalVeloSeats();

@@ -156,8 +156,8 @@ public class SignIn {
 	public String formValidation(String pseudo,String password) {
 		String result="";
 		
-		if(password.equals("") || password.length() < 4 || password.length()>16) {
-			result+="Invalid password. Password must be in 4 to 16 characters";
+		if(password.equals("") || password.length() < 4 ) {
+			result+="Invalid password. Password must be > 4 characters.";
 			result+="<br/>";
 		}
 		if(pseudo.equals("") || pseudo.length() < 3) {

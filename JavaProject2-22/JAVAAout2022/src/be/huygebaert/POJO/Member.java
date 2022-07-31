@@ -32,7 +32,7 @@ public class Member extends Person{
 			this.password=password;
 			this.tel=tel;
 			this.pseudo=pseudo;
-			this.balance=20;
+			this.balance=0;
 			this.memberVehicle = null;
 			memberCategories = new ArrayList<Category>();
 			this.memberCategories.add(category);
@@ -104,28 +104,35 @@ public class Member extends Person{
 	public void setMemberRegisters(List<Register> memberRegisters) {
 		this.memberRegisters = memberRegisters;
 	}
-
-	public boolean verifyBalance(double amount) {
-		if(this.getBalance() > amount) {
-			this.setBalance(this.getBalance() - amount);
-			return true;
-		}
-		return false;
-	}
 	
 	@Override
 	public String toString() {
 		return this.getFirstname()+" "+this.getLastname();
 	}
 
-	public boolean updateBalance(Member member) {
-		this.setBalance(member.getBalance());
-		if(memberDAO.update(member)) {
+	public boolean updateBalance(double amount) {
+		double newBalance;
+	// If balance is negative => pending refund
+		newBalance = this.getBalance()-amount;
+		this.setBalance(newBalance);
+		/*
+		if(amount < 0) {
+			newBalance = this.getBalance() + amount;
+			this.setBalance(newBalance);
+			System.out.println("negative value => (+)"+this.getBalance());
+		}else {
+			newBalance = this.getBalance() - amount;
+			this.setBalance(newBalance);
+			System.out.println("positive value => (-)"+this.getBalance());
+		}
+		*/
+		if(memberDAO.update(this)) {
 			return true;
 		}
 		return false;
 	}
 	public boolean createVelo(Velo velo) {
+		//TODO => Vélo ajouté deux fois à la création du membre
 		this.memberVelos.add(velo);
 		if(veloDAO.create(velo)) {
 			return true;
@@ -140,10 +147,26 @@ public class Member extends Person{
 		return false;
 	}
 	public boolean joinCategory(Category category) {
-		this.getMemberCategories().add(category);
+		// If member just create -> list.get(0) = first category ( constructor ), don't need to add
+		if(this.getMemberCategories().get(0).getClass() != category.getClass()) {
+			System.out.println("It's not first category choosen, add !");
+			this.getMemberCategories().add(category);
+		}
 		if(memberDAO.create(this)){
 			return true;
 		}
 		return false;
+	}
+	
+	public static boolean isNumeric(String strNum) {
+	    if (strNum == null) {
+	        return false;
+	    }
+	    try {
+	        double d = Double.parseDouble(strNum);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
 	}
 }

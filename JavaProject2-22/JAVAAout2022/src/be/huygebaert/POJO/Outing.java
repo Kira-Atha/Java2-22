@@ -179,4 +179,9 @@ public class Outing implements Serializable {
 		allOutings = outingDAO.findAll();
 		return allOutings;
 	}
+	
+	public boolean createRegister(Register register) {
+		
+		return false;
+	}
 }

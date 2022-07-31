@@ -51,7 +51,7 @@ public class Velo implements Serializable {
 		return this.memberVelo;
 	}
 	public String toString() {
-		return this.getType()+" "+this.getLenght()+" "+this.getWeight()+" "+this.getMemberVelo().getId();
+		return this.getType();
 	}
 	
 	public static List<Velo> getAllVelos(){

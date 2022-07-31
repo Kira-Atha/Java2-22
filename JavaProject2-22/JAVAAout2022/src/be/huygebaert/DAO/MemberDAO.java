@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import be.huygebaert.POJO.Category;
 import be.huygebaert.POJO.Cyclo;
 import be.huygebaert.POJO.Manager;
 import be.huygebaert.POJO.Member;
@@ -18,17 +19,22 @@ public class MemberDAO extends DAO<Member>{
 		super(connection);
 	}
 
-	// Pour rejoindre la catégorie, je profite de cette DAO vide ( INSERT INTO => CREATE )
+	// Pour rejoindre la catégorie, je profite de cette DAO vide
 	@Override
 	public boolean create(Member member) {
 		try(PreparedStatement ps = this.connect.prepareStatement("INSERT INTO Cat_Memb VALUES(?,?)")){
 			ps.setInt(1, member.getId());
-			ps.setInt(2, member.getMemberCategories().get(0).getNum());
-			System.out.println("[PERSON DAO]MEMBER ID => "+member.getId()+" CATE ID => "+member.getMemberCategories().get(0).getNum());
-			if(ps.executeUpdate()>1) {
-				return true;
+			if(member.getMemberCategories().size()==1) {
+				ps.setInt(2, member.getMemberCategories().get(0).getNum());
 			}else {
-				return false;
+				Category lastCategory = member.getMemberCategories().get(member.getMemberCategories().size()-1);
+				ps.setInt(2, lastCategory.getNum());
+			}
+			if(ps.executeUpdate()>0) {
+				if(member.updateBalance(-20)) {
+					//System.out.println("DAO BALANCE=>"+member.getBalance());
+					return true;
+				}
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();

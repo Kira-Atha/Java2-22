@@ -21,33 +21,18 @@ public class Vehicle implements Serializable {
 	
 	public Vehicle() {}
 	
-//create
 	public Vehicle(int totalMemberSeats, int totalVeloSeats,Member driver) {
 		try {
-			this.totalMemberSeats = totalMemberSeats;
-			this.totalVeloSeats=totalVeloSeats;
 			this.passengersInVehicle = new ArrayList<Member>();
 			this.passengersInVehicle.add(driver);
 			this.velosInVehicle = new ArrayList<Velo>();
-			
+			this.totalMemberSeats -= passengersInVehicle.size();
+			this.totalVeloSeats -= velosInVehicle.size();
 		}catch(Exception e) {
 			System.out.print("Vehicle doesn't create");
 		}
 	}
 	
-//Find
-	public Vehicle(int totalMemberSeats, int totalVeloSeats, int remainingMemberSeats, int remainingVeloSeats,Member driver) {
-		try {
-			this.totalMemberSeats = totalMemberSeats;
-			this.totalVeloSeats=totalVeloSeats;
-			this.passengersInVehicle = new ArrayList<Member>();
-			this.passengersInVehicle.add(driver);
-			this.velosInVehicle = new ArrayList<Velo>();
-			
-		}catch(Exception e) {
-			System.out.print("Vehicle doesn't create");
-		}
-	}
 	public int getNum() {
 		return num;
 	}

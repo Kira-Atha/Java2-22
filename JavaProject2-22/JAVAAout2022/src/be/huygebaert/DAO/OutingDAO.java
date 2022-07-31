@@ -93,12 +93,11 @@ public class OutingDAO extends DAO<Outing> {
 				statement = this.connect.prepareStatement("INSERT INTO Out_Vehicle VALUES(?,?)");
 			// Get the id of the last vehicle add on outing
 				int numOfLastVehicle = outing.getOutingVehicles().get(outing.getOutingVehicles().size()-1).getNum();
+				Vehicle lastVehicle = outing.getOutingVehicles().get(numOfLastVehicle);
 				//System.out.println(numOfLastVehicle);
 				statement.setInt(1, numOfLastVehicle);
 				statement.setInt(2, outing.getNum());
-				int num = statement.executeUpdate();
-				if(num>0) {
-					System.out.println(num);
+				if(statement.executeUpdate()>0) {
 					statement.close();
 					statement = this.connect.prepareStatement(sql_update);
 					statement.setString(1,outing.getStartPoint());
@@ -113,6 +112,9 @@ public class OutingDAO extends DAO<Outing> {
 					statement.setInt(10,outing.getNum());
 					System.out.println(outing.getNum());
 					statement.executeUpdate();
+				// Formule à modifier, je suis parti de l'idée que le driver est payé en fonction du nombre de personne qu'il peut prendre ( tant pis si toutes les places ne sont pas
+				// occupées, il s'est tout de même déplacé
+					lastVehicle.getDriver().updateBalance(outing.getForfeit()*lastVehicle.getTotalMemberSeats());
 					return true;
 				}
 			}else {

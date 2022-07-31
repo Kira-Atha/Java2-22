@@ -354,44 +354,44 @@ public class SignUp {
 	public String formValidation(String firstname, String lastname, String password, String pseudo, String tel, String typeAccount, String typeCategory,double lenghtVelo,double weightVelo,String typeVelo) {
 		String result="";
 		
-		if(firstname.equals("") || firstname.length() < 3) {
-			result+="Invalid firstname";
+		if(firstname.equals("") || firstname.length() < 3 || Member.isNumeric(firstname)) {
+			result+="Invalid firstname. Firstname must be > 3 characters and doesn't contain number.";
 			result+="\n";
 		}
-		if(lastname.equals("") || lastname.length() < 3) {
-			result+="Invalid lastname";
+		if(lastname.equals("") || lastname.length() < 3 || Member.isNumeric(lastname)) {
+			result+="Invalid lastname. Lastname must be > 3 characters and doesn't contain number.";
 			result+="\n";
 		}
-		if(password.equals("") || password.length() < 4 || password.length()>16) {
-			result+="Invalid password. Password must be in 4 to 16 characters";
+		if(password.equals("") || password.length() < 4) {
+			result+="Invalid password. Password must be > 4 characters.";
 			result+="\n";
 		}
 		if(pseudo.equals("") || pseudo.length() < 3) {
-			result+="Invalid pseudo";
+			result+="Invalid pseudo. Pseudo must be > 3 characters.";
 			result+="\n";
 		}
-		if(tel.equals("") || tel.length() < 3) {
-			result+="Invalid tel";
+		if(tel.equals("") || tel.length() < 9 || tel.length()>10 || !Member.isNumeric(tel)) {
+			result+="Invalid tel. Enter 071000000 or 0400000000 format";
 			result+="\n";
 		}
 		if(typeAccount.equals("") || typeAccount.equals(null)) {
-			result+="Invalid account type";
+			result+="Select account type.";
 			result+="\n";
 		}
 		if(typeAccount.equals("Treasurer") == false && typeCategory.equals("") || typeCategory.equals(null)) {
-			result+="Invalid category type";
+			result+="Select category type.";
 			result+="\n";
 		}
 		if(typeAccount.equals("Member")) {
 			if(weightVelo <= 0 || weightVelo >= 5) {
-				result+="Enter weight velo in kg format";
+				result+="Enter weight velo in kg format.";
 				result+="\n";
 			}
 			if(lenghtVelo <= 0 || lenghtVelo >=2.5) {
-				result+="Enter lenght velo in m format";
+				result+="Enter lenght velo in m format.";
 				result+="\n";
 			}			if(typeVelo.equals("") || Objects.isNull(typeVelo)) {
-				result+="Enter type velo";
+				result+="Enter type velo.";
 				result+="\n";
 			}
 		}

@@ -24,10 +24,8 @@ public class Treasurer extends Person {
 	}
 
 	public boolean managePayments(Member member,double amount) {
-		if(member.verifyBalance(amount)) {
-			if(member.updateBalance(member)) {
-				return true;
-			}
+		if(member.updateBalance(amount)) {
+			return true;
 		}
 		return false;
 	}

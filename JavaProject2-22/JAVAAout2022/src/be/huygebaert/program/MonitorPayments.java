@@ -98,8 +98,8 @@ public class MonitorPayments {
 		lb_allMembers.setBounds(410, 10, 195, 14);
 		monitorPayments.getContentPane().add(lb_allMembers);
 		
-		lb_textSelect = new JLabel("Select balance and put amount to subtract");
-		lb_textSelect.setBounds(331, 458, 346, 14);
+		lb_textSelect = new JLabel("Select balance and put positive value to pay someone. If you put a negative value, this amount is due from that member ");
+		lb_textSelect.setBounds(0, 458, 700, 14);
 		monitorPayments.getContentPane().add(lb_textSelect);
 		
 		lb_balanceSelected = new JLabel("");
@@ -153,20 +153,15 @@ public class MonitorPayments {
 		btn_send = new JButton("-");
 		btn_send.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(lb_balanceSelected.getText() != "" && MonitorPayments.isNumeric(tf_newBalance.getText())) {
+				if(lb_balanceSelected.getText() != "" && Member.isNumeric(tf_newBalance.getText())) {
 					if(JOptionPane.showInternalConfirmDialog(null, "Are you sure ?") == 0) {
 						Member member = new Member();
-						//TODO : changer value car en DB démarre à 2
 						member = member.getMember(tablePayments.getSelectedRow()+1);
-						
 						if(((Treasurer) person).managePayments(member,Double.parseDouble(tf_newBalance.getText()))) {
 							JOptionPane.showMessageDialog(null,"Success");
-							//TODO : trouver un meilleur refresh 
 							MonitorPayments next = new MonitorPayments(person);
 							JFrame monitorPayments = next.monitorPayments;
 							changeFrame(monitorPayments);
-						}else {
-							JOptionPane.showMessageDialog(null, "Balance of member si < the amount to subtract");
 						}
 					}
 				}else {
@@ -189,16 +184,5 @@ public class MonitorPayments {
 	public void changeFrame(JFrame window) {
 		window.setVisible(true);
 		this.monitorPayments.dispose();
-	}
-	public static boolean isNumeric(String strNum) {
-	    if (strNum == null) {
-	        return false;
-	    }
-	    try {
-	        double d = Double.parseDouble(strNum);
-	    } catch (NumberFormatException nfe) {
-	        return false;
-	    }
-	    return true;
 	}
 }

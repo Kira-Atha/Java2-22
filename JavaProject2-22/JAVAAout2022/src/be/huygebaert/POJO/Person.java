@@ -16,7 +16,7 @@ abstract public class Person implements Serializable {
 	protected String password;
 	protected String tel;
 	protected String pseudo;
-	static DAOFactory adf = new DAOFactory();
+	protected static DAOFactory adf = new DAOFactory();
 	protected static List<Person> allPersons = new ArrayList<Person>();
 	protected static DAO<Person>personDAO = adf.getPersonDAO();
 	protected static DAO<Treasurer>treasurerDAO = adf.getTreasurerDAO();
@@ -109,13 +109,13 @@ abstract public class Person implements Serializable {
 	public static List<Person> getAllPersons() {
 		return personDAO.findAll();
 	}
-	public Treasurer getTreasurer(int id) {
+	public static Treasurer getTreasurer(int id) {
 		return treasurerDAO.find(id);
 	}
-	public Member getMember(int id) {
+	public static Member getMember(int id) {
 		return memberDAO.find(id);
 	}
-	public Manager getManager(int id) {
+	public static Manager getManager(int id) {
 		return managerDAO.find(id);
 	}
 	public boolean joinCategory(Category category) {

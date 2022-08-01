@@ -8,6 +8,7 @@ import be.huygebaert.DAO.DAOFactory;
 
 public class Velo implements Serializable {
 	private static final long serialVersionUID = 7274111556630336582L;
+	private int num;
 	private double weight;
 	private String type;
 	private double lenght;
@@ -56,5 +57,14 @@ public class Velo implements Serializable {
 	
 	public static List<Velo> getAllVelos(){
 		return veloDAO.findAll();
+	}
+	public static Velo getVelo(int id) {
+		return veloDAO.find(id);
+	}
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
 	}
 }

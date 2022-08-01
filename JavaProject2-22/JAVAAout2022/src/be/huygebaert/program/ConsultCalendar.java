@@ -50,18 +50,20 @@ public class ConsultCalendar {
 	JButton btn_create,btn_delete,btn_update,btn_logout,btn_cat,btn_joinCat;
 	private static Person person;
 	private JLabel lb_message,lb_legend,lb_startPoint,lb_forfeit,lb_maxMember,lb_maxVelo,lb_titleForm,lb_weight, lb_lenght, lb_type,lb_vehicleTotalMemberSeats,lb_vehicleTotalVeloSeats;
-	private JPanel panel_outingInfo,panel_formOuting,panel_buttons,panel_calendar;
+	private JPanel panel_register,panel_outingInfo,panel_formOuting,panel_buttons,panel_calendar;
 	private JTextField tf_startPoint,tf_forfeit,tf_maxMember,tf_maxVelo,tf_weight,tf_type,tf_lenght,tf_vehicleTotalMemberSeats,tf_vehicleTotalVeloSeats;
 	private String date;
 	private List <Outing> allOutings;
 	private List <Category> allCategories;
 	private List <Velo> allVelos;
 	private List<Vehicle> allVehicles;
+	private List<Register> allRegisters;
 	private JDateChooser dateChooser;
 	private SimpleDateFormat sdf;
 	private JCalendar calendar;
 	private Outing outingExist;
 	private JComboBox<Object> selectVelo;
+	//private JComboBox<Object> selectVehicle;
 	boolean reg_passenger,reg_velo = false;
 	
 	
@@ -85,6 +87,16 @@ public class ConsultCalendar {
 			allCategories = Category.getAllCategories();
 			allVelos = Velo.getAllVelos();
 			allVehicles = Vehicle.getAllVehicles();
+			allRegisters = Register.getAllRegisters();
+			
+			if(!Objects.isNull(allRegisters)) {
+				for(Register reg :allRegisters) {
+					if(reg.getOuting().getOutingCalendar().getNum() == ((Member)person).getMemberCategories().get(0).getNum()) {
+						System.out.println("Ce membre participe le : "+reg.getOuting().getStartDate());
+					}
+				}
+			}
+
 		}
 		initialize();
 	}
@@ -375,9 +387,11 @@ public class ConsultCalendar {
 			consultCalendar.getContentPane().add(lb_message);
 			lb_message.setBounds(0,0,400,15);
 		
-			for(Velo velo : allVelos) {
-				if(velo.getMemberVelo().getId() == ((Member)person).getId())
-					((Member)person).getMemberVelos().add(velo);
+			if(((Member)person).getMemberVelos().size() ==0) {
+				for(Velo velo : allVelos) {
+					if(velo.getMemberVelo().getId() == ((Member)person).getId())
+						((Member)person).getMemberVelos().add(velo);
+				}
 			}
 			
 			for(Vehicle vehicle : allVehicles) {
@@ -386,79 +400,18 @@ public class ConsultCalendar {
 				}
 			}
 		
-		//REGISTER ON OUTING
-
-			JPanel panel_register = new JPanel();
-			panel_register.setBounds(0,300,250,300);
+			panel_register = new JPanel();
+			panel_register.setBounds(0,300,250,400);
 			panel_register.setLayout(null);
 			consultCalendar.getContentPane().add(panel_register);
-			JButton btn_register = new JButton("Register");
-			btn_register.setBounds(0,0,100,20);
-			panel_register.add(btn_register);
-			
-			JCheckBox check_velo = new JCheckBox("I want to put my bike in a car");
-			check_velo.setBounds(0,30,200,20);
-			panel_register.add(check_velo);
-			
-			
-			List<Velo> memberVelos = ((Member)person).getMemberVelos();
-			selectVelo = new JComboBox<Object>(memberVelos.toArray());
-			selectVelo.setBounds(5,70,150,20);
-			panel_register.add(selectVelo);
-			selectVelo.setVisible(false);
-			
-			check_velo.addActionListener(e->{
-				if(check_velo.isSelected()) {
-					selectVelo.setVisible(true);
-					reg_velo = true;
-				}
-			});
-			check_velo.addActionListener(e->{
-				if(!check_velo.isSelected()) {
-					if(!Objects.isNull(selectVelo)) {
-						selectVelo.setVisible(false);
-						reg_velo = false;
-					}
-				}
-			});
-			
-			JCheckBox check_passenger = new JCheckBox("I want to come by car");
-			check_passenger.setBounds(0,120,150,20);
-			panel_register.add(check_passenger);
-			check_passenger.addActionListener(e->{
-				if(check_passenger.isSelected()) {
-					reg_passenger = true;
-				}
-			});
-			check_passenger.addActionListener(e->{
-				if(!check_passenger.isSelected()) {
-					reg_passenger = false;
-				}
-			});
-			
-			btn_register.addActionListener(e-> {
-				if(!Objects.isNull(outingExist)) {
-					System.out.println("Reg passager => "+reg_passenger);
-					System.out.println("Reg velo =>" + reg_velo);
-					Velo veloSelected = null;
-					if(reg_velo) {
-						veloSelected = (Velo) selectVelo.getSelectedItem();
-					}
-					
-					Register register = new Register(reg_passenger,reg_velo,(Member)person,veloSelected,outingExist);
-					System.out.println(register);
-					//TODO ne pas pouvoir s'inscrire à une sortie déjà terminée
-				}else {
-					JOptionPane.showMessageDialog(null,"Select an outing");
-				}
-				
-			});
+			if(!Objects.isNull(outingExist)) {
+				create_panelRegister();
+			}
 		
-			
 		//ADD VELO to member
 			JPanel panel_addVelo = new JPanel();
 			panel_addVelo.setLayout(null);
-			panel_addVelo.setBounds(250,300,200,300);
+			panel_addVelo.setBounds(300,300,200,300);
 			consultCalendar.getContentPane().add(panel_addVelo);
 			
 			JButton btn_addVelo = new JButton("Add velo");
@@ -513,7 +466,7 @@ public class ConsultCalendar {
 			if(Objects.isNull(((Member)person).getMemberVehicle())){
 				JPanel panel_addVehicle = new JPanel();
 				panel_addVehicle.setLayout(null);
-				panel_addVehicle.setBounds(500,300,200,300);
+				panel_addVehicle.setBounds(600,300,200,300);
 				consultCalendar.getContentPane().add(panel_addVehicle);
 				JButton btn_addVehicle = new JButton("Add vehicle");
 				btn_addVehicle.setBounds(0,0,150,20);
@@ -572,22 +525,44 @@ public class ConsultCalendar {
 				
 				btn_addVehicle.addActionListener(e->{
 					if(!Objects.isNull(outingExist)) {
-						boolean alreadyAdd = false;
-						for(Vehicle vehicle : outingExist.getOutingVehicles()) {
-							if(vehicle.getNum() == ((Member)person).getMemberVehicle().getNum()) {
-								alreadyAdd = true;
-								break;
+						if(outingExist.getStartDate().compareTo(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant())) > 0) {
+							boolean alreadyAdd = false;
+							boolean alreadyDriveToday = false;
+							Category categoryDriving = null;
+							for(Vehicle vehicle : outingExist.getOutingVehicles()) {
+								if(vehicle.getNum() == ((Member)person).getMemberVehicle().getNum()) {
+									alreadyAdd = true;
+									break;
+								}
 							}
-						}
-						if(alreadyAdd) {
-							JOptionPane.showMessageDialog(null, "You already drive for this outing");
+							for(Outing out : allOutings ) {
+								for(Vehicle veh : out.getOutingVehicles()) {
+									if(veh.getNum() == ((Member)person).getMemberVehicle().getNum() ) {
+										alreadyDriveToday = true;
+										categoryDriving = Category.getCategory(out.getOutingCalendar().getNum());
+										break;
+									}
+								}
+							}
+							if(!alreadyAdd) {
+								if(!alreadyDriveToday) {
+									if(outingExist.addVehicle(((Member)person).getMemberVehicle())) {
+										JOptionPane.showMessageDialog(null,"Success : vehicle add to outing");
+										ConsultCalendar next = new ConsultCalendar(person);
+										JFrame consultCalendar = next.consultCalendar;
+										changeFrame(consultCalendar);
+									}else {
+										JOptionPane.showMessageDialog(null,"Don't need seats");
+										System.out.println((((Member)person).getMemberVehicle()));
+									}
+								}else {
+									JOptionPane.showMessageDialog(null, "You already drive this day to other outing in "+categoryDriving.getClass().getSimpleName());
+								}
+							}else {
+								JOptionPane.showMessageDialog(null, "You already drive for this outing");
+							}
 						}else {
-							if(outingExist.addVehicle(((Member)person).getMemberVehicle())) {
-								JOptionPane.showMessageDialog(null,"Success : vehicle add to outing");
-								ConsultCalendar next = new ConsultCalendar(person);
-								JFrame consultCalendar = next.consultCalendar;
-								changeFrame(consultCalendar);
-							}
+							JOptionPane.showMessageDialog(null, "You can't add your vehicle to an already outing finished");
 						}
 					}else {
 						JOptionPane.showMessageDialog(null,"Select an outing");
@@ -719,7 +694,36 @@ public class ConsultCalendar {
 				if (person instanceof Member) {
 					if(outing.getStartDate().compareTo(sdf.parse(date)) == 0 && outing.getOutingCalendar().getNum() == ((Member)person).getMemberCategories().get(0).getSingleCalendar().getNum()) {
 						outingExist = outing;
+						
+						if(!Objects.isNull(allRegisters)) {
+							for(Register reg :allRegisters) {
+								if(reg.getOuting().getOutingCalendar().getNum() == outingExist.getOutingCalendar().getNum()) {
+									outingExist.getOutingRegisters().add(reg);
+								}
+							}
+						}
 						//System.out.println("Outing exist where you selected");
+					}
+					if(!Objects.isNull(outingExist)) {
+						if(!Objects.isNull(panel_register)) {
+							clean_panel(panel_register);
+							create_panelRegister();
+							/*
+							if(outingExist.getOutingVehicles().size() > 0) {
+								selectVehicle = new JComboBox<Object>(outingExist.getOutingVehicles().toArray());
+								selectVehicle.setBounds(0,150,200,20);
+								panel_register.add(selectVehicle);
+								selectVehicle.setVisible(false);
+							}else {
+								selectVehicle = null;
+							}
+							*/
+						}
+					}else {
+						if(!Objects.isNull(panel_register)) {
+							clean_panel(panel_register);
+							//create_panelRegister();
+						}
 					}
 				}
 			} catch (ParseException e1) {
@@ -801,4 +805,171 @@ public class ConsultCalendar {
 		}
 		return result;
 	} 
+	public void create_panelRegister() {
+		//REGISTER ON OUTING
+		JButton btn_register = new JButton("Register");
+		btn_register.setBounds(0,0,100,20);
+		panel_register.add(btn_register);
+		
+		JCheckBox check_velo = new JCheckBox("I want to put my bike in a car");
+		check_velo.setBounds(0,30,200,20);
+		panel_register.add(check_velo);
+		
+		
+		selectVelo = new JComboBox<Object>(((Member)person).getMemberVelos().toArray());
+		selectVelo.setBounds(5,70,150,20);
+		panel_register.add(selectVelo);
+		selectVelo.setVisible(true);
+		
+		/*
+		if(!Objects.isNull(outingExist)) {
+			if(outingExist.getOutingVehicles().size() > 0) {
+				selectVehicle = new JComboBox<Object>(outingExist.getOutingVehicles().toArray());
+				selectVehicle.setBounds(0,150,120,20);
+				panel_register.add(selectVehicle);
+				selectVehicle.setVisible(false);
+			}
+		}
+		*/
+		check_velo.addActionListener(e->{
+			if(check_velo.isSelected()) {
+				/*
+				if(!Objects.isNull(selectVehicle)) {
+					reg_velo = true;
+					//selectVehicle.setVisible(true);
+				}else {
+					JOptionPane.showMessageDialog(null,"No car available, try again later");
+				}*/
+				if(outingExist.getOutingVehicles().size()==0) {
+					JOptionPane.showMessageDialog(null,"No car available, try again later");
+					//selectVehicle.setVisible(true);
+				}else {
+				}
+				reg_velo = true;
+			}
+		});
+		check_velo.addActionListener(e->{
+			if(!check_velo.isSelected()) {
+				/*
+				if(!Objects.isNull(selectVehicle)) {
+					//selectVelo.setVisible(false);
+					reg_velo = false;
+					//selectVehicle.setVisible(false);
+				}*/
+				reg_velo = false;
+			}
+		});
+		
+		JCheckBox check_passenger = new JCheckBox("I want to come by car");
+		check_passenger.setBounds(0,120,150,20);
+		panel_register.add(check_passenger);
+		check_passenger.addActionListener(e->{
+			if(check_passenger.isSelected()) {
+				reg_passenger = true;
+				if(outingExist.getOutingVehicles().size()==0) {
+					JOptionPane.showMessageDialog(null,"No car available, try again later");
+					//selectVehicle.setVisible(true);
+				}
+			}
+		});
+		check_passenger.addActionListener(e->{
+			if(!check_passenger.isSelected()) {
+				reg_passenger = false;
+				/*
+				if(!Objects.isNull(selectVehicle)) {
+					selectVehicle.setVisible(false);
+				}
+				*/
+			}
+		});
+		
+		btn_register.addActionListener(e-> {
+			if(!Objects.isNull(outingExist)) {
+				//System.out.println("Reg passager => "+reg_passenger);
+				//System.out.println("Reg velo =>" + reg_velo);
+				Velo veloSelected  = (Velo) selectVelo.getSelectedItem();
+				//Vehicle vehicleSelected = null;
+				boolean vehiMAvailable = false;
+				boolean vehiVAvailable = false;
+				if(reg_velo) {
+					//vehicleSelected = (Vehicle) selectVehicle.getSelectedItem();
+					for(Vehicle vehicle : outingExist.getOutingVehicles()) {
+						if(vehicle.getVelos().size() < vehicle.getTotalVeloSeats()) {
+							Vehicle vehicleAvailable = vehicle;
+							vehicleAvailable.addVelo(veloSelected);
+							vehiVAvailable = true;
+							System.out.println("Velo ajouté à la liste de vélo du véhicule");
+							break;
+						}
+					}
+					if(!vehiVAvailable) {
+						JOptionPane.showMessageDialog(null, "No Velo seats available");
+					}
+					//vehicleAvailable.addVelo(veloSelected);
+				}
+				if(reg_passenger) {
+					/*
+					//vehicleSelected = (Vehicle) selectVehicle.getSelectedItem();
+					vehicleSelected.addPassenger((Member)person);
+					System.out.println("Passager ajouté à la liste du véhicule");
+					*/
+					//vehicleSelected = (Vehicle) selectVehicle.getSelectedItem();
+					for(Vehicle vehicle : outingExist.getOutingVehicles()) {
+						if(vehicle.getPassengers().size() < vehicle.getTotalMemberSeats()) {
+							Vehicle vehicleAvailable = vehicle;
+							vehicleAvailable.addPassenger((Member)person);
+							vehiMAvailable = true;
+							System.out.println("Membre ajouté à la liste de Membre du véhicule");
+							break;
+						}
+					}
+					// TODO 
+					if(!vehiMAvailable) {
+						JOptionPane.showMessageDialog(null, "No Member seats available");
+					}
+				}
+				
+				if( (reg_velo && vehiVAvailable) || (reg_passenger && vehiMAvailable)) {
+					Register register = new Register(reg_passenger,reg_velo,(Member)person,veloSelected,outingExist);
+					
+					if(!Objects.isNull(register)) {
+						boolean alreadyParticipate = false;
+						for(Register reg : outingExist.getOutingRegisters()) {
+							if(reg.getMember().getId() == register.getMember().getId()) {
+								JOptionPane.showMessageDialog(null,"You are already participating in this outing");
+								alreadyParticipate = true;
+							}
+						}
+						if(!alreadyParticipate) {
+							if(outingExist.createRegister(register)) {
+								JOptionPane.showMessageDialog(null,"Register success");
+							}
+						}
+					}
+				}else if((!reg_velo && !vehiVAvailable) || (!reg_passenger && !vehiMAvailable)) {
+					Register register = new Register(reg_passenger,reg_velo,(Member)person,veloSelected,outingExist);
+					
+					if(!Objects.isNull(register)) {
+						boolean alreadyParticipate = false;
+						for(Register reg : outingExist.getOutingRegisters()) {
+							if(reg.getMember().getId() == register.getMember().getId()) {
+								JOptionPane.showMessageDialog(null,"You are already participating in this outing");
+								alreadyParticipate = true;
+							}
+						}
+						if(!alreadyParticipate) {
+							if(outingExist.createRegister(register)) {
+								JOptionPane.showMessageDialog(null,"Register success");
+							}
+						}
+					}
+				}else {
+					JOptionPane.showMessageDialog(null, "You can't register to this outing if you want use car (no seats availables)");
+				}
+			}else {
+				JOptionPane.showMessageDialog(null,"Select an outing");
+			}
+			
+		});
+	}
 }

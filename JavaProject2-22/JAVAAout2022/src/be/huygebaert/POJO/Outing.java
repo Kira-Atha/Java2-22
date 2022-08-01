@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
@@ -28,6 +29,7 @@ public class Outing implements Serializable {
 	static DAOFactory adf = new DAOFactory();
 	protected static DAO<Outing>outingDAO = adf.getOutingDAO();
 	protected static List<Outing> allOutings = null;
+	protected static DAO<Register>registerDAO = adf.getRegisterDAO();
 	
 	public Outing() {
 
@@ -179,9 +181,19 @@ public class Outing implements Serializable {
 		allOutings = outingDAO.findAll();
 		return allOutings;
 	}
-	
+	public static Outing getOuting(int id) {
+		return outingDAO.find(id);
+	}
 	public boolean createRegister(Register register) {
-		
+		if(!this.getOutingRegisters().contains(register) && !Objects.isNull(register)) {
+			this.getOutingRegisters().add(register);
+			registerDAO.create(register);
+			return true;
+		}
 		return false;
+	}
+	
+	public String toString() {
+		return String.valueOf(this.getNum());
 	}
 }

@@ -26,8 +26,8 @@ public class Vehicle implements Serializable {
 			this.passengersInVehicle = new ArrayList<Member>();
 			this.passengersInVehicle.add(driver);
 			this.velosInVehicle = new ArrayList<Velo>();
-			this.totalMemberSeats -= passengersInVehicle.size();
-			this.totalVeloSeats -= velosInVehicle.size();
+			this.totalMemberSeats = totalMemberSeats;
+			this.totalVeloSeats = totalVeloSeats;
 		}catch(Exception e) {
 			System.out.print("Vehicle doesn't create");
 		}
@@ -81,7 +81,6 @@ public class Vehicle implements Serializable {
 		this.totalVeloSeats = totalVeloSeats;
 	}
 	
-	// Modifier les places de la sortie ! 
 	public boolean addPassenger(Member member) {
 		if(!member.equals(null) && !this.passengersInVehicle.contains(member) && this.totalMemberSeats < this.passengersInVehicle.size()){
 			this.passengersInVehicle.add(member);
@@ -99,11 +98,15 @@ public class Vehicle implements Serializable {
 		return false;
 	}
 
-	public Vehicle getVehicle(int id) {		
+	public static Vehicle getVehicle(int id) {		
 		return vehicleDAO.find(id);
 	}
 	
 	public static List<Vehicle> getAllVehicles(){
 		return vehicleDAO.findAll();
+	}
+	@Override
+	public String toString() {
+		return "(D) : "+this.getDriver()+" (M) "+ this.getPassengers().size() +"/"+this.getTotalMemberSeats()+" (V) : "+ this.getVelos().size()+"/"+this.getTotalVeloSeats();
 	}
 }

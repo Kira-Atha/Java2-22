@@ -93,7 +93,7 @@ public class OutingDAO extends DAO<Outing> {
 				statement = this.connect.prepareStatement("INSERT INTO Out_Vehicle VALUES(?,?)");
 			// Get the id of the last vehicle add on outing
 				int numOfLastVehicle = outing.getOutingVehicles().get(outing.getOutingVehicles().size()-1).getNum();
-				Vehicle lastVehicle = outing.getOutingVehicles().get(numOfLastVehicle);
+				Vehicle lastVehicle = Vehicle.getVehicle(numOfLastVehicle);
 				//System.out.println(numOfLastVehicle);
 				statement.setInt(1, numOfLastVehicle);
 				statement.setInt(2, outing.getNum());

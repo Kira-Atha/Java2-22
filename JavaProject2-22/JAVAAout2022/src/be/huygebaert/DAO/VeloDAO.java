@@ -51,7 +51,7 @@ public class VeloDAO extends DAO<Velo> {
 	public Velo find(int id) {
 		
 		Velo velo = null;
-		/*
+		
 		MemberDAO memberDAO = new MemberDAO(this.connect);
 		try {
 			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Velo where IdVelo ="+id);
@@ -60,7 +60,7 @@ public class VeloDAO extends DAO<Velo> {
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
-		}*/
+		}
 		return velo;
 	}
 
@@ -74,6 +74,7 @@ public class VeloDAO extends DAO<Velo> {
 			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Velo");
 			while(result.next()){
 				velo = new Velo(result.getDouble("Weight"),result.getString("Type"),result.getDouble("Lenght"),memberDAO.find(result.getInt("IdMember")));
+				velo.setNum(result.getInt("IdVelo"));
 				allVelos.add(velo);
 			}
 		}catch(SQLException e) {

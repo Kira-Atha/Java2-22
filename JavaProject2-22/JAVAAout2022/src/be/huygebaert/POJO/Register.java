@@ -1,7 +1,11 @@
 package be.huygebaert.POJO;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+
+import be.huygebaert.DAO.DAO;
+import be.huygebaert.DAO.DAOFactory;
 
 public class Register implements Serializable {
 	private static final long serialVersionUID = 2958860344136235528L;
@@ -10,7 +14,8 @@ public class Register implements Serializable {
 	private Member member;
 	private Velo velo;
 	private Outing outing;
-	
+	private static DAOFactory adf = new DAOFactory();
+	private static DAO<Register>registerDAO = adf.getRegisterDAO();
 	
 	//Velo peut être null car 0-1
 	public Register(boolean reg_passenger,boolean reg_velo,Member member, Velo velo, Outing outing) {
@@ -67,6 +72,10 @@ public class Register implements Serializable {
 			typeVelo= " TYPE VELO : "+ this.getVelo().getType();
 		}
 		return "REGISTER VALUE => PSEUDO MEMBRE " + this.getMember().getPseudo()+typeVelo +" POINT DE DEPART DE LA SORTIE "+ this.getOuting().getStartPoint() +" EST PASSAGER ? "+ this.isReg_passenger() +" MET SON VELO DANS UNE VOITURE ?" + this.isReg_velo();
+	}
+	
+	public static List <Register> getAllRegisters() {
+		return registerDAO.findAll();
 	}
 
 }

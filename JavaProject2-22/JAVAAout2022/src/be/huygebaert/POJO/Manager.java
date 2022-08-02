@@ -1,21 +1,16 @@
 package be.huygebaert.POJO;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import be.huygebaert.DAO.DAO;
-import be.huygebaert.DAO.DAOFactory;
+
 
 public class Manager extends Person {
 	private static final long serialVersionUID = -1584705078113981090L;
 	private Category category = null;
-	DAO<Category> categoryDAO = adf.getCategoryDAO();
-	DAO<Manager> managerDAO = adf.getManagerDAO();
+	private static DAO<Manager> managerDAO = adf.getManagerDAO();
 	
 	public Manager(String firstname, String lastname, String password, String tel, String pseudo, Category category) {
 		try {
-			Person.idCount++;
-			this.id = Person.idCount;
 			this.firstname = firstname;
 			this.lastname=lastname;
 			this.password=password;
@@ -28,7 +23,6 @@ public class Manager extends Person {
 	}
 	public Manager(String firstname, String lastname, String password, String tel, String pseudo) {
 		try {
-			this.id = Person.idCount;
 			this.firstname = firstname;
 			this.lastname=lastname;
 			this.password=password;
@@ -38,9 +32,8 @@ public class Manager extends Person {
 			System.out.println("Manager doesn't create");
 		}
 	}
-	public Manager() {
-		
-	}
+	public Manager() {}
+	
 	public Category getCategory() {
 		return category;
 	}
@@ -56,19 +49,14 @@ public class Manager extends Person {
 		switch(choice) {
 			case 0:
 				if(this.getCategory().getSingleCalendar().addOuting(outing)) {
-					//System.out.println("passage 0");
 					return true;
 				}
 			case 1:
-				//System.out.println("BEFORE DAO => "+outing.getNum());
-				
 				if(this.getCategory().getSingleCalendar().updateOuting(outing)) {
-					//System.out.println("passage 1");
 					return true;
 				}
 			case 2:
 				if(this.getCategory().getSingleCalendar().deleteOuting(outing)) {
-					//System.out.println("passage 2");
 					return true;
 				}
 		}

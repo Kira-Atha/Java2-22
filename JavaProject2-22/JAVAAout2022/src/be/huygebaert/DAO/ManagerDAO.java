@@ -5,11 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import be.huygebaert.POJO.Category;
 import be.huygebaert.POJO.Manager;
-import be.huygebaert.POJO.Member;
-import be.huygebaert.POJO.Person;
+
 
 public class ManagerDAO extends DAO<Manager>{
 	public ManagerDAO(Connection connection) {
@@ -18,19 +15,16 @@ public class ManagerDAO extends DAO<Manager>{
 
 	@Override
 	public boolean create(Manager obj) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean delete(Manager obj) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean update(Manager obj) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

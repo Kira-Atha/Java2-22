@@ -6,9 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import be.huygebaert.POJO.Vehicle;
-import be.huygebaert.POJO.Velo;
 
 public class VehicleDAO extends DAO<Vehicle>{
 	public VehicleDAO(Connection connection) {
@@ -34,43 +32,11 @@ public class VehicleDAO extends DAO<Vehicle>{
 
 	@Override
 	public boolean delete(Vehicle obj) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean update(Vehicle vehicle) {
-		Vehicle vehicleToCompare = Vehicle.getVehicle(vehicle.getNum());
-		
-		if(vehicleToCompare.getPassengers().size() == vehicle.getPassengers().size()) {
-			// Alors c'est l'ajout du dernier vélo de la liste
-			try(PreparedStatement statement = this.connect.prepareStatement("INSERT INTO Velo_Vehicle VALUES (?,?)")) {
-				statement.setInt(1, vehicle.getNum());
-				statement.setInt(2, vehicle.getVelos().get(vehicle.getVelos().size()-1).getNum());
-				
-				if(statement.executeUpdate() > 0) {
-					return true;
-				}
-			}catch(SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		if(vehicleToCompare.getVelos().size() == vehicle.getVelos().size()) {
-			// Alors c'est l'ajout de passager
-			
-			try(PreparedStatement statement = this.connect.prepareStatement("INSERT INTO Passenger_Vehicle VALUES (?,?)")) {
-				statement.setInt(1, vehicle.getPassengers().get(vehicle.getPassengers().size()-1).getId());
-				statement.setInt(2, vehicle.getNum());
-				
-				if(statement.executeUpdate() >0) {
-					return true;
-				}
-			}catch(SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
 		return false;
 	}
 

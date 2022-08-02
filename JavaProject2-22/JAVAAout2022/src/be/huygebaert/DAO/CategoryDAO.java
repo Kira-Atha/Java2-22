@@ -1,17 +1,12 @@
 package be.huygebaert.DAO;
-
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
-
 import be.huygebaert.POJO.Category;
 import be.huygebaert.POJO.Cyclo;
 import be.huygebaert.POJO.Descender;
-import be.huygebaert.POJO.Manager;
 import be.huygebaert.POJO.TrailRider;
 import be.huygebaert.POJO.Trialist;
 
@@ -63,33 +58,7 @@ public class CategoryDAO extends DAO<Category> {
 					category = new Trialist();
 					category = trialistDAO.find(result.getInt("IdCalendar"));
 					break;
-			}
-				
-				
-			/*
-				
-				if (result.getString("NameCategory").equals("Cyclo")){
-					category = new Cyclo();
-					category = cycloDAO.find(result.getInt("IdCalendar"));
-					return category;
 				}
-				
-				if (result.getString("NameCategory").equals("Descender")){
-					category = new Descender();
-					category = descenderDAO.find(result.getInt("IdCalendar"));
-					return category;
-				}
-				if (result.getString("NameCategory").equals("Trailrider")){
-					category = new TrailRider();
-					category = trailriderDAO.find(result.getInt("IdCalendar"));
-					return category;
-				}
-				if (result.getString("NameCategory").equals("Trialist")){
-					category = new Trialist();
-					category = trialistDAO.find(result.getInt("IdCalendar"));
-					return category;
-				}
-				*/
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -102,7 +71,6 @@ public class CategoryDAO extends DAO<Category> {
 		}
 		return category;
 	}
-	
 	@Override
 	public List<Category> findAll(){
 		List<Category> categories = new ArrayList<Category>();
@@ -137,27 +105,6 @@ public class CategoryDAO extends DAO<Category> {
 						categories.add(category);
 						break;
 				}
-				/*
-				if (result.getString("NameCategory").equals("Cyclo")){
-					category = new Cyclo();
-					category = cycloDAO.find(result.getInt("IdCalendar"));
-					categories.add(category);
-				}
-				if (result.getString("NameCategory").equals("Descender")){
-					category = new Descender();
-					category = descenderDAO.find(result.getInt("IdCalendar"));
-					categories.add(category);
-				}
-				if (result.getString("NameCategory").equals("Trailrider")){
-					category = new TrailRider();
-					category = trailriderDAO.find(result.getInt("IdCalendar"));
-					categories.add(category);
-				}
-				if (result.getString("NameCategory").equals("Trialist")){
-					category = new Trialist();
-					category = trialistDAO.find(result.getInt("IdCalendar"));
-					categories.add(category);
-				}*/
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();

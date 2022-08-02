@@ -1,7 +1,6 @@
 package be.huygebaert.DAO;
 
 import java.sql.Connection;
-
 import be.huygebaert.POJO.*;
 
 public class DAOFactory extends AbstractDAOFactory{
@@ -48,8 +47,5 @@ protected static final Connection conn = DbConnection.getInstance();
 	}
 	public DAO<Velo> getVeloDAO(){
 		return new VeloDAO(conn);
-	}
-	public DAO<VTT> getVTTDAO(){
-		return new VTTDAO(conn);
 	}
 }

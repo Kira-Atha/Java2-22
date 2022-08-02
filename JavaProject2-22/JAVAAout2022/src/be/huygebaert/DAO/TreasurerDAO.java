@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
 import be.huygebaert.POJO.Treasurer;
 
 public class TreasurerDAO extends DAO<Treasurer> {
@@ -14,19 +13,16 @@ public class TreasurerDAO extends DAO<Treasurer> {
 
 	@Override
 	public boolean create(Treasurer obj) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean delete(Treasurer obj) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean update(Treasurer obj) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -49,7 +45,6 @@ public class TreasurerDAO extends DAO<Treasurer> {
 
 	@Override
 	public List<Treasurer> findAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

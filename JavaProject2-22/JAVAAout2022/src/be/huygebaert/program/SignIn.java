@@ -2,7 +2,6 @@ package be.huygebaert.program;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.util.List;
 import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -24,13 +23,11 @@ public class SignIn {
 	public JFrame signIn;
 	private JTextField tf_Pseudo;
 	private JPasswordField pf_Password;
-	private JLabel lb_Error,lb_Pseudo,lb_Password;
+	private JLabel lb_Pseudo,lb_Password;
 	private JButton btn_Send,btn_Back;
 	private JLabel lblNewLabel;
 
-	/**
-	 * Launch the application.
-	 */
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -102,21 +99,10 @@ public class SignIn {
 			String password = String.valueOf(pf_Password.getPassword());
 			String result = formValidation(pseudo,password);
 			
-			lb_Error = new JLabel();
-			lb_Error.setBounds(300,250, 400, 300);
-			lb_Error.setForeground(Color.red);
-			lb_Error.hide();
-			signIn.getContentPane().add(lb_Error);
 			if(result!="") {
-				result="<html>"+result+"</html>";
-				lb_Error.setText("");
-				lb_Error.setText(result);
-				lb_Error.show();
+				JOptionPane.showMessageDialog(null, result);
 			}else {
-				lb_Error.setText("");
-				lb_Error.hide();
 				Person person = new Member(pseudo,password);
-				
 				if(!Objects.isNull(person)) {
 					person = person.signIn();
 					if(!Objects.isNull(person)) {
@@ -139,9 +125,7 @@ public class SignIn {
 						JOptionPane.showMessageDialog(null,"This pseudo or this password is incorrect.");
 					}
 				}
-				
-			}
-				
+			}	
 		});
 		btn_Back.addActionListener(e-> {
 			Init previous = new Init();
@@ -164,7 +148,6 @@ public class SignIn {
 			result+="Invalid pseudo. Pseudo must be > 3 characters";
 			result+="<br/>";
 		}
-	
 		return result;
 	}
 }

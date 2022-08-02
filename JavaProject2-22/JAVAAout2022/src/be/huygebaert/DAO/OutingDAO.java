@@ -1,15 +1,10 @@
 package be.huygebaert.DAO;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import be.huygebaert.POJO.Calendar;
-import be.huygebaert.POJO.Member;
 import be.huygebaert.POJO.Outing;
 import be.huygebaert.POJO.Vehicle;
 
@@ -29,7 +24,6 @@ public class OutingDAO extends DAO<Outing> {
 	        ps0.setInt(6, outing.getMaxVeloSeats());
 	        ps0.setInt(7, outing.getNeedMemberSeats());
 	        ps0.setInt(8, outing.getNeedVeloSeats());
-	        System.out.println("DAO CALENDAR NUM : "+outing.getOutingCalendar().getNum());
 	        ps0.setInt(9, outing.getRemainingMemberSeats());
 	        ps0.setInt(10, outing.getRemainingVeloSeats());
 	        ps0.setInt(11,outing.getOutingCalendar().getNum());
@@ -80,21 +74,16 @@ public class OutingDAO extends DAO<Outing> {
 
 	@Override
 	public boolean update(Outing outing) {
-	// Manager update outing
 		String sql_update = "UPDATE OUTING set StartPoint = ?,DateStart = ?,Forfeit=?,MaxMemberSeats=?,MaxVeloSeats=?,NeedMemberSeats=?,NeedVeloSeats=?,RemainingMemberSeats = ?,RemainingVeloSeats = ? WHERE IdOuting = ?";
 		PreparedStatement statement;
 		try {
 			Outing outingToCompare = find(outing.getNum());
-
+			// add vehicle in outing
 			if(outingToCompare.getOutingVehicles().size()!=outing.getOutingVehicles().size()) {
-				//this.connect.setAutoCommit(false);
-				
-				System.out.println("AJOUT DE VEHICULE");
 				statement = this.connect.prepareStatement("INSERT INTO Out_Vehicle VALUES(?,?)");
 			// Get the id of the last vehicle add on outing
 				int numOfLastVehicle = outing.getOutingVehicles().get(outing.getOutingVehicles().size()-1).getNum();
 				Vehicle lastVehicle = Vehicle.getVehicle(numOfLastVehicle);
-				//System.out.println(numOfLastVehicle);
 				statement.setInt(1, numOfLastVehicle);
 				statement.setInt(2, outing.getNum());
 				if(statement.executeUpdate()>0) {
@@ -110,15 +99,12 @@ public class OutingDAO extends DAO<Outing> {
 					statement.setInt(8, outing.getRemainingMemberSeats());
 					statement.setInt(9, outing.getRemainingVeloSeats());
 					statement.setInt(10,outing.getNum());
-					System.out.println(outing.getNum());
 					statement.executeUpdate();
-				// Formule à modifier, je suis parti de l'idée que le driver est payé en fonction du nombre de personne qu'il peut prendre ( tant pis si toutes les places ne sont pas
-				// occupées, il s'est tout de même déplacé
+				//Formule possible à modifier
 					lastVehicle.getDriver().updateBalance(outing.getForfeit()*lastVehicle.getTotalMemberSeats());
 					return true;
 				}
 			}else {
-				System.out.println("UPDATE MANAGER");
 				statement = this.connect.prepareStatement(sql_update);
 				statement.setString(1,outing.getStartPoint());
 				statement.setDate(2,new java.sql.Date(outing.getStartDate().getTime()));
@@ -131,11 +117,7 @@ public class OutingDAO extends DAO<Outing> {
 				statement.setInt(9, outing.getRemainingVeloSeats());
 				statement.setInt(10,outing.getNum());
 				statement.executeUpdate();
-				
-				System.out.println(outing.getStartPoint());
-				System.out.println(outing.getStartDate());
 				statement.closeOnCompletion();
-				
 				return true;
 			}
 		}catch(SQLException e) {
@@ -153,8 +135,6 @@ public class OutingDAO extends DAO<Outing> {
 		try {
 			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Outing WHERE IdOuting = "+id);
 			if(result.first()){
-				// Compléter avec info de base
-				
 				outing = new Outing();
 				outing.setNum(result.getInt("IdOuting"));
 				outing.setStartPoint(result.getString("StartPoint"));
@@ -199,8 +179,6 @@ public class OutingDAO extends DAO<Outing> {
 		try {
 			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Outing");
 			while(result.next()){
-				// Compléter avec info de base
-				
 				outing = new Outing();
 				outing.setNum(result.getInt("IdOuting"));
 				int idOuting = outing.getNum();
@@ -223,7 +201,6 @@ public class OutingDAO extends DAO<Outing> {
 				while(result2.next()) {
 					outing.getOutingVehicles().add(vehicleDAO.find(result2.getInt("IdVehicle")));
 				}
-				//System.out.println("OUTINGS GET ON DAO => "+outing.getStartPoint());
 				allOutings.add(outing);
 			}
 		}catch(SQLException e) {

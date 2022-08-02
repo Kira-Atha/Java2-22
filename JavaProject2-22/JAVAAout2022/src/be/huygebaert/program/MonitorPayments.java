@@ -1,19 +1,13 @@
 package be.huygebaert.program;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
 import java.util.List;
-
-import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,16 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-
 import be.huygebaert.POJO.Member;
 import be.huygebaert.POJO.Person;
 import be.huygebaert.POJO.Treasurer;
-
-import java.awt.event.FocusAdapter;
 
 public class MonitorPayments {
 
@@ -67,11 +55,7 @@ public class MonitorPayments {
 	}
 
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
-		//MonitorPayments.person = person;
 		monitorPayments = new JFrame("MonitorPayments");
 		monitorPayments.setBounds(100, 100, 800, 600);
 		monitorPayments.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -128,13 +112,10 @@ public class MonitorPayments {
 		tablePayments.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//System.out.println("- test");
 				int row = tablePayments.getSelectedRow();
 				int column = 3;
 				double currentValue = Double.valueOf(tablePayments.getValueAt(row,column).toString());
-				//tf_newBalance.setText(Double.toString(currentValue));
 				lb_balanceSelected.setText(Double.toString(currentValue));
-				//System.out.println(currentValue);
 			}
 		});
 		
@@ -156,7 +137,7 @@ public class MonitorPayments {
 				if(lb_balanceSelected.getText() != "" && Member.isNumeric(tf_newBalance.getText())) {
 					if(JOptionPane.showInternalConfirmDialog(null, "Are you sure ?") == 0) {
 						Member member = new Member();
-						member = member.getMember(tablePayments.getSelectedRow()+1);
+						member = Member.getMember(tablePayments.getSelectedRow()+1);
 						if(((Treasurer) person).managePayments(member,Double.parseDouble(tf_newBalance.getText()))) {
 							JOptionPane.showMessageDialog(null,"Success");
 							MonitorPayments next = new MonitorPayments(person);

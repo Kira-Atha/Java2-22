@@ -1,25 +1,19 @@
 package be.huygebaert.DAO;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import be.huygebaert.POJO.Category;
-import be.huygebaert.POJO.Cyclo;
-import be.huygebaert.POJO.Manager;
 import be.huygebaert.POJO.Member;
-import be.huygebaert.POJO.Person;
-import be.huygebaert.POJO.Treasurer;
+
 
 public class MemberDAO extends DAO<Member>{
 	public MemberDAO(Connection connection) {
 		super(connection);
 	}
 
-	// Pour rejoindre la catégorie, je profite de cette DAO vide
 	@Override
 	public boolean create(Member member) {
 		try(PreparedStatement ps = this.connect.prepareStatement("INSERT INTO Cat_Memb VALUES(?,?)")){
@@ -32,7 +26,6 @@ public class MemberDAO extends DAO<Member>{
 			}
 			if(ps.executeUpdate()>0) {
 				if(member.updateBalance(-20)) {
-					//System.out.println("DAO BALANCE=>"+member.getBalance());
 					return true;
 				}
 			}
@@ -44,7 +37,6 @@ public class MemberDAO extends DAO<Member>{
 
 	@Override
 	public boolean delete(Member obj) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -81,28 +73,9 @@ public class MemberDAO extends DAO<Member>{
 				result = this.connect.createStatement().executeQuery("SELECT * FROM Cat_Memb where IdMember =  " + id);
 				CategoryDAO categoryDAO = new CategoryDAO(this.connect);
 				while(result.next()) {
-					// L'id du calendrier = l'id de la catégorie ( type )
-					//System.out.println("This member "+firstname+" have : " +result.getInt("IdCalendar") );
 					member.getMemberCategories().add(categoryDAO.find(result.getInt("IdCalendar")));
-					//System.out.println("BUg0");
 				}
 				
-				/*
-		// Vehicle of member
-				result = this.connect.createStatement().executeQuery("SELECT * FROM VEHICLE where IdDriver ="+id );
-				VehicleDAO vehicleDAO = new VehicleDAO(this.connect);
-				while(result.next()) {
-					member.setMemberVehicle(vehicleDAO.find(result.getInt("IdVehicle")));
-				}
-				
-		// Velo(s) of member
-				
-				result = this.connect.createStatement().executeQuery("SELECT * FROM VELO where IdMember = "+id);
-				VeloDAO veloDAO = new VeloDAO(this.connect);
-				while(result.next()) {
-					member.getMemberVelos().add(veloDAO.find(result.getInt("IdVelo")));
-				}
-				*/
 				return member;
 			}
 		}catch(SQLException e){
@@ -121,15 +94,12 @@ public class MemberDAO extends DAO<Member>{
 	public List<Member> findAll() {
 		List <Member> allMembers = new ArrayList<Member>();
 		Member member;
-		// TODO Leur(s) vélo(s) ? Véhicule ? Inscription? 
 		try {
 			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Member");
 			while(result.next()){
-				// Compléter avec info de base
 				member = new Member(result.getString("Firstname"),result.getString("Lastname"),result.getString("Password"),result.getString("Tel"),result.getString("Pseudo"));
 				member.setBalance(result.getDouble("Balance"));
 				member.setId(result.getInt("IdMember"));
-				// Compléter avec les catégories
 				ResultSet result2 = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery(
 						"SELECT * FROM Member INNER JOIN Cat_Memb "
 						+ "ON Member.IdMember = Cat_Memb.IdMember "

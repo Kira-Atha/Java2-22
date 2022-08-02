@@ -3,13 +3,11 @@ package be.huygebaert.POJO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 
 abstract public class Person implements Serializable {
 	private static final long serialVersionUID = 8586954274748508608L;
-	protected static int idCount = 0;
 	protected int id;
 	protected String firstname;
 	protected String lastname;
@@ -67,13 +65,13 @@ abstract public class Person implements Serializable {
 		for(Person person : allPersons) {
 			if(this.getPseudo().equals(person.getPseudo()) && this.getPassword().equals(person.getPassword())){
 				if(person instanceof Treasurer ) {
-					toConnect = person.getTreasurer(person.getId());
+					toConnect = Person.getTreasurer(person.getId());
 				}
 				if(person instanceof Member){
-					toConnect = person.getMember(person.getId());
+					toConnect = Person.getMember(person.getId());
 				}
 				if(person instanceof Manager) {
-					toConnect = person.getManager(person.getId());
+					toConnect = Person.getManager(person.getId());
 				}
 			}
 		}
@@ -83,19 +81,15 @@ abstract public class Person implements Serializable {
 		allPersons = getAllPersons();
 		
 		if(this instanceof Manager) {
-			//System.out.println("here");
 			Manager manager = (Manager) this;
 			List <Manager> managers = manager.getAllManagers();
 			for(Manager man : managers ) {
-				//System.out.println(manager.getFirstname());
 				if(manager.getCategory().getNum() == man.getCategory().getNum() || manager.getPseudo() == man.getPseudo()) {
 					return false;
 				}
 			}
 		}else {
-			//System.out.println("OBJET COURANT => "+this.getPseudo());
 			for(Person person : allPersons) {
-				//System.out.println("PERSON => "+person.getPseudo());
 				if(person.getPseudo().equals(this.getPseudo())) {
 					return false;
 				}
@@ -120,5 +114,23 @@ abstract public class Person implements Serializable {
 	}
 	public boolean joinCategory(Category category) {
 		return false;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) {
+			return true;
+		}
+			
+		if((o == null) || (o.getClass() != this.getClass())) {
+			return false;
+		}
+
+		final Person test = (Person)o;
+		return this.getId() == (test.getId());
+	}
+	@Override
+	public int hashCode() {
+		return this.hashCode();
 	}
 }

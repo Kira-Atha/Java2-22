@@ -25,9 +25,13 @@ public class VeloDAO extends DAO<Velo> {
 	        ps0.setString(3, velo.getType());
 	        ps0.setDouble(4, velo.getLenght());
 	        ps0.setInt(5, velo.getMemberVelo().getId());
-	        //System.out.println("VELO info"+velo);
 	        if(ps0.executeUpdate() > 0) {
-	        	return true;
+	        	try (ResultSet generatedKeys = ps0.getGeneratedKeys()) {
+		            if (generatedKeys.next()) {
+		                velo.setNum(generatedKeys.getInt(1));
+		                return true;
+		            }
+	        	}
 	        }
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -37,13 +41,11 @@ public class VeloDAO extends DAO<Velo> {
 
 	@Override
 	public boolean delete(Velo obj) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean update(Velo obj) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

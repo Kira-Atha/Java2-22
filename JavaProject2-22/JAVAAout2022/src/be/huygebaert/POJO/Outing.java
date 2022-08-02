@@ -1,8 +1,6 @@
 package be.huygebaert.POJO;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,14 +24,12 @@ public class Outing implements Serializable {
 	private Calendar outingCalendar;
 	private List <Vehicle> outingVehicles = new ArrayList<Vehicle>();
 	private List <Register> outingRegisters = new ArrayList<Register>();
-	static DAOFactory adf = new DAOFactory();
-	protected static DAO<Outing>outingDAO = adf.getOutingDAO();
-	protected static List<Outing> allOutings = null;
-	protected static DAO<Register>registerDAO = adf.getRegisterDAO();
+	private static DAOFactory adf = new DAOFactory();
+	private static DAO<Outing>outingDAO = adf.getOutingDAO();
+	private static List<Outing> allOutings = null;
+	private static DAO<Register>registerDAO = adf.getRegisterDAO();
 	
-	public Outing() {
-
-	}
+	public Outing() {}
 	
 	public Outing(String startPoint, Date date, double forfeit,int maxMemberSeats, int maxVeloSeats,Calendar calendar) {
 		this.startPoint = startPoint;
@@ -44,9 +40,8 @@ public class Outing implements Serializable {
 		this.maxVeloSeats = maxVeloSeats;
 		this.needMemberSeats = maxMemberSeats;
 		this.needVeloSeats = maxVeloSeats;
-		this.remainingMemberSeats = maxMemberSeats;
-		this.remainingVeloSeats = maxVeloSeats;
-		
+		this.remainingMemberSeats = 0;
+		this.remainingVeloSeats = 0;
 		outingVehicles = new ArrayList<Vehicle>();
 		outingRegisters = new ArrayList<Register>();
 	}
@@ -140,28 +135,22 @@ public class Outing implements Serializable {
 	public void setRemainingVeloSeats(int remainingVeloSeats) {
 		this.remainingVeloSeats = remainingVeloSeats;
 	}
-
-	public boolean addParticipant() {
-		return false;
-	}
 	
 	public boolean addVehicle(Vehicle vehicle) {
 		if(this.needMemberSeats > 0  && this.needVeloSeats > 0 ) {
 			this.outingVehicles.add(vehicle);
 			this.needMemberSeats = this.needMemberSeats - vehicle.getTotalMemberSeats();
 			this.needVeloSeats = this.needVeloSeats - vehicle.getTotalVeloSeats();
-			
+			//Compter driver
+			this.remainingMemberSeats = (this.remainingMemberSeats + vehicle.getTotalMemberSeats())-1;
+			this.remainingVeloSeats = this.remainingVeloSeats+vehicle.getTotalVeloSeats();
 			if(outingDAO.update(this)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	public double calculateForfeit() {
-		double forfeit_ = 0;
-		return forfeit_;
-	}
-	// TODO : Revoir
+	
 	public int getNeedMemberSeats() {
 		return this.needMemberSeats;
 	}
@@ -185,10 +174,27 @@ public class Outing implements Serializable {
 		return outingDAO.find(id);
 	}
 	public boolean createRegister(Register register) {
+		boolean registeredIsDriver = false;
+		if(( this.getRemainingMemberSeats() == 0 && register.isReg_passenger() ) || ( this.getRemainingVeloSeats() == 0 && register.isReg_velo())) {
+			return false;
+		}
+		for(Vehicle vehicle : this.getOutingVehicles()) {
+			if(register.getMember().equals(vehicle.getDriver())) {
+				registeredIsDriver = true;
+			}
+		}
+		
 		if(!this.getOutingRegisters().contains(register) && !Objects.isNull(register)) {
+			if(register.isReg_passenger() && !registeredIsDriver) {
+				this.remainingMemberSeats-=1;
+			}
+			if(register.isReg_velo()) {
+				this.remainingVeloSeats-=1;
+			}
 			this.getOutingRegisters().add(register);
-			registerDAO.create(register);
-			return true;
+			if(registerDAO.create(register)) {
+				return true;
+			}
 		}
 		return false;
 	}

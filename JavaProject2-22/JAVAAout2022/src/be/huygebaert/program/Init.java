@@ -1,14 +1,8 @@
 package be.huygebaert.program;
 
 import java.awt.EventQueue;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import be.huygebaert.DAO.DAO;
-import be.huygebaert.DAO.DAOFactory;
-import be.huygebaert.POJO.Category;
 import javax.swing.JLabel;
 import java.awt.Font;
 

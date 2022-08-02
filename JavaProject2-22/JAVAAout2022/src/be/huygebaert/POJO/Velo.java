@@ -13,7 +13,6 @@ public class Velo implements Serializable {
 	private String type;
 	private double lenght;
 	private Member memberVelo;
-	// Pas besoin de savoir dans quell voiture se trouve le vélo, ni dans quelle inscription
 	private static DAOFactory adf = new DAOFactory();
 	private static DAO<Velo> veloDAO = adf.getVeloDAO();
 	
@@ -28,7 +27,6 @@ public class Velo implements Serializable {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		//this.member=member;
 	}
 	public double getWeight() {
 		return weight;
@@ -66,5 +64,23 @@ public class Velo implements Serializable {
 	}
 	public void setNum(int num) {
 		this.num = num;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) {
+			return true;
+		}
+			
+		if((o == null) || (o.getClass() != this.getClass())) {
+			return false;
+		}
+
+		final Velo test = (Velo)o;
+		return this.getNum() == (test.getNum());
+	}
+	@Override
+	public int hashCode() {
+		return this.hashCode();
 	}
 }

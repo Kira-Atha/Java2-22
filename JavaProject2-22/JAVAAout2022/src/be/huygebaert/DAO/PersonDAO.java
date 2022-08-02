@@ -4,20 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
-
-import be.huygebaert.POJO.Cyclo;
-import be.huygebaert.POJO.Descender;
 import be.huygebaert.POJO.Manager;
 import be.huygebaert.POJO.Member;
 import be.huygebaert.POJO.Person;
-import be.huygebaert.POJO.TrailRider;
 import be.huygebaert.POJO.Treasurer;
-import be.huygebaert.POJO.Trialist;
-import be.huygebaert.POJO.Velo;
 
 public class PersonDAO extends DAO<Person> {
 	public PersonDAO(Connection connection) {
@@ -68,7 +60,6 @@ public class PersonDAO extends DAO<Person> {
 		        ps.setInt(5, manager.getCategory().getNum());
 		        ps.setString(6, manager.getPseudo());
 		        
-		        //manager.getCategory().addPerson(manager);
 		        if(ps.executeUpdate() >0) {
 		        	return true;
 		        }
@@ -103,13 +94,11 @@ public class PersonDAO extends DAO<Person> {
 
 	@Override
 	public boolean delete(Person obj) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean update(Person obj) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

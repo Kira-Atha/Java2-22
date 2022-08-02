@@ -1,9 +1,6 @@
 package be.huygebaert.program;
-
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
-
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -15,17 +12,11 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-
-import be.huygebaert.DAO.DAO;
-import be.huygebaert.DAO.DAOFactory;
 import be.huygebaert.POJO.*;
-
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
-import java.awt.event.ActionEvent;
 import java.awt.Font;
 
 public class SignUp {
@@ -210,6 +201,9 @@ public class SignUp {
 		 * ACTIONS
 		 */
 		btn_send.addActionListener(e->{
+			double weightVelo = 0;
+			double lenghtVelo = 0;
+			String result ="";
 			String firstname = tf_firstname.getText();
 			String lastname = tf_lastname.getText();
 			String tel = tf_tel.getText();
@@ -219,10 +213,16 @@ public class SignUp {
 			String account = checkedAccount? typeAccountGroup.getSelection().getActionCommand():"";
 			boolean checkedCategory = typeCategoryGroup.getSelection() !=null;
 			String category = checkedCategory? typeCategoryGroup.getSelection().getActionCommand():"";
-			double weightVelo = Double.parseDouble(tf_weight.getText());
-			double lenghtVelo = Double.parseDouble(tf_lenght.getText());
+			try {
+				weightVelo = Double.parseDouble(tf_weight.getText());
+				lenghtVelo = Double.parseDouble(tf_lenght.getText());
+			}catch(NumberFormatException nfe) {
+				result+="Wrong format !";
+				result+="\n";
+			}
+
 			String typeVelo = tf_type.getText();
-			String result = formValidation(firstname,lastname,password,pseudo,tel,account,category,lenghtVelo,weightVelo,typeVelo);
+			result += formValidation(firstname,lastname,password,pseudo,tel,account,category,lenghtVelo,weightVelo,typeVelo);
 			
 			
 			if(result!="") {
@@ -241,7 +241,7 @@ public class SignUp {
 					}
 				}
 				if(account.equals("Member")) {
-					System.out.println("Send => "+category);
+					//System.out.println("Send => "+category);
 					Category categoryConstMember = Category.getCategory(Integer.parseInt(category));
 					Member member = new Member(firstname,lastname,password,tel,pseudo,categoryConstMember,typeVelo,weightVelo,lenghtVelo);
 					if(!Objects.isNull(member)) {

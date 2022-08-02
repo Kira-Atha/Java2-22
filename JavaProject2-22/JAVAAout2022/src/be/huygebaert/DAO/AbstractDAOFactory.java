@@ -20,7 +20,6 @@ public abstract class AbstractDAOFactory {
 	public abstract DAO<Trialist> getTrialistDAO();
 	public abstract DAO<Vehicle> getVehicleDAO();
 	public abstract DAO<Velo> getVeloDAO();
-	public abstract DAO<VTT> getVTTDAO();
 	
 	public static AbstractDAOFactory getFactory(int type){
 		switch(type){

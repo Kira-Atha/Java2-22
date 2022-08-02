@@ -3,7 +3,6 @@ package be.huygebaert.POJO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 
@@ -37,7 +36,6 @@ public class Vehicle implements Serializable {
 		return num;
 	}
 
-
 	public void setNum(int num) {
 		this.num = num;
 	}
@@ -46,53 +44,35 @@ public class Vehicle implements Serializable {
 		return this.passengersInVehicle.get(0);
 	}
 
-
 	public List<Member> getPassengers() {
 		return passengersInVehicle;
 	}
 
-
-	public void setPassengers(List<Member> passengers) {
-		this.passengersInVehicle = passengers;
-	}
-
-
 	public List<Velo> getVelos() {
 		return velosInVehicle;
-	}
-	
-	public void setvVelos(List<Velo> velos) {
-		this.velosInVehicle = velos;
 	}
 	
 	public int getTotalMemberSeats() {
 		return totalMemberSeats;
 	}
 	
-	public void setTotalMemberSeats(int totalMemberSeats) {
-		this.totalMemberSeats = totalMemberSeats;
-	}
-	
 	public int getTotalVeloSeats() {
 		return totalVeloSeats;
 	}
 	
-	public void setTotalVeloSeats(int totalVeloSeats) {
-		this.totalVeloSeats = totalVeloSeats;
-	}
-	
 	public boolean addPassenger(Member member) {
-		if(!member.equals(null) && !this.passengersInVehicle.contains(member) && this.totalMemberSeats < this.passengersInVehicle.size()){
+		if(member.equals(this.getDriver())){
+			return true;
+		}
+		if(!member.equals(null) && !this.passengersInVehicle.contains(member) && this.totalMemberSeats > this.passengersInVehicle.size()){
 			this.passengersInVehicle.add(member);
-			this.totalMemberSeats -= 1; 
 			return true;
 		}
 		return false;
 	}
 	public boolean addVelo(Velo velo) {
-		if(!velo.equals(null) && !this.velosInVehicle.contains(velo) && this.totalVeloSeats<this.velosInVehicle.size()) {
+		if(!velo.equals(null) && !this.velosInVehicle.contains(velo) && this.totalVeloSeats > this.velosInVehicle.size()) {
 			this.velosInVehicle.add(velo);
-			this.totalVeloSeats-=1;
 			return true;
 		}
 		return false;

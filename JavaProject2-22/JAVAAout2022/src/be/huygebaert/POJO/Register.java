@@ -3,12 +3,12 @@ package be.huygebaert.POJO;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 
 public class Register implements Serializable {
 	private static final long serialVersionUID = 2958860344136235528L;
+	private int num;
 	private boolean reg_passenger;
 	private boolean reg_velo;
 	private Member member;
@@ -17,7 +17,6 @@ public class Register implements Serializable {
 	private static DAOFactory adf = new DAOFactory();
 	private static DAO<Register>registerDAO = adf.getRegisterDAO();
 	
-	//Velo peut être null car 0-1
 	public Register(boolean reg_passenger,boolean reg_velo,Member member, Velo velo, Outing outing) {
 		this.reg_passenger = reg_passenger;
 		this.reg_velo = reg_velo;
@@ -65,6 +64,8 @@ public class Register implements Serializable {
 	public void setOuting(Outing outing) {
 		this.outing = outing;
 	}
+	
+	//debug
 	@Override
 	public String toString() {
 		String typeVelo = "";
@@ -78,4 +79,29 @@ public class Register implements Serializable {
 		return registerDAO.findAll();
 	}
 
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) {
+			return true;
+		}
+			
+		if((o == null) || (o.getClass() != this.getClass())) {
+			return false;
+		}
+
+		final Register test = (Register)o;
+		return this.getNum() == (test.getNum());
+	}
+	@Override
+	public int hashCode() {
+		return this.getNum();
+	}
 }

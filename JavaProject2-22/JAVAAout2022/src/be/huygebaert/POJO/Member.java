@@ -2,10 +2,8 @@ package be.huygebaert.POJO;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import be.huygebaert.DAO.DAO;
-import be.huygebaert.DAO.DAOFactory;
-import be.huygebaert.DAO.MemberDAO;
+
 
 public class Member extends Person{
 	private static final long serialVersionUID = 5312718583319369493L;
@@ -14,7 +12,6 @@ public class Member extends Person{
 	private List<Category> memberCategories;
 	private List <Velo> memberVelos;
 	private Vehicle memberVehicle;
-	private List<Register> memberRegisters;
 	protected static DAO<Velo>veloDAO = adf.getVeloDAO();
 	protected static DAO<Vehicle>vehicleDAO = adf.getVehicleDAO();
 	
@@ -25,8 +22,7 @@ public class Member extends Person{
 	}
 	public Member(String firstname, String lastname, String password, String tel, String pseudo, Category category,String type,double lenght,double weight) {
 		try {
-			Person.idCount++;
-			this.id = Person.idCount;
+			this.id = 0;
 			this.firstname = firstname;
 			this.lastname=lastname;
 			this.password=password;
@@ -38,16 +34,14 @@ public class Member extends Person{
 			this.memberCategories.add(category);
 			memberVelos = new ArrayList<Velo>();
 			this.memberVelos.add(new Velo(weight,type,lenght,this));
-			
-			memberRegisters = new ArrayList<Register>();
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	
 	public Member(String firstname, String lastname, String password, String tel, String pseudo) {
-		Person.idCount++;
-		this.id = Person.idCount;
 		this.firstname = firstname;
 		this.lastname=lastname;
 		this.password=password;
@@ -55,9 +49,7 @@ public class Member extends Person{
 		this.pseudo=pseudo;
 		memberCategories = new ArrayList<Category>();
 		memberVelos = new ArrayList<Velo>();
-		memberRegisters = new ArrayList<Register>();
 	}
-	
 	public double getBalance() {
 		return balance;
 	}
@@ -96,15 +88,6 @@ public class Member extends Person{
 	public void setMemberVehicle(Vehicle memberVehicle) {
 		this.memberVehicle = memberVehicle;
 	}
-
-	public List<Register> getMemberRegisters() {
-		return memberRegisters;
-	}
-
-	public void setMemberRegisters(List<Register> memberRegisters) {
-		this.memberRegisters = memberRegisters;
-	}
-	
 	@Override
 	public String toString() {
 		return this.getFirstname()+" "+this.getLastname();
@@ -115,25 +98,16 @@ public class Member extends Person{
 	// If balance is negative => pending refund
 		newBalance = this.getBalance()-amount;
 		this.setBalance(newBalance);
-		/*
-		if(amount < 0) {
-			newBalance = this.getBalance() + amount;
-			this.setBalance(newBalance);
-			System.out.println("negative value => (+)"+this.getBalance());
-		}else {
-			newBalance = this.getBalance() - amount;
-			this.setBalance(newBalance);
-			System.out.println("positive value => (-)"+this.getBalance());
-		}
-		*/
 		if(memberDAO.update(this)) {
 			return true;
 		}
 		return false;
 	}
 	public boolean createVelo(Velo velo) {
-		//TODO => Vélo ajouté deux fois à la création du membre
-		this.memberVelos.add(velo);
+		// Ne pas rajouter une deuxième fois le vélo créé à l'inscription
+		if(this.getMemberVelos().size() > 1) {
+			this.memberVelos.add(velo);
+		}
 		if(veloDAO.create(velo)) {
 			return true;
 		}

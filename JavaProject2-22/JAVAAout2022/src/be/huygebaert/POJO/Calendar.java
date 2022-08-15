@@ -1,14 +1,10 @@
 package be.huygebaert.POJO;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 
-public class Calendar implements Serializable {
-
-	private static final long serialVersionUID = -7374868150598752577L;
+public class Calendar  {
 	private int num;
 	private List <Outing> calendarOutings;
 	private static DAOFactory adf = new DAOFactory();
@@ -34,7 +30,7 @@ public class Calendar implements Serializable {
 	public List <Outing> getCalendarOutings() {
 		List <Outing> allOutings = Outing.getAllOutings();
 		for(Outing out : allOutings) {
-			if(out.getOutingCalendar().getNum() == this.getNum()) {
+			if(out.getOutingCalendar().getNum() == this.getNum() && !this.calendarOutings.contains(out)) {
 				this.calendarOutings.add(out);
 			}
 		}
@@ -66,5 +62,22 @@ public class Calendar implements Serializable {
 			}
 		}
 		return false;
+	}
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) {
+			return true;
+		}
+			
+		if((o == null) || (o.getClass() != this.getClass())) {
+			return false;
+		}
+
+		final Calendar test = (Calendar)o;
+		return this.getNum() == test.getNum();
+	}
+	@Override
+	public int hashCode() {
+		return this.getNum();
 	}
 }

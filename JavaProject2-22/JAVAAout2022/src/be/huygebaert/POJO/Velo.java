@@ -1,13 +1,9 @@
 package be.huygebaert.POJO;
-
-import java.io.Serializable;
 import java.util.List;
-
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 
-public class Velo implements Serializable {
-	private static final long serialVersionUID = 7274111556630336582L;
+public class Velo {
 	private int num;
 	private double weight;
 	private String type;
@@ -77,7 +73,7 @@ public class Velo implements Serializable {
 		}
 
 		final Velo test = (Velo)o;
-		return this.getNum() == (test.getNum());
+		return this.getNum() == test.getNum();
 	}
 	@Override
 	public int hashCode() {

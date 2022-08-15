@@ -78,10 +78,11 @@ public class CategoryDAO extends DAO<Category> {
 		TrailRiderDAO trailriderDAO = new TrailRiderDAO(this.connect);
 		DescenderDAO descenderDAO = new DescenderDAO(this.connect);
 		TrialistDAO trialistDAO = new TrialistDAO(this.connect);
+		ResultSet result = null;
 		
 		Category category;
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Calendar");
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Calendar");
 			while(result.next()){
 				switch(result.getString("NameCategory")) {
 					case "Cyclo":
@@ -108,6 +109,12 @@ public class CategoryDAO extends DAO<Category> {
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return categories;
 	}

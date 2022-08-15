@@ -1,13 +1,10 @@
 package be.huygebaert.POJO;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 
-public class Vehicle implements Serializable {
-	private static final long serialVersionUID = 3076977523777926314L;
+public class Vehicle {
 	private int num;
 	private int totalMemberSeats;
 	private int totalVeloSeats;
@@ -62,6 +59,7 @@ public class Vehicle implements Serializable {
 	
 	public boolean addPassenger(Member member) {
 		if(member.equals(this.getDriver())){
+			// mais il ne l'ajoute pas
 			return true;
 		}
 		if(!member.equals(null) && !this.passengersInVehicle.contains(member) && this.totalMemberSeats > this.passengersInVehicle.size()){
@@ -88,5 +86,22 @@ public class Vehicle implements Serializable {
 	@Override
 	public String toString() {
 		return "(D) : "+this.getDriver()+" (M) "+ this.getPassengers().size() +"/"+this.getTotalMemberSeats()+" (V) : "+ this.getVelos().size()+"/"+this.getTotalVeloSeats();
+	}
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) {
+			return true;
+		}
+			
+		if((o == null) || (o.getClass() != this.getClass())) {
+			return false;
+		}
+
+		final Vehicle test = (Vehicle)o;
+		return this.getNum() == test.getNum();
+	}
+	@Override
+	public int hashCode() {
+		return this.getNum();
 	}
 }

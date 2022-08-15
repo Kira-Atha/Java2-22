@@ -1,6 +1,5 @@
 package be.huygebaert.POJO;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,8 +8,7 @@ import java.util.Objects;
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 
-public class Outing implements Serializable {
-	private static final long serialVersionUID = -3227706264588669413L;
+public class Outing{
 	private int num;
 	private String startPoint;
 	private Date startDate;
@@ -22,14 +20,17 @@ public class Outing implements Serializable {
 	private int remainingMemberSeats;
 	private int remainingVeloSeats;
 	private Calendar outingCalendar;
-	private List <Vehicle> outingVehicles = new ArrayList<Vehicle>();
-	private List <Register> outingRegisters = new ArrayList<Register>();
+	private List <Vehicle> outingVehicles;
+	private List <Register> outingRegisters;
 	private static DAOFactory adf = new DAOFactory();
 	private static DAO<Outing>outingDAO = adf.getOutingDAO();
 	private static List<Outing> allOutings = null;
 	private static DAO<Register>registerDAO = adf.getRegisterDAO();
 	
-	public Outing() {}
+	public Outing() {
+		this.outingVehicles = new ArrayList<Vehicle>();
+		this.outingRegisters = new ArrayList<Register>();
+	}
 	
 	public Outing(String startPoint, Date date, double forfeit,int maxMemberSeats, int maxVeloSeats,Calendar calendar) {
 		this.startPoint = startPoint;
@@ -42,8 +43,8 @@ public class Outing implements Serializable {
 		this.needVeloSeats = maxVeloSeats;
 		this.remainingMemberSeats = 0;
 		this.remainingVeloSeats = 0;
-		outingVehicles = new ArrayList<Vehicle>();
-		outingRegisters = new ArrayList<Register>();
+		this.outingVehicles = new ArrayList<Vehicle>();
+		this.outingRegisters = new ArrayList<Register>();
 	}
 
 
@@ -113,6 +114,12 @@ public class Outing implements Serializable {
 	}
 
 	public List<Register> getOutingRegisters() {
+		List<Register> allRegisters = Register.getAllRegisters();
+		for(Register reg : allRegisters) {
+			if(reg.getOuting().equals(this) && !this.outingRegisters.contains(reg)) {
+				this.outingRegisters.add(reg);
+			}
+		}
 		return outingRegisters;
 	}
 
@@ -137,7 +144,7 @@ public class Outing implements Serializable {
 	}
 	
 	public boolean addVehicle(Vehicle vehicle) {
-		if(this.needMemberSeats > 0  && this.needVeloSeats > 0 ) {
+		if(this.needMemberSeats > 0  || this.needVeloSeats > 0 ) {
 			this.outingVehicles.add(vehicle);
 			this.needMemberSeats = this.needMemberSeats - vehicle.getTotalMemberSeats();
 			this.needVeloSeats = this.needVeloSeats - vehicle.getTotalVeloSeats();
@@ -173,6 +180,8 @@ public class Outing implements Serializable {
 	public static Outing getOuting(int id) {
 		return outingDAO.find(id);
 	}
+	
+	//addParticipant() in class diagram
 	public boolean createRegister(Register register) {
 		boolean registeredIsDriver = false;
 		if(( this.getRemainingMemberSeats() == 0 && register.isReg_passenger() ) || ( this.getRemainingVeloSeats() == 0 && register.isReg_velo())) {
@@ -201,5 +210,23 @@ public class Outing implements Serializable {
 	
 	public String toString() {
 		return String.valueOf(this.getNum());
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) {
+			return true;
+		}
+			
+		if((o == null) || (o.getClass() != this.getClass())) {
+			return false;
+		}
+
+		final Outing test = (Outing)o;
+		return this.getNum() == test.getNum();
+	}
+	@Override
+	public int hashCode() {
+		return this.getNum();
 	}
 }

@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Objects;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -43,7 +45,7 @@ public class MonitorPayments {
 					MonitorPayments window = new MonitorPayments(person);
 					window.monitorPayments.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 			}
 		});
@@ -51,7 +53,13 @@ public class MonitorPayments {
 
 	public MonitorPayments(Person person) {
 		MonitorPayments.person = person;
-		initialize();
+		if(!Objects.isNull(person)) {
+			initialize();
+		}else {
+			Init previous = new Init();
+			JFrame home = previous.init;
+			changeFrame(home);
+		}
 	}
 
 
@@ -135,18 +143,22 @@ public class MonitorPayments {
 		btn_send.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(lb_balanceSelected.getText() != "" && Member.isNumeric(tf_newBalance.getText())) {
-					if(JOptionPane.showInternalConfirmDialog(null, "Are you sure ?") == 0) {
-						Member member = new Member();
-						member = Member.getMember(tablePayments.getSelectedRow()+1);
-						if(((Treasurer) person).managePayments(member,Double.parseDouble(tf_newBalance.getText()))) {
-							JOptionPane.showMessageDialog(null,"Success");
-							MonitorPayments next = new MonitorPayments(person);
-							JFrame monitorPayments = next.monitorPayments;
-							changeFrame(monitorPayments);
+					if(Double.parseDouble(tf_newBalance.getText()) <=10000 && Double.parseDouble(tf_newBalance.getText()) >=-10000) {
+						if(JOptionPane.showInternalConfirmDialog(null, "Are you sure ?") == 0) {
+							Member member = new Member();
+							member = Member.getMember(tablePayments.getSelectedRow()+1);
+							if(((Treasurer) person).managePayments(member,Double.parseDouble(tf_newBalance.getText()))) {
+								JOptionPane.showMessageDialog(null,"Success");
+								MonitorPayments next = new MonitorPayments(person);
+								JFrame monitorPayments = next.monitorPayments;
+								changeFrame(monitorPayments);
+							}
 						}
+					}else {
+						JOptionPane.showMessageDialog(null, "Value <= - 10 000 or >= 10 000");
 					}
 				}else {
-					JOptionPane.showMessageDialog(null, "Value to subtract is not a number and select a current balance");
+					JOptionPane.showMessageDialog(null, "Value to subtract is not a number, select a current balance");
 				}
 			}
 		});
@@ -164,6 +176,10 @@ public class MonitorPayments {
 	
 	public void changeFrame(JFrame window) {
 		window.setVisible(true);
-		this.monitorPayments.dispose();
+		try {
+			this.monitorPayments.dispose();
+		}catch(Exception e){
+			
+		}
 	}
 }

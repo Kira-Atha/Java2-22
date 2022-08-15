@@ -1,13 +1,10 @@
 package be.huygebaert.POJO;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 
-abstract public class Person implements Serializable {
-	private static final long serialVersionUID = 8586954274748508608L;
+abstract public class Person {
 	protected int id;
 	protected String firstname;
 	protected String lastname;
@@ -23,6 +20,17 @@ abstract public class Person implements Serializable {
 	
 	public Person() {}
 	
+	public Person(String firstname, String lastname, String password, String tel, String pseudo) {
+		try {
+			this.firstname = firstname;
+			this.lastname=lastname;
+			this.password=password;
+			this.tel=tel;
+			this.pseudo=pseudo;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public int getId() {
 		return id;
 	}
@@ -79,24 +87,18 @@ abstract public class Person implements Serializable {
 	}
 	public boolean signUp() {
 		allPersons = getAllPersons();
-		
-		if(this instanceof Manager) {
-			Manager manager = (Manager) this;
-			List <Manager> managers = manager.getAllManagers();
-			for(Manager man : managers ) {
-				if(manager.getCategory().getNum() == man.getCategory().getNum() || manager.getPseudo() == man.getPseudo()) {
-					return false;
+		if(!allPersons.contains(this)) {
+			if(this instanceof Manager) {
+				List <Manager> allManagers = Manager.getAllManagers();
+				for(Manager man : allManagers) {
+					if(((Manager)this).getCategory().getNum() == man.getCategory().getNum()) {
+						return false;
+					}
 				}
 			}
-		}else {
-			for(Person person : allPersons) {
-				if(person.getPseudo().equals(this.getPseudo())) {
-					return false;
-				}
+			if(personDAO.create(this)) {
+				return true;
 			}
-		}
-		if(personDAO.create(this)) {
-			return true;
 		}
 		return false;
 	}
@@ -112,9 +114,6 @@ abstract public class Person implements Serializable {
 	public static Manager getManager(int id) {
 		return managerDAO.find(id);
 	}
-	public boolean joinCategory(Category category) {
-		return false;
-	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -127,10 +126,10 @@ abstract public class Person implements Serializable {
 		}
 
 		final Person test = (Person)o;
-		return this.getId() == (test.getId());
+		return this.getId() == test.getId() || this.getPseudo().equals(test.getPseudo());
 	}
 	@Override
 	public int hashCode() {
-		return this.hashCode();
+		return this.getId();
 	}
 }

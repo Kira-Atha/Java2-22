@@ -2,53 +2,45 @@ package be.huygebaert.POJO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import be.huygebaert.DAO.DAO;
 
 
 public class Member extends Person{
-	private static final long serialVersionUID = 5312718583319369493L;
-
 	private double balance;
 	private List<Category> memberCategories;
 	private List <Velo> memberVelos;
 	private Vehicle memberVehicle;
-	protected static DAO<Velo>veloDAO = adf.getVeloDAO();
-	protected static DAO<Vehicle>vehicleDAO = adf.getVehicleDAO();
+	private static DAO<Velo>veloDAO = adf.getVeloDAO();
+	private static DAO<Vehicle>vehicleDAO = adf.getVehicleDAO();
+	private static DAO<Member> memberDAO = adf.getMemberDAO();
 	
-	public Member() {}
+	public Member() {
+		this.memberVelos = new ArrayList<Velo>();
+		this.memberCategories = new ArrayList<Category>();
+		
+	}
+
+	public Member(String firstname, String lastname, String password, String tel, String pseudo) {
+		super(firstname,lastname,password,tel,pseudo);
+		this.memberCategories = new ArrayList<Category>();
+		this.memberVelos = new ArrayList<Velo>();
+	}
+
+	public Member(String firstname, String lastname, String password, String tel, String pseudo, Category category,String type,double lenght,double weight) {
+		super(firstname,lastname,password,tel,pseudo);
+		
+		this.balance=0;
+		this.memberVehicle = null;
+		this.memberCategories = new ArrayList<Category>();
+		this.memberCategories.add(category);
+		this.memberVelos = new ArrayList<Velo>();
+		this.memberVelos.add(new Velo(weight,type,lenght,this));
+	}
+	// Créer un objet bidon pour tester la connexion
 	public Member(String pseudo,String password) {
 		this.pseudo = pseudo;
 		this.password = password;
-	}
-	public Member(String firstname, String lastname, String password, String tel, String pseudo, Category category,String type,double lenght,double weight) {
-		try {
-			this.id = 0;
-			this.firstname = firstname;
-			this.lastname=lastname;
-			this.password=password;
-			this.tel=tel;
-			this.pseudo=pseudo;
-			this.balance=0;
-			this.memberVehicle = null;
-			memberCategories = new ArrayList<Category>();
-			this.memberCategories.add(category);
-			memberVelos = new ArrayList<Velo>();
-			this.memberVelos.add(new Velo(weight,type,lenght,this));
-
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-	public Member(String firstname, String lastname, String password, String tel, String pseudo) {
-		this.firstname = firstname;
-		this.lastname=lastname;
-		this.password=password;
-		this.tel=tel;
-		this.pseudo=pseudo;
-		memberCategories = new ArrayList<Category>();
-		memberVelos = new ArrayList<Velo>();
 	}
 	public double getBalance() {
 		return balance;
@@ -63,14 +55,7 @@ public class Member extends Person{
 		this.memberCategories = memberCategories;
 	}
 	public static List<Member> getAllMembers(){
-		DAO<Member> memberDAO = adf.getMemberDAO();
 		return memberDAO.findAll();
-	}
-	
-	public static List<Member> getMemberRegister(Register register){
-		List<Member> memberRegisters = null;
-		
-		return memberRegisters;
 	}
 
 	public List <Velo> getMemberVelos() {
@@ -123,7 +108,6 @@ public class Member extends Person{
 	public boolean joinCategory(Category category) {
 		// If member just create -> list.get(0) = first category ( constructor ), don't need to add
 		if(this.getMemberCategories().get(0).getClass() != category.getClass()) {
-			System.out.println("It's not first category choosen, add !");
 			this.getMemberCategories().add(category);
 		}
 		if(memberDAO.create(this)){
@@ -142,5 +126,66 @@ public class Member extends Person{
 	        return false;
 	    }
 	    return true;
+	}
+	public boolean alreadyRegisterInOuting(Register register,Outing outingExist) {
+		if(!Objects.isNull(register)) {
+			for(Register reg : outingExist.getOutingRegisters()) {
+				if(reg.getMember().equals(register.getMember()) ) {
+					return true;
+				}
+			}
+		}else {
+			for(Register reg : outingExist.getOutingRegisters()) {
+				if(reg.getMember().equals(this)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public List<Object> alreadyRegisterToday(Outing outingExist) {
+		List<Object> boolCategory = new ArrayList<Object>();
+		List<Outing> allOutings = Outing.getAllOutings();
+		
+		for(Outing out : allOutings) {
+			for(Register reg : out.getOutingRegisters()) {
+				if(reg.getMember().equals(this) && out.getStartDate().compareTo(outingExist.getStartDate()) == 0 && !out.getOutingCalendar().equals(this.getMemberCategories().get(0).getSingleCalendar()) ) {
+					boolCategory.add((Boolean)true);
+					boolCategory.add((Category)Category.getCategory(out.getOutingCalendar().getNum()));
+				}
+			}
+		}
+		boolCategory.add((Boolean)false);
+		boolCategory.add(null);
+		return boolCategory;
+	}
+	public List<Object> alreadyDriveToday(Outing outingExist) {
+		List<Object> boolCategory = new ArrayList<Object>();
+		List <Outing> allOutings = Outing.getAllOutings();
+		
+		for(Outing out : allOutings ) {
+			for(Vehicle veh : out.getOutingVehicles()) {
+				if(veh.equals(this.getMemberVehicle()) && out.getStartDate().compareTo(outingExist.getStartDate()) == 0 && !out.getOutingCalendar().equals(this.getMemberCategories().get(0).getSingleCalendar()) ) {
+					boolCategory.add((Boolean)true);
+					boolCategory.add((Category)Category.getCategory(out.getOutingCalendar().getNum()));
+					return boolCategory;
+				}
+			}
+		}
+		boolCategory.add((Boolean)false);
+		boolCategory.add(null);
+		return boolCategory;
+	}
+	
+	public boolean alreadyDriveInOuting(Outing outingExist) {
+		if(!Objects.isNull(outingExist.getOutingVehicles())) {
+			for(Vehicle vehicle : outingExist.getOutingVehicles()) {
+				if(vehicle.equals(this.getMemberVehicle())) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

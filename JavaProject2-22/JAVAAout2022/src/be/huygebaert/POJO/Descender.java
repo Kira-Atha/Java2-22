@@ -3,11 +3,10 @@ package be.huygebaert.POJO;
 import be.huygebaert.DAO.DAO;
 
 public class Descender extends VTT {
-	private static final long serialVersionUID = -2213836681647297285L;
-	private static DAO<Descender> descenderDAO = null;
+	private static DAO<Descender> descenderDAO = adf.getDescenderDAO();
 	
 	public Descender() {
-		descenderDAO = adf.getDescenderDAO();
+		super();
 	}
 
 	public static Category getCategory(int num) {		

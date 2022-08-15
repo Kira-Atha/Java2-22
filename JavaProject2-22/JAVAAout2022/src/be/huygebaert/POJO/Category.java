@@ -1,24 +1,21 @@
 package be.huygebaert.POJO;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Objects;
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 
 
-abstract public class Category implements Serializable {
+abstract public class Category {
 
-	private static final long serialVersionUID = -309839438964916689L;
 	protected static DAOFactory adf = new DAOFactory();
 	protected int num;
 	protected Calendar singleCalendar;
 	protected static List <Category> categories = null; 
 	protected static DAO<Category> categoryDAO = adf.getCategoryDAO();
 	
-	public Category() {}
-	
+	public Category() {
+		this.singleCalendar = new Calendar();
+	}
 	public int getNum() {
 		return num;
 	}
@@ -40,9 +37,16 @@ abstract public class Category implements Serializable {
 		this.singleCalendar = singleCalendar;
 	}
 	
-	public void deleteCategory() {
-		//TODO if i have time enough
-		this.singleCalendar = null;
+	// can't this = null
+	public static boolean deleteCategory(Category category) {
+		Calendar calendar = category.getSingleCalendar();
+		calendar = null;
+		category = null;
+		if(Objects.isNull(category)) {
+			return true;
+		}
+		return false;
+		// Not destructor in java -> garbage collector
 	}
 // Override equals / hashCode to use List.contains(object) how i want ( compare class name between 2 categories )
 	@Override

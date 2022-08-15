@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import be.huygebaert.POJO.Velo;
 import be.huygebaert.POJO.Person;
 import be.huygebaert.POJO.Outing;
@@ -20,7 +22,10 @@ public class RegisterDAO extends DAO<Register> {
 
 	@Override
 	public boolean create(Register register) {
-		try(PreparedStatement statement = this.connect.prepareStatement("INSERT INTO Register VALUES (?,?,?,?,?,?)")) {
+		PreparedStatement statement = null;
+		PreparedStatement statement0 = null;
+		try {
+			statement = this.connect.prepareStatement("INSERT INTO Register VALUES (?,?,?,?,?,?)");
 			statement.setInt(1, 0);
 			statement.setInt(2, register.getMember().getId());
 			statement.setInt(3, register.getOuting().getNum());
@@ -29,7 +34,6 @@ public class RegisterDAO extends DAO<Register> {
 			statement.setBoolean(6, register.isReg_velo());
 			if(statement.executeUpdate() > 0) {
 				String update_sql = "";
-				PreparedStatement statement0 = null;
 				if(register.isReg_passenger() || register.isReg_velo()) {
 					update_sql = "UPDATE Outing set RemainingMemberSeats = ?,RemainingVeloSeats=? WHERE IdOuting = ?";
 					try {
@@ -69,6 +73,15 @@ public class RegisterDAO extends DAO<Register> {
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				statement.close();
+				if(!Objects.isNull(statement0)) {
+					statement0.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
@@ -85,7 +98,24 @@ public class RegisterDAO extends DAO<Register> {
 
 	@Override
 	public Register find(int id) {
-		return null;
+		ResultSet result = null;
+		Register register = null;
+		try {
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Register WHERE IdOuting="+id);
+			while(result.next()){
+				register = new Register(result.getBoolean("RegPassenger"),result.getBoolean("RegVelo"),Person.getMember(result.getInt("IdMember")),Velo.getVelo(result.getInt("IdVelo")),Outing.getOuting(result.getInt("IdOuting")));
+				register.setNum(result.getInt("IdRegister"));
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return register;
 	}
 
 	@Override
@@ -102,6 +132,12 @@ public class RegisterDAO extends DAO<Register> {
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return allRegisters;
 	}

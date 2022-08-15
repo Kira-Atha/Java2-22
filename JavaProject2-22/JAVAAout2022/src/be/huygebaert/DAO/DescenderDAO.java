@@ -29,8 +29,9 @@ public class DescenderDAO extends DAO<Descender>{
 
 	@Override
 	public Descender find(int id) {
+		ResultSet result = null;
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Calendar WHERE IdCalendar ="+id);
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Calendar WHERE IdCalendar ="+id);
 			if(result.first()) {
 				Descender descender = new Descender();
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
@@ -40,6 +41,12 @@ public class DescenderDAO extends DAO<Descender>{
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

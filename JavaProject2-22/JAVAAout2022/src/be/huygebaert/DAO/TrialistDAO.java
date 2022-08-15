@@ -28,8 +28,9 @@ public class TrialistDAO extends DAO<Trialist>{
 
 	@Override
 	public Trialist find(int id) {
+		ResultSet result = null;
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Calendar WHERE IdCalendar ="+id);
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * from Calendar WHERE IdCalendar ="+id);
 			if(result.first()) {
 				Trialist trialist = new Trialist();
 				CalendarDAO calendarDAO = new CalendarDAO(this.connect);
@@ -39,6 +40,12 @@ public class TrialistDAO extends DAO<Trialist>{
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

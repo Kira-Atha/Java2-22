@@ -1,13 +1,11 @@
 package be.huygebaert.POJO;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import be.huygebaert.DAO.DAO;
 import be.huygebaert.DAO.DAOFactory;
 
-public class Register implements Serializable {
-	private static final long serialVersionUID = 2958860344136235528L;
+public class Register {
 	private int num;
 	private boolean reg_passenger;
 	private boolean reg_velo;

@@ -30,9 +30,10 @@ public class ManagerDAO extends DAO<Manager>{
 
 	@Override
 	public Manager find(int id) {
+		ResultSet result = null;
 		Manager manager;
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery(
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery(
 					"SELECT * FROM Manager INNER JOIN Calendar "
 					+ "ON Calendar.IdCalendar = Manager.IdCalendar "
 					+ " WHERE IdManager = " +id);
@@ -66,6 +67,12 @@ public class ManagerDAO extends DAO<Manager>{
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
+		}finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -75,9 +82,10 @@ public class ManagerDAO extends DAO<Manager>{
 		List <Manager> allManagers = new ArrayList<Manager>();
 		CategoryDAO categoryDAO = new CategoryDAO(this.connect);
 		Manager manager;
+		ResultSet result=null;
 		
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Manager");
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Manager");
 			while(result.next()){
 				// Compléter avec info de base
 				manager = new Manager(result.getString("Firstname"),result.getString("Lastname"),result.getString("Password"),result.getString("Tel"),result.getString("Pseudo"));
@@ -89,6 +97,12 @@ public class ManagerDAO extends DAO<Manager>{
 			return allManagers;
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

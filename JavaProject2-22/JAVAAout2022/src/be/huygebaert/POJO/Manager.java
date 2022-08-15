@@ -3,34 +3,16 @@ package be.huygebaert.POJO;
 import java.util.List;
 import be.huygebaert.DAO.DAO;
 
-
 public class Manager extends Person {
-	private static final long serialVersionUID = -1584705078113981090L;
-	private Category category = null;
+	private Category category;
 	private static DAO<Manager> managerDAO = adf.getManagerDAO();
 	
-	public Manager(String firstname, String lastname, String password, String tel, String pseudo, Category category) {
-		try {
-			this.firstname = firstname;
-			this.lastname=lastname;
-			this.password=password;
-			this.tel=tel;
-			this.pseudo=pseudo;
-			this.category=category;
-		}catch(Exception e) {
-			System.out.println("Manager doesn't create");
-		}
-	}
 	public Manager(String firstname, String lastname, String password, String tel, String pseudo) {
-		try {
-			this.firstname = firstname;
-			this.lastname=lastname;
-			this.password=password;
-			this.tel=tel;
-			this.pseudo=pseudo;
-		}catch(Exception e) {
-			System.out.println("Manager doesn't create");
-		}
+		super(firstname,lastname,password,tel,pseudo);
+	}
+	public Manager(String firstname, String lastname, String password, String tel, String pseudo,Category category) {
+		super(firstname,lastname,password,tel,pseudo);
+		this.category = category;
 	}
 	public Manager() {}
 	
@@ -41,7 +23,7 @@ public class Manager extends Person {
 		this.category = category;
 	}
 	
-	public List <Manager>getAllManagers(){
+	public static List <Manager>getAllManagers(){
 		return managerDAO.findAll();
 	}
 	
@@ -51,14 +33,17 @@ public class Manager extends Person {
 				if(this.getCategory().getSingleCalendar().addOuting(outing)) {
 					return true;
 				}
+				break;
 			case 1:
 				if(this.getCategory().getSingleCalendar().updateOuting(outing)) {
 					return true;
 				}
+				break;
 			case 2:
 				if(this.getCategory().getSingleCalendar().deleteOuting(outing)) {
 					return true;
 				}
+				break;
 		}
 		return false;
 	}

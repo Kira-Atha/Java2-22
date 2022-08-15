@@ -44,15 +44,21 @@ public class VehicleDAO extends DAO<Vehicle>{
 	public Vehicle find(int id) {
 		Vehicle vehicle = null;
 		MemberDAO memberDAO = new MemberDAO(this.connect);
-		
+		ResultSet result = null;
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Vehicle WHERE IdVehicle ="+id);
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Vehicle WHERE IdVehicle ="+id);
 			while(result.next()){
 				vehicle = new Vehicle(result.getInt("TotalMemberSeats"),result.getInt("TotalVeloSeats"),memberDAO.find(result.getInt("IdDriver")));
 				vehicle.setNum(result.getInt("IdVehicle"));
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return vehicle;
 	}
@@ -62,9 +68,9 @@ public class VehicleDAO extends DAO<Vehicle>{
 		List<Vehicle> allVehicles = new ArrayList <Vehicle>();
 		Vehicle vehicle;
 		MemberDAO memberDAO = new MemberDAO(this.connect);
-		
+		ResultSet result = null;
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Vehicle");
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Vehicle");
 			while(result.next()){
 				vehicle = new Vehicle(result.getInt("TotalMemberSeats"),result.getInt("TotalVeloSeats"),memberDAO.find(result.getInt("IdDriver")));
 				vehicle.setNum(result.getInt("IdVehicle"));
@@ -72,6 +78,12 @@ public class VehicleDAO extends DAO<Vehicle>{
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return allVehicles;
 	}

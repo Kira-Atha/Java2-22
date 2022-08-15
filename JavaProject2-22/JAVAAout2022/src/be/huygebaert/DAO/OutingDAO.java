@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import be.huygebaert.POJO.Outing;
 import be.huygebaert.POJO.Vehicle;
 
@@ -15,7 +17,9 @@ public class OutingDAO extends DAO<Outing> {
 
 	@Override
 	public boolean create(Outing outing) {
-		try(PreparedStatement ps0 = this.connect.prepareStatement("INSERT INTO Outing VALUES (?,?,?,?,?,?,?,?,?,?,?)")) {
+		PreparedStatement ps0 = null;
+		try {
+			ps0 = this.connect.prepareStatement("INSERT INTO Outing VALUES (?,?,?,?,?,?,?,?,?,?,?)");
 		    ps0.setInt(1, 0);
 	        ps0.setString(2, outing.getStartPoint());
 	        ps0.setDate(3,new java.sql.Date(outing.getStartDate().getTime()));
@@ -35,13 +39,26 @@ public class OutingDAO extends DAO<Outing> {
 		}catch (Exception e) {
            e.printStackTrace();
            return false;
-       }
+       }finally{
+			try {
+				ps0.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
 	public boolean delete(Outing outing) {
+		PreparedStatement ps= null;
+		Outing outingToCompare = Outing.getOuting(outing.getNum());
+		
+		if(outingToCompare.getOutingVehicles().size() >0 || outingToCompare.getOutingRegisters().size() > 0) {
+			return false;
+		}
+		
 		try {
-			PreparedStatement ps = this.connect.prepareStatement("DELETE * FROM OUTING WHERE IdOuting = ?");
+			ps = this.connect.prepareStatement("DELETE * FROM OUTING WHERE IdOuting = ?");
 			ps.setInt(1,outing.getNum());
 			ps.executeUpdate();
 		}catch(SQLException e) {
@@ -50,7 +67,7 @@ public class OutingDAO extends DAO<Outing> {
             e.printStackTrace();
         }
 		try {
-			PreparedStatement ps = this.connect.prepareStatement("DELETE * FROM Out_Vehicle WHERE IdOuting = ?");
+			ps = this.connect.prepareStatement("DELETE * FROM Out_Vehicle WHERE IdOuting = ?");
 			ps.setInt(1,outing.getNum());
 			ps.executeUpdate();
 			return true;
@@ -60,7 +77,7 @@ public class OutingDAO extends DAO<Outing> {
            e.printStackTrace();
 		}
 		try {
-			PreparedStatement ps = this.connect.prepareStatement("DELETE * FROM Register WHERE IdOuting = ?");
+			ps = this.connect.prepareStatement("DELETE * FROM Register WHERE IdOuting = ?");
 			ps.setInt(1,outing.getNum());
 			ps.executeUpdate();
 			return true;
@@ -68,18 +85,45 @@ public class OutingDAO extends DAO<Outing> {
 			 System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
 		}catch (Exception e) {
            e.printStackTrace();
-       }
+       }finally{
+			try {
+				if(!Objects.isNull(ps)) {
+					ps.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public boolean update(Outing outing) {
 		String sql_update = "UPDATE OUTING set StartPoint = ?,DateStart = ?,Forfeit=?,MaxMemberSeats=?,MaxVeloSeats=?,NeedMemberSeats=?,NeedVeloSeats=?,RemainingMemberSeats = ?,RemainingVeloSeats = ? WHERE IdOuting = ?";
-		PreparedStatement statement;
+		PreparedStatement statement = null;
 		try {
 			Outing outingToCompare = find(outing.getNum());
-			// add vehicle in outing
-			if(outingToCompare.getOutingVehicles().size()!=outing.getOutingVehicles().size()) {
+		// S'il n'y a pas de véhicule dans l'objet à modifier -> update du manager.
+			if(outing.getOutingVehicles().size()==0) {
+				//Empêcher la modification d'une sortie qui en db qui possède des véhicules
+				if(outingToCompare.getOutingVehicles().size() >0 || outingToCompare.getOutingRegisters().size() >0) {
+					return false;
+				}
+				statement = this.connect.prepareStatement(sql_update);
+				statement.setString(1,outing.getStartPoint());
+				statement.setDate(2,new java.sql.Date(outing.getStartDate().getTime()));
+				statement.setDouble(3,outing.getForfeit());
+				statement.setInt(4,outing.getMaxMemberSeats());
+				statement.setInt(5,outing.getMaxVeloSeats());
+				statement.setInt(6,outing.getNeedMemberSeats());
+				statement.setInt(7,outing.getNeedVeloSeats());
+				statement.setInt(8, outing.getRemainingMemberSeats());
+				statement.setInt(9, outing.getRemainingVeloSeats());
+				statement.setInt(10,outing.getNum());
+				statement.executeUpdate();
+				return true;
+				// Si l'objet courant contient 1 véhicule, alors il s'agit d'un ajout de véhicule à une sortie
+			}else if(outing.getOutingVehicles().size() > 0){
 				statement = this.connect.prepareStatement("INSERT INTO Out_Vehicle VALUES(?,?)");
 			// Get the id of the last vehicle add on outing
 				int numOfLastVehicle = outing.getOutingVehicles().get(outing.getOutingVehicles().size()-1).getNum();
@@ -100,28 +144,21 @@ public class OutingDAO extends DAO<Outing> {
 					statement.setInt(9, outing.getRemainingVeloSeats());
 					statement.setInt(10,outing.getNum());
 					statement.executeUpdate();
-				//Formule possible à modifier
+				//Formule bidon possible à modifier
 					lastVehicle.getDriver().updateBalance(outing.getForfeit()*lastVehicle.getTotalMemberSeats());
 					return true;
 				}
-			}else {
-				statement = this.connect.prepareStatement(sql_update);
-				statement.setString(1,outing.getStartPoint());
-				statement.setDate(2,new java.sql.Date(outing.getStartDate().getTime()));
-				statement.setDouble(3,outing.getForfeit());
-				statement.setInt(4,outing.getMaxMemberSeats());
-				statement.setInt(5,outing.getMaxVeloSeats());
-				statement.setInt(6,outing.getNeedMemberSeats());
-				statement.setInt(7,outing.getNeedVeloSeats());
-				statement.setInt(8, outing.getRemainingMemberSeats());
-				statement.setInt(9, outing.getRemainingVeloSeats());
-				statement.setInt(10,outing.getNum());
-				statement.executeUpdate();
-				statement.closeOnCompletion();
-				return true;
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				if(!Objects.isNull(statement)) {
+					statement.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return false;
@@ -162,6 +199,7 @@ public class OutingDAO extends DAO<Outing> {
        }finally{
 			try {
 				result.close();
+				result2.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -177,7 +215,7 @@ public class OutingDAO extends DAO<Outing> {
 		List<Outing> allOutings = new ArrayList<Outing>();
 		
 		try {
-			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Outing");
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Outing ORDER BY cast(DateStart as date)");
 			while(result.next()){
 				outing = new Outing();
 				outing.setNum(result.getInt("IdOuting"));
@@ -211,6 +249,7 @@ public class OutingDAO extends DAO<Outing> {
 		finally{
 			try {
 				result.close();
+				result2.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

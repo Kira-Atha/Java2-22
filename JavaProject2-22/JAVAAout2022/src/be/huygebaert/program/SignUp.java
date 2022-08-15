@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.Font;
 
 public class SignUp {
@@ -354,25 +356,33 @@ public class SignUp {
 	public String formValidation(String firstname, String lastname, String password, String pseudo, String tel, String typeAccount, String typeCategory,double lenghtVelo,double weightVelo,String typeVelo) {
 		String result="";
 		
-		if(firstname.equals("") || firstname.length() < 3 || Member.isNumeric(firstname)) {
-			result+="Invalid firstname. Firstname must be > 3 characters and doesn't contain number.";
+		// Support string like : Jean, Jean-francois, Jean Paul, Jean's Paul
+
+		if(firstname.equals("") || !firstname.matches("^[^- '](?=(?![A-Z]?[A-Z]))(?=(?![a-z]+[A-Z]))(?=(?!.*[A-Z][A-Z]))(?=(?!.*[- '][- '.]))(?=(?!.*[.][-'.]))[A-Za-z- '.]{3,}$") || firstname.length() > 50) {
+			result+="Invalid firstname. Firstname must be 3-50 characters and doesn't contain number or spécial character";
 			result+="\n";
 		}
-		if(lastname.equals("") || lastname.length() < 3 || Member.isNumeric(lastname)) {
-			result+="Invalid lastname. Lastname must be > 3 characters and doesn't contain number.";
+		if(lastname.equals("") || !lastname.matches("^[^- '](?=(?![A-Z]?[A-Z]))(?=(?![a-z]+[A-Z]))(?=(?!.*[A-Z][A-Z]))(?=(?!.*[- '][- '.]))(?=(?!.*[.][-'.]))[A-Za-z- '.]{3,}$") || lastname.length() > 50) {
+			result+="Invalid lastname. Lastname must be > 3-50 characters and doesn't contain number or special character";
 			result+="\n";
 		}
-		if(password.equals("") || password.length() < 4) {
-			result+="Invalid password. Password must be > 4 characters.";
+		if(password.equals("") || password.length() < 4 || password.length() > 500) {
+			result+="Invalid password. Password must be 4-500 characters.";
 			result+="\n";
 		}
-		if(pseudo.equals("") || pseudo.length() < 3) {
-			result+="Invalid pseudo. Pseudo must be > 3 characters.";
+		if(pseudo.equals("") || !pseudo.matches("^[a-zA-Z0-9]+$") || pseudo.length() <3 || pseudo.length()>50) {
+			result+="Invalid pseudo. Pseudo must be 3-50 characters and can't contain special character";
 			result+="\n";
 		}
-		if(tel.equals("") || tel.length() < 9 || tel.length()>10 || !Member.isNumeric(tel)) {
-			result+="Invalid tel. Enter 071000000 or 0400000000 format";
+		if(tel.equals("")) {
+			result+="Num tel is empty";
 			result+="\n";
+		}else {
+			 // accept : +32 71 65 52, +32470846112, +334655236
+			 if(!tel.matches("^\\+(?:[0-9] ?){6,14}[0-9]$")) {
+				 result+="Invalid format tel. Try format like : \"+32470846112]\" or \"+33 71 65 52\" ";
+				 result+="\n";
+			 }
 		}
 		if(typeAccount.equals("") || typeAccount.equals(null)) {
 			result+="Select account type.";
@@ -390,8 +400,9 @@ public class SignUp {
 			if(lenghtVelo <= 0 || lenghtVelo >=2.5) {
 				result+="Enter lenght velo in m format.";
 				result+="\n";
-			}			if(typeVelo.equals("") || Objects.isNull(typeVelo)) {
-				result+="Enter type velo.";
+			}
+			if(typeVelo.equals("") || Objects.isNull(typeVelo) || !typeVelo.matches("^[a-zA-Z0-9]+$") || typeVelo.length() < 3 || typeVelo.length() > 50) {
+				result+="Enter type velo. Can contain number and letter, total 3-50";
 				result+="\n";
 			}
 		}

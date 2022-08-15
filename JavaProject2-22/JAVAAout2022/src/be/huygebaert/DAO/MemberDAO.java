@@ -16,7 +16,9 @@ public class MemberDAO extends DAO<Member>{
 
 	@Override
 	public boolean create(Member member) {
-		try(PreparedStatement ps = this.connect.prepareStatement("INSERT INTO Cat_Memb VALUES(?,?)")){
+		PreparedStatement ps = null;
+		try{
+			ps = this.connect.prepareStatement("INSERT INTO Cat_Memb VALUES(?,?)");
 			ps.setInt(1, member.getId());
 			if(member.getMemberCategories().size()==1) {
 				ps.setInt(2, member.getMemberCategories().get(0).getNum());
@@ -25,12 +27,18 @@ public class MemberDAO extends DAO<Member>{
 				ps.setInt(2, lastCategory.getNum());
 			}
 			if(ps.executeUpdate()>0) {
-				if(member.updateBalance(-20)) {
+				if(member.updateBalance(-5)) {
 					return true;
 				}
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				ps.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
@@ -43,14 +51,21 @@ public class MemberDAO extends DAO<Member>{
 	@Override
 	public boolean update(Member member) {
 		String sql = "UPDATE MEMBER set Balance = ? WHERE idMember = ?";
+		PreparedStatement statement = null;
 		try {
-			PreparedStatement statement = this.connect.prepareStatement(sql);
+			statement = this.connect.prepareStatement(sql);
 			statement.setDouble(1,member.getBalance());
 			statement.setInt(2,member.getId());
 			statement.executeUpdate();
 			return true;
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
@@ -69,7 +84,7 @@ public class MemberDAO extends DAO<Member>{
 				member.setBalance(result.getDouble("Balance"));
 				member.setId(result.getInt("IdMember"));
 		// Category of member
-				
+				result.close();
 				result = this.connect.createStatement().executeQuery("SELECT * FROM Cat_Memb where IdMember =  " + id);
 				CategoryDAO categoryDAO = new CategoryDAO(this.connect);
 				while(result.next()) {
@@ -94,13 +109,15 @@ public class MemberDAO extends DAO<Member>{
 	public List<Member> findAll() {
 		List <Member> allMembers = new ArrayList<Member>();
 		Member member;
+		ResultSet result = null;
+		ResultSet result2 = null;
 		try {
-			ResultSet result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Member");
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM Member");
 			while(result.next()){
 				member = new Member(result.getString("Firstname"),result.getString("Lastname"),result.getString("Password"),result.getString("Tel"),result.getString("Pseudo"));
 				member.setBalance(result.getDouble("Balance"));
 				member.setId(result.getInt("IdMember"));
-				ResultSet result2 = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery(
+				result2 = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY).executeQuery(
 						"SELECT * FROM Member INNER JOIN Cat_Memb "
 						+ "ON Member.IdMember = Cat_Memb.IdMember "
 						+ "INNER JOIN Calendar "
@@ -128,6 +145,13 @@ public class MemberDAO extends DAO<Member>{
 			return allMembers;
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				result.close();
+				result2.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
